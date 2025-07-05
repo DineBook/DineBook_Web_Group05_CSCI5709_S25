@@ -3,6 +3,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
+import restaurantRoutes from './routes/restaurant';
+import bookingRoutes from './routes/booking';
 import mongoose from 'mongoose';
 
 dotenv.config();
@@ -23,6 +25,8 @@ app.use(bodyParser.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/restaurants', restaurantRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 // Basic route
 app.get('/', (req, res) => {

@@ -4,8 +4,8 @@ import { authenticate } from '../utils';
 
 const router = express.Router();
 
-router.get('/', authenticate, getRestaurants);
-router.post('/', authenticate, createRestaurant);
-router.get('/:id', authenticate, getRestaurantById);
+router.get('/', authenticate as any, getRestaurants as any);
+router.post('/', authenticate as any, createRestaurant as any);
+router.get('/:id', authenticate as any, getRestaurantById as any);
 
 export default router;
