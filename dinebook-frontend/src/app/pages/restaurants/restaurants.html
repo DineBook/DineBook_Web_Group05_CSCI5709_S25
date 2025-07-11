@@ -8,23 +8,129 @@
             Explore our curated selection of amazing restaurants and book your perfect dining experience.
           </p>
         </div>
-        <div class="header-actions">
+        <!-- <div class="header-actions">
           <button mat-raised-button color="primary" (click)="bookTable()" class="quick-book-btn">
             <mat-icon>restaurant</mat-icon>
             Quick Book
           </button>
+        </div> -->
+      </div>
+    </div>
+
+    <!-- Search and Filters Section -->
+    <div class="search-filters-section">
+      <form [formGroup]="searchForm" class="search-filters-form">
+        <!-- Search Bar -->
+        <div class="search-bar">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Search by location</mat-label>
+            <input matInput 
+                   formControlName="location" 
+                   placeholder="e.g., Downtown, Halifax, etc." 
+                   type="text">
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
         </div>
+
+        <!-- Filters -->
+        <div class="filters-row">
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Cuisine Type</mat-label>
+            <mat-select formControlName="cuisine">
+              <mat-option value="">All Cuisines</mat-option>
+              <mat-option *ngFor="let cuisine of cuisineOptions" [value]="cuisine">
+                {{ cuisine }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="filter-field">
+            <mat-label>Price Range</mat-label>
+            <mat-select formControlName="priceRange">
+              <mat-option value="">All Prices</mat-option>
+              <mat-option *ngFor="let option of priceRangeOptions" [value]="option.value">
+                {{ option.icon }} {{ option.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <button mat-button 
+                  type="button" 
+                  (click)="clearFilters()" 
+                  class="clear-filters-btn"
+                  *ngIf="getActiveFilterKeys().length > 0">
+            <mat-icon>clear</mat-icon>
+            Clear Filters
+          </button>
+        </div>
+      </form>
+
+      <!-- Active Filters Display -->
+      <div class="active-filters" *ngIf="getActiveFilterKeys().length > 0">
+        <span class="filters-label">Active filters:</span>
+        <mat-chip-listbox class="filters-chips">
+          <mat-chip-option 
+            *ngFor="let filterKey of getActiveFilterKeys()" 
+            (removed)="removeFilter(filterKey)"
+            class="filter-chip">
+            {{ filterKey }}: {{ getFilterDisplayValue(filterKey) }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip-option>
+        </mat-chip-listbox>
+      </div>
+
+      <!-- Results Summary -->
+      <div class="results-summary" *ngIf="!loading && !error">
+        <p>
+          Showing {{ restaurants.length }} of {{ totalRestaurants }} restaurants
+          <span *ngIf="getActiveFilterKeys().length > 0"> with current filters</span>
+        </p>
       </div>
     </div>
     
     <div class="restaurants-content">
-      <div class="restaurants-grid">
-        <div class="restaurant-card" *ngFor="let restaurant of mockRestaurants">
+      <!-- Loading State -->
+      <div *ngIf="loading" class="loading-state">
+        <div class="loading-spinner">
+          <mat-icon class="spinning">refresh</mat-icon>
+        </div>
+        <p>Loading restaurants...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error && !loading" class="error-state">
+        <div class="error-content">
+          <mat-icon class="error-icon">error_outline</mat-icon>
+          <h3>Oops! Something went wrong</h3>
+          <p>{{ error }}</p>
+          <button mat-raised-button color="primary" (click)="retry()">
+            <mat-icon>refresh</mat-icon>
+            Try Again
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && !error && restaurants.length === 0" class="empty-state">
+        <div class="empty-content">
+          <mat-icon class="empty-icon">restaurant</mat-icon>
+          <h3>No Restaurants Found</h3>
+          <p>We couldn't find any restaurants at the moment. Please check back later or try refreshing the page.</p>
+          <button mat-raised-button color="primary" (click)="retry()">
+            <mat-icon>refresh</mat-icon>
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Restaurants Grid -->
+      <div *ngIf="!loading && !error && restaurants.length > 0" class="restaurants-grid">
+        <div class="restaurant-card" *ngFor="let restaurant of restaurants" (click)="viewRestaurantDetails(restaurant)">
             
           <div class="restaurant-image">
             <img src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" alt="Rooftop Restaurant" />
             <div class="image-overlay">
-              <button mat-icon-button class="favorite-btn" [attr.aria-label]="'Add ' + restaurant.name + ' to favorites'">
+              <button mat-icon-button class="favorite-btn" [attr.aria-label]="'Add ' + restaurant.name + ' to favorites'" (click)="$event.stopPropagation()">
                 <mat-icon>favorite_border</mat-icon>
               </button>
             </div>
@@ -36,7 +142,7 @@
             <div class="restaurant-header">
                 
               <h3 class="restaurant-name">{{ restaurant.name }}</h3>
-              <span class="price-indicator">{{ restaurant.priceRange }}</span>
+              <span class="price-indicator">{{ restaurant.priceRangeDisplay }}</span>
             </div>
             <p class="restaurant-cuisine">{{ restaurant.cuisine }}</p>
             <div class="restaurant-rating">
@@ -45,7 +151,7 @@
                   {{ star }}
                 </mat-icon>
               </div>
-              <span class="rating-text">{{ restaurant.rating }} ({{ restaurant.reviews }} reviews)</span>
+              <span class="rating-text">{{ (restaurant.rating || restaurant.averageRating || 0) | number:'1.1-1' }} ({{ restaurant.reviews || 0 }} reviews)</span>
             </div>
             <div class="restaurant-details">
               <div class="detail-item">
@@ -54,21 +160,34 @@
               </div>
               <div class="detail-item">
                 <mat-icon class="detail-icon">access_time</mat-icon>
-                <span>{{ restaurant.timing }}</span>
+                <span>{{ restaurant.timing || 'Hours vary' }}</span>
               </div>
             </div>
             <div class="restaurant-actions">
-              <button mat-button class="view-menu-btn">
+              <button mat-button class="view-menu-btn" (click)="$event.stopPropagation()">
                 <mat-icon>menu_book</mat-icon>
-                View Menu
+                View Details
               </button>
-              <button mat-button class="view-menu-btn" (click)="bookTableForRestaurant(restaurant)" class="book-btn">
+              <button mat-button class="view-menu-btn" (click)="bookTableForRestaurant(restaurant); $event.stopPropagation()" class="book-btn">
                 <mat-icon>event_available</mat-icon>
                 Book Table
               </button>
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Pagination -->
+      <div *ngIf="!loading && !error && restaurants.length > 0 && totalRestaurants > pageSize" class="pagination-section">
+        <mat-paginator 
+          [length]="totalRestaurants"
+          [pageSize]="pageSize"
+          [pageIndex]="currentPage"
+          [pageSizeOptions]="[2, 4, 6, 10]"
+          [showFirstLastButtons]="true"
+          (page)="onPageChange($event)"
+          aria-label="Select page of restaurants">
+        </mat-paginator>
       </div>
       
       <div class="cta-section">

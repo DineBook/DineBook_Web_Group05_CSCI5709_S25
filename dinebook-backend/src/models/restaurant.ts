@@ -21,6 +21,17 @@ export const restaurantSchema = new mongoose.Schema({
         required: [true, 'Location is required'],
         trim: true
     },
+    coordinates: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            default: 'Point'
+        },
+        coordinates: {
+            type: [Number], // [longitude, latitude]
+            index: '2dsphere'
+        }
+    },
     address: {
         street: String,
         city: String,

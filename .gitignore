@@ -93,3 +93,5 @@ dinebook-backend/.Trashes
 dinebook-backend/ehthumbs.db
 dinebook-backend/Thumbs.db
 .DS_Store
+
+.tool-versions

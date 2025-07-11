@@ -3,14 +3,14 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { map, catchError, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
-import { 
-  BookingAvailabilityQuery, 
-  CreateBookingRequest, 
-  BookingResponse, 
-  AvailabilityResponse, 
+import {
+  BookingAvailabilityQuery,
+  CreateBookingRequest,
+  BookingResponse,
+  AvailabilityResponse,
   Restaurant,
   BookingFilter,
-  BookingStats 
+  BookingStats
 } from '../models/booking';
 
 @Injectable({
@@ -20,48 +20,63 @@ export class BookingService {
   private apiUrl = 'http://localhost:3000/api';
   private bookingsSubject = new BehaviorSubject<BookingResponse[]>([]);
   public bookings$ = this.bookingsSubject.asObservable();
-  
+
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
 
   constructor(
     private http: HttpClient,
     private authService: AuthService
-  ) {}
+  ) { }
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
     const headers: { [key: string]: string } = {
       'Content-Type': 'application/json'
     };
-    
+
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
-    
+
     return new HttpHeaders(headers);
   }
 
   private handleError(error: any): Observable<never> {
     console.error('BookingService Error:', error);
     let errorMessage = 'An unexpected error occurred';
-    
+
     if (error.error?.message) {
       errorMessage = error.error.message;
     } else if (error.message) {
       errorMessage = error.message;
     }
-    
+
     return throwError(() => new Error(errorMessage));
   }
 
-  getRestaurants(): Observable<Restaurant[]> {
-    return this.http.get<Restaurant[]>(`${this.apiUrl}/restaurants`)
+  getRestaurants(params?: {
+    location?: string;
+    cuisine?: string;
+    priceRange?: string;
+    page?: string;
+    limit?: string;
+  }): Observable<{ restaurants: Restaurant[], pagination: any, filters: any }> {
+    let httpParams = new HttpParams();
+
+    if (params) {
+      if (params.location) httpParams = httpParams.set('location', params.location);
+      if (params.cuisine) httpParams = httpParams.set('cuisine', params.cuisine);
+      if (params.priceRange) httpParams = httpParams.set('priceRange', params.priceRange);
+      if (params.page) httpParams = httpParams.set('page', params.page);
+      if (params.limit) httpParams = httpParams.set('limit', params.limit);
+    }
+
+    return this.http.get<any>(`${this.apiUrl}/restaurants`, { params: httpParams })
       .pipe(
         map((response: any) => {
-          console.log('API Response:', response); 
-          
-          
+          console.log('API Response:', response);
+
           let restaurants: Restaurant[] = [];
           if (Array.isArray(response)) {
             restaurants = response;
@@ -74,40 +89,50 @@ export class BookingService {
             throw new Error('Invalid response format from server');
           }
 
-          return restaurants.map(restaurant => ({
+          const transformedRestaurants = restaurants.map(restaurant => ({
             ...restaurant,
             id: restaurant._id,
-            rating: restaurant.averageRating || 0, 
-            timing: this.formatOpeningHours(restaurant.openingHours), 
-            reviews: 0 
+            rating: restaurant.averageRating || 0,
+            timing: this.formatOpeningHours(restaurant.openingHours),
+            reviews: 0
           }));
+
+          return {
+            restaurants: transformedRestaurants,
+            pagination: response.pagination || { page: 1, limit: 10, total: restaurants.length, pages: 1 },
+            filters: response.filters || {}
+          };
         }),
         catchError(this.handleError)
       );
   }
 
   private formatOpeningHours(openingHours: Restaurant['openingHours']): string {
+    if (!openingHours) {
+      return 'Hours vary';
+    }
+
     const daysOfWeek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const today = daysOfWeek[new Date().getDay()] as keyof typeof openingHours;
     const todayHours = openingHours[today];
-    
+
     if (todayHours?.open && todayHours?.close) {
       return `Open until ${todayHours.close}`;
     }
-    
+
     return 'Hours vary';
   }
- 
+
   checkAvailability(query: BookingAvailabilityQuery): Observable<AvailabilityResponse> {
     this.loadingSubject.next(true);
-    
+
     let params = new HttpParams()
       .set('restaurantId', query.restaurantId)
       .set('date', query.date);
 
-    return this.http.get<AvailabilityResponse>(`${this.apiUrl}/bookings/availability`, { 
+    return this.http.get<AvailabilityResponse>(`${this.apiUrl}/bookings/availability`, {
       params,
-      headers: this.getHeaders() 
+      headers: this.getHeaders()
     }).pipe(
       tap(() => this.loadingSubject.next(false)),
       catchError((error) => {
@@ -117,10 +142,10 @@ export class BookingService {
     );
   }
 
-  
+
   createBooking(booking: CreateBookingRequest): Observable<BookingResponse> {
     this.loadingSubject.next(true);
-    
+
     return this.http.post<BookingResponse>(`${this.apiUrl}/bookings`, booking, {
       headers: this.getHeaders()
     }).pipe(
@@ -135,10 +160,10 @@ export class BookingService {
     );
   }
 
-  
+
   getUserBookings(filter?: BookingFilter): Observable<BookingResponse[]> {
     this.loadingSubject.next(true);
-    
+
     let params = new HttpParams();
     if (filter?.status && filter.status !== 'all') {
       params = params.set('status', filter.status);
@@ -165,7 +190,7 @@ export class BookingService {
     );
   }
 
-  
+
   getBooking(bookingId: string): Observable<BookingResponse> {
     return this.http.get<BookingResponse>(`${this.apiUrl}/bookings/${bookingId}`, {
       headers: this.getHeaders()
@@ -174,10 +199,10 @@ export class BookingService {
     );
   }
 
-  
+
   cancelBooking(bookingId: string): Observable<void> {
     this.loadingSubject.next(true);
-    
+
     return this.http.delete<void>(`${this.apiUrl}/bookings/${bookingId}`, {
       headers: this.getHeaders()
     }).pipe(
@@ -192,7 +217,7 @@ export class BookingService {
     );
   }
 
-  
+
   getBookingStats(): Observable<BookingStats> {
     return this.http.get<BookingStats>(`${this.apiUrl}/bookings/stats`, {
       headers: this.getHeaders()
@@ -201,11 +226,11 @@ export class BookingService {
     );
   }
 
- 
+
   refreshUserBookings(): void {
     this.getUserBookings().subscribe({
       next: () => {
-        
+
       },
       error: (error) => {
         console.error('Failed to refresh user bookings:', error);
@@ -213,20 +238,20 @@ export class BookingService {
     });
   }
 
-  
+
   isBookingCancellable(booking: BookingResponse): boolean {
     const bookingDateTime = new Date(`${booking.date}T${booking.time}`);
     const now = new Date();
     const timeDifference = bookingDateTime.getTime() - now.getTime();
     const hoursDifference = timeDifference / (1000 * 3600);
-    
+
     return hoursDifference > 2 && booking.status === 'confirmed';
   }
 
   isBookingUpcoming(booking: BookingResponse): boolean {
     const bookingDateTime = new Date(`${booking.date}T${booking.time}`);
     const now = new Date();
-    
+
     return bookingDateTime > now && booking.status === 'confirmed';
   }
 

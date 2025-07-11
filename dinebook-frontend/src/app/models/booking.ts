@@ -51,6 +51,16 @@ export interface Restaurant {
   name: string;
   cuisine: string;
   location: string;
+  coordinates?: {
+    type: string;
+    coordinates: [number, number]; // [longitude, latitude]
+  };
+  address?: {
+    street?: string;
+    city?: string;
+    province?: string;
+    postalCode?: string;
+  };
   priceRange: number; // Backend uses number (1-4)
   averageRating?: number;
   description?: string;
@@ -70,12 +80,12 @@ export interface Restaurant {
   ownerId: string;
   createdAt?: Date;
   updatedAt?: Date;
-  
-  
+
+  // Legacy fields for compatibility
   rating?: number;
-  reviews?: number; 
+  reviews?: number;
   timing?: string;
-  image?: string; 
+  image?: string;
 }
 
 export interface BookingFilter {

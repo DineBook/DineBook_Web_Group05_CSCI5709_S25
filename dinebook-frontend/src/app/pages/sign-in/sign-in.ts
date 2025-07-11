@@ -68,7 +68,15 @@ export class SignInComponent {
           localStorage.setItem("user", JSON.stringify(response.user))
           this.authService.login()
           this.isLoading = false
-          this.router.navigate(["/dashboard"])
+
+          const userRole = response.user?.role
+          if (userRole === 'customer') {
+            this.router.navigate(["/dashboard"])
+          } else if (userRole === 'owner') {
+            this.router.navigate(["/owner/dashboard"])
+          } else {
+            this.router.navigate(["/dashboard"])
+          }
         },
         error: (err) => {
           this.isLoading = false

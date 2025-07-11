@@ -18,6 +18,10 @@ export interface RestaurantQueryParams {
     priceRange?: string;
     page?: string;
     limit?: string;
+    // Location-based search parameters
+    lat?: string;
+    lng?: string;
+    radius?: string; // in kilometers
 }
 
 // Interface for restaurant creation body
@@ -44,5 +48,9 @@ export interface CreateRestaurantBody {
         city?: string;
         province?: string;
         postalCode?: string;
+    };
+    coordinates?: {
+        latitude: number;
+        longitude: number;
     };
 }

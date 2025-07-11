@@ -2,12 +2,12 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { Booking } from "../models/";
 import { sendBookingConfirmationEmail } from "../utils/email";
-import { 
-    BookingValidators, 
-    ResponseHelper, 
-    BookingDatabase, 
-    TimeHelper, 
-    BookingInputValidator 
+import {
+    BookingValidators,
+    ResponseHelper,
+    BookingDatabase,
+    TimeHelper,
+    BookingInputValidator
 } from "../utils/booking-helpers";
 import type { AuthenticatedRequest, CreateBookingBody } from "../types";
 
@@ -24,7 +24,7 @@ export const getAvailability = async (
         }
 
         const restaurant = await BookingDatabase.findRestaurantById(restaurantId);
-        
+
         const dayOfWeek = TimeHelper.getDayOfWeek(date);
         const openingHours = TimeHelper.getOpeningHours(restaurant, dayOfWeek);
 
@@ -53,7 +53,7 @@ export const getAvailability = async (
         const availableSlots = timeSlots.map(time => {
             const bookedGuests = bookingCounts[time] || 0;
             const availableCapacity = restaurant.capacity - bookedGuests;
-            
+
             return {
                 time,
                 available: availableCapacity > 0,
@@ -77,7 +77,7 @@ export const getAvailability = async (
 
     } catch (error) {
         console.error("Availability fetch error:", error);
-        
+
         if (error instanceof Error) {
             if (error.name === "CastError") {
                 return ResponseHelper.sendValidationError(res, "Invalid restaurant ID");
@@ -117,7 +117,7 @@ export const createBooking = async (
         }
 
         if (!BookingValidators.isTimeWithinHours(time, openingHours.open, openingHours.close)) {
-            return ResponseHelper.sendValidationError(res, 
+            return ResponseHelper.sendValidationError(res,
                 `Requested time is outside restaurant hours (${openingHours.open} - ${openingHours.close})`
             );
         }
@@ -139,7 +139,7 @@ export const createBooking = async (
 
             if (availableCapacity < guests) {
                 await session.abortTransaction();
-                return ResponseHelper.sendConflictError(res, 
+                return ResponseHelper.sendConflictError(res,
                     `This time slot is fully booked. Available capacity: ${availableCapacity}, Requested: ${guests}`
                 );
             }
@@ -159,6 +159,7 @@ export const createBooking = async (
             await sendConfirmationEmail(user.email, booking, restaurant.name, specialRequests);
 
         } catch (transactionError) {
+            console.error('Error during booking creation:', transactionError);
             await session.abortTransaction();
             throw transactionError;
         } finally {
@@ -234,7 +235,7 @@ export const cancelBooking = async (
 
         const bookingDateTime = new Date(`${booking.date}T${booking.time}:00`);
         const now = new Date();
-        
+
         if (bookingDateTime < now) {
             return ResponseHelper.sendValidationError(res, "Cannot cancel past bookings");
         }
@@ -265,14 +266,14 @@ export const cancelBooking = async (
 };
 
 async function sendConfirmationEmail(
-    userEmail: string, 
-    booking: any, 
-    restaurantName: string, 
+    userEmail: string,
+    booking: any,
+    restaurantName: string,
     specialRequests?: string
 ): Promise<void> {
     try {
         console.log(`Attempting to send email to: ${userEmail}`);
-        
+
         await sendBookingConfirmationEmail(userEmail, {
             bookingId: booking._id.toString(),
             restaurantName,
@@ -281,7 +282,7 @@ async function sendConfirmationEmail(
             guests: booking.guests,
             specialRequests
         });
-        
+
         console.log(`Booking confirmation email sent successfully to: ${userEmail}`);
     } catch (emailError) {
         console.error("Failed to send confirmation email:", emailError);
@@ -298,10 +299,10 @@ export const getUserBookings = async (
 ): Promise<void> => {
     try {
         const customerId = req.user.id;
-        const { status, dateFrom, dateTo } = req.query as { 
-            status?: string; 
-            dateFrom?: string; 
-            dateTo?: string; 
+        const { status, dateFrom, dateTo } = req.query as {
+            status?: string;
+            dateFrom?: string;
+            dateTo?: string;
         };
 
         const filter: any = { customerId };
@@ -354,24 +355,24 @@ export const getBookingStats = async (
             cancelledBookings
         ] = await Promise.all([
             Booking.countDocuments({ customerId }),
-            Booking.countDocuments({ 
-                customerId, 
+            Booking.countDocuments({
+                customerId,
                 status: 'confirmed',
                 $or: [
                     { date: { $gt: todayString } },
-                    { 
+                    {
                         date: todayString,
                         time: { $gt: now.toTimeString().slice(0, 5) }
                     }
                 ]
             }),
-            Booking.countDocuments({ 
-                customerId, 
+            Booking.countDocuments({
+                customerId,
                 status: { $in: ['completed'] }
             }),
-            Booking.countDocuments({ 
-                customerId, 
-                status: 'cancelled' 
+            Booking.countDocuments({
+                customerId,
+                status: 'cancelled'
             })
         ]);
 

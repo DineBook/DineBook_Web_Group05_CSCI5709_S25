@@ -35,6 +35,7 @@ export const register = async (req: Request, res: Response) => {
 
 		res.status(201).json({ message: 'Registration successful! Please check your email to verify your account.' });
 	} catch (err) {
+		console.error('Error during registration:', err);
 		res.status(500).json({ message: 'Server error', error: err });
 	}
 };
@@ -72,6 +73,7 @@ export const login = async (req: Request, res: Response) => {
 			},
 		});
 	} catch (err) {
+		console.error('Error during login:', err);
 		res.status(500).json({ message: 'Server error', error: err });
 	}
 };
@@ -92,6 +94,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
 		res.json({ message: 'Email verified successfully' });
 	} catch (err) {
+		console.error('Error during email verification:', err);
 		res.status(500).json({ message: 'Server error', error: err });
 	}
 };

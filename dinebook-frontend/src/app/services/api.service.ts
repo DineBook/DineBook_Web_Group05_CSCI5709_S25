@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class ApiService {
   private apiUrl = 'http://localhost:3000';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getWelcomeMessage(): Observable<{ message: string }> {
     return this.http.get<{ message: string }>(`${this.apiUrl}/`);
@@ -24,5 +24,9 @@ export class ApiService {
 
   verifyEmail(token: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/auth/verify?token=${token}`);
+  }
+
+  getRestaurantById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/restaurants/${id}`);
   }
 }

@@ -9,6 +9,7 @@
       
       <nav class="nav-desktop" role="navigation" aria-label="Main navigation">
         <ul class="nav-list">
+          <!-- Always show Home -->
           <li class="nav-item">
             <a routerLink="/landing" 
                routerLinkActive="active" 
@@ -17,42 +18,63 @@
               Home
             </a>
           </li>
-          <li class="nav-item">
+          
+          <!-- Show for all users when not logged in, or for customers when logged in -->
+          <li class="nav-item" *ngIf="!(isLoggedIn$ | async) || (isCustomer$ | async)">
             <a routerLink="/restaurants" 
                routerLinkActive="active" 
                class="nav-link">
               Restaurants
             </a>
           </li>
-          <li class="nav-item">
+          
+          <!-- Show only for customers -->
+          <li class="nav-item" *ngIf="isCustomer$ | async">
             <a routerLink="/book-table" 
                routerLinkActive="active" 
                class="nav-link">
               Book Table
             </a>
           </li>
-          <li class="nav-item" *ngIf="authService.isLoggedIn$ | async">
+          
+          <!-- Customer Dashboard -->
+          <li class="nav-item" *ngIf="isCustomer$ | async">
             <a routerLink="/dashboard" 
                routerLinkActive="active" 
                class="nav-link">
               Dashboard
             </a>
           </li>
-          <li class="nav-item" *ngIf="authService.isLoggedIn$ | async">
+          
+          <!-- Owner Dashboard -->
+          <li class="nav-item" *ngIf="isOwner$ | async">
+            <a routerLink="/owner/dashboard" 
+               routerLinkActive="active" 
+               class="nav-link">
+              Dashboard
+            </a>
+          </li>
+          
+          <!-- My Bookings - show for both customers and owners -->
+          <li class="nav-item" *ngIf="(isCustomer$ | async) || (isOwner$ | async)">
             <a routerLink="/my-bookings" 
                routerLinkActive="active" 
                class="nav-link">
               My Bookings
             </a>
           </li>
-          <li class="nav-item">
+          
+          <!-- About - show only when not logged in -->
+          <li class="nav-item" *ngIf="!(isLoggedIn$ | async)">
             <a routerLink="/about" 
                routerLinkActive="active" 
                class="nav-link">
               About
             </a>
           </li>
-          <li class="nav-item">
+          
+          <!-- Contact - show only when not logged in -->
+          <li class="nav-item" *ngIf="!(isLoggedIn$ | async)">
             <a routerLink="/contact" 
                routerLinkActive="active" 
                class="nav-link">
@@ -63,18 +85,17 @@
       </nav>
       
       <div class="auth-section">
-        <ng-container *ngIf="authService.isLoggedIn$ | async; else loggedOutTemplate">
+        <ng-container *ngIf="isLoggedIn$ | async; else loggedOutTemplate">
           <div class="user-menu">
-            <span class="welcome-text">Welcome back!</span>
-<button 
-  mat-flat-button 
-  class="logout-btn" 
-  (click)="authService.logout()"
-  aria-label="Sign out of your account">
-  <img src="https://cdn-icons-png.flaticon.com/512/17578/17578369.png" alt="logout" />
-  Sign Out
-</button>
-
+            <span class="welcome-text">Welcome back<span *ngIf="isOwner$ | async"> (Owner)</span>!</span>
+            <button 
+              mat-flat-button 
+              class="logout-btn" 
+              (click)="authService.logout()"
+              aria-label="Sign out of your account">
+              <img src="https://cdn-icons-png.flaticon.com/512/17578/17578369.png" alt="logout" />
+              Sign Out
+            </button>
           </div>
         </ng-container>
         

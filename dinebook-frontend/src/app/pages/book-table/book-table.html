@@ -21,7 +21,36 @@
           
           <mat-card class="form-card">
             <mat-card-content>
-              <mat-form-field appearance="outline" class="full-width">
+              <!-- Preselected Restaurant Info -->
+              <div *ngIf="preselectedRestaurant" class="preselected-restaurant-info">
+                <div class="info-header">
+                  <mat-icon>restaurant</mat-icon>
+                  <span class="info-title">Restaurant Selected</span>
+                </div>
+                <div class="restaurant-details">
+                  <h3 class="restaurant-name">{{ preselectedRestaurant.name }}</h3>
+                  <div class="restaurant-meta">
+                    <span *ngIf="preselectedRestaurant.cuisine" class="cuisine">
+                      <mat-icon>local_dining</mat-icon>
+                      {{ preselectedRestaurant.cuisine }} Cuisine
+                    </span>
+                    <span *ngIf="preselectedRestaurant.location" class="location">
+                      <mat-icon>location_on</mat-icon>
+                      {{ preselectedRestaurant.location }}
+                    </span>
+                    <span *ngIf="preselectedRestaurant.capacity" class="capacity">
+                      <mat-icon>people</mat-icon>
+                      Capacity: {{ preselectedRestaurant.capacity }} guests
+                    </span>
+                  </div>
+                </div>
+                <button type="button" mat-stroked-button color="primary" (click)="clearPreselection()" class="change-restaurant-btn">
+                  <mat-icon>edit</mat-icon>
+                  Change Restaurant
+                </button>
+              </div>
+
+              <mat-form-field appearance="outline" class="full-width" [style.display]="preselectedRestaurant ? 'none' : 'block'">
                 <mat-label>Select Restaurant</mat-label>
                 <mat-select formControlName="restaurantId" [disabled]="isLoading">
                   <mat-option value="">Choose a restaurant</mat-option>
