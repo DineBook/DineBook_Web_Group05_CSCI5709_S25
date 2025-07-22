@@ -1,4 +1,202 @@
 <div class="owner-dashboard">
-  <h1>Hello World - Owner Dashboard</h1>
-  <p>Welcome to the restaurant owner dashboard!</p>
+  <div class="container">
+    
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Loading your dashboard...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="error-state">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ error }}</p>
+      <button mat-raised-button class="btn-primary" (click)="loadDashboardData()">
+        Try Again
+      </button>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div *ngIf="!loading && !error && restaurant" class="dashboard-content">
+      
+      <!-- Header -->
+      <div class="dashboard-header">
+        <div class="restaurant-info">
+          <div class="restaurant-header-content">
+            <div class="restaurant-details-section">
+              <h1 class="restaurant-name">{{ restaurant.name }}</h1>
+              <p class="restaurant-details">
+                <mat-icon>location_on</mat-icon>
+                {{ restaurant.location }} • {{ restaurant.cuisine }} • ${{ ''.repeat(restaurant.priceRange) }}
+              </p>
+            </div>
+            <div class="restaurant-actions">
+              <button mat-raised-button class="btn-primary btn-with-icon" routerLink="/owner/restaurant">
+                <mat-icon>edit</mat-icon>
+                Edit Restaurant
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-grid" *ngIf="stats">
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ stats.totalBookings }}</div>
+            <div class="stat-label">Total Bookings</div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ stats.todayBookings }}</div>
+            <div class="stat-label">Today's Bookings</div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ stats.totalReviews }}</div>
+            <div class="stat-label">Total Reviews</div>
+          </div>
+        </div>
+        
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
+          <div class="stat-content">
+            <div class="stat-number">{{ (stats.averageRating || 0).toFixed(1) }}</div>
+            <div class="stat-label">Average Rating</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="dashboard-main">
+        <mat-tab-group class="dashboard-tabs">
+          
+          <!-- Recent Bookings Tab -->
+          <mat-tab label="Recent Bookings">
+            <div class="tab-content">
+              <div class="section-header">
+                <h3>Recent Bookings</h3>
+                <p>Latest reservations at your restaurant</p>
+              </div>
+              
+              <div *ngIf="recentBookings.length === 0" class="empty-state">
+                <mat-icon>calendar_today</mat-icon>
+                <p>No recent bookings</p>
+              </div>
+              
+              <div class="bookings-list" *ngIf="recentBookings.length > 0">
+                <mat-card *ngFor="let booking of recentBookings" class="booking-card">
+                  <mat-card-content>
+                    <div class="booking-header">
+                      <div class="customer-info">
+                        <h4>{{ booking.customerId?.name || 'Customer' }}</h4>
+                        <p>{{ booking.customerId?.email }}</p>
+                      </div>
+                      <mat-chip [color]="getStatusColor(booking.status)" selected>
+                        {{ booking.status | titlecase }}
+                      </mat-chip>
+                    </div>
+                    
+                    <div class="booking-details">
+                      <div class="detail-item">
+                        <mat-icon>calendar_today</mat-icon>
+                        <span>{{ formatDate(booking.date) }}</span>
+                      </div>
+                      <div class="detail-item">
+                        <mat-icon>access_time</mat-icon>
+                        <span>{{ formatTime(booking.time) }}</span>
+                      </div>
+                      <div class="detail-item">
+                        <mat-icon>people</mat-icon>
+                        <span>{{ booking.guests }} {{ booking.guests === 1 ? 'guest' : 'guests' }}</span>
+                      </div>
+                    </div>
+                    
+                    <div *ngIf="booking.specialRequests" class="special-requests">
+                      <mat-icon>note</mat-icon>
+                      <p>{{ booking.specialRequests }}</p>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </div>
+          </mat-tab>
+          
+          <!-- Recent Reviews Tab -->
+          <mat-tab label="Recent Reviews">
+            <div class="tab-content">
+              <div class="section-header">
+                <h3>Recent Reviews</h3>
+                <p>What customers are saying about your restaurant</p>
+              </div>
+              
+              <div *ngIf="recentReviews.length === 0" class="empty-state">
+                <mat-icon>rate_review</mat-icon>
+                <p>No recent reviews</p>
+              </div>
+              
+              <div class="reviews-list" *ngIf="recentReviews.length > 0">
+                <mat-card *ngFor="let review of recentReviews" class="review-card">
+                  <mat-card-content>
+                    <div class="review-header">
+                      <div class="customer-info">
+                        <h4>{{ review.customerId?.name || 'Anonymous' }}</h4>
+                        <div class="rating">
+                          <span *ngFor="let star of getStarArray(review.rating)" 
+                                [class]="star ? 'star filled' : 'star'">★</span>
+                          <span class="rating-text">({{ review.rating }}/5)</span>
+                        </div>
+                      </div>
+                      <div class="review-date">
+                        {{ formatDate(review.createdAt) }}
+                      </div>
+                    </div>
+                    
+                    <div class="review-content">
+                      <p>{{ review.comment }}</p>
+                    </div>
+                    
+                    <div *ngIf="review.ownerReply" class="owner-reply">
+                      <div class="reply-label">
+                        <mat-icon>reply</mat-icon>
+                        <span>Your Reply:</span>
+                      </div>
+                      <p>{{ review.ownerReply }}</p>
+                    </div>
+                    
+                    <div *ngIf="!review.ownerReply" class="reply-actions">
+                      <button mat-button class="btn-secondary btn-with-icon">
+                        <mat-icon>reply</mat-icon>
+                        Reply
+                      </button>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </div>
+          </mat-tab>
+          
+        </mat-tab-group>
+      </div>
+    </div>
+
+    <!-- No Restaurant State -->
+    <div *ngIf="!loading && !error && !restaurant" class="no-restaurant-state">
+      <mat-icon>restaurant</mat-icon>
+      <h2>No Restaurant Found</h2>
+      <p>You don't have a restaurant registered yet.</p>
+      <button mat-raised-button class="btn-primary">
+        Create Restaurant
+      </button>
+    </div>
+
+  </div>
 </div>

@@ -5,6 +5,7 @@ import { SignUpComponent } from './pages/sign-up/sign-up';
 import { VerifyComponent } from './pages/verify/verify';
 import { DashboardComponent } from './pages/dashboard/dashboard';
 import { OwnerDashboardComponent } from './pages/owner-dashboard/owner-dashboard';
+import { RestaurantManagementComponent } from './pages/restaurant-management/restaurant-management';
 import { RestaurantsComponent } from './pages/restaurants/restaurants';
 import { RestaurantDetailComponent } from './pages/restaurant-detail/restaurant-detail';
 import { AboutComponent } from './pages/about/about';
@@ -24,6 +25,7 @@ export const routes: Routes = [
   { path: 'verify', component: VerifyComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [CustomerGuard] },
   { path: 'owner/dashboard', component: OwnerDashboardComponent, canActivate: [OwnerGuard] },
+  { path: 'owner/restaurant', component: RestaurantManagementComponent, canActivate: [OwnerGuard] },
   { path: 'restaurants', component: RestaurantsComponent },
   { path: 'restaurants/:id', component: RestaurantDetailComponent },
   { path: 'book-table', component: BookTableComponent, canActivate: [CustomerGuard] },
