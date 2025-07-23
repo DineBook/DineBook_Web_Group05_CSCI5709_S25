@@ -80,9 +80,38 @@ export class RestaurantsComponent implements OnInit {
     })
   }
 
+  userCoords: { latitude: number; longitude: number; radius: number } | null = null;
+
   ngOnInit() {
+    this.getUserLocation();
     this.loadRestaurants()
     this.setupFormSubscriptions()
+  }
+
+   getUserLocation() {
+    if (!navigator.geolocation) {
+      console.warn('Geolocation is not supported by this browser.');
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        this.userCoords = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          radius: 5 // Default radius in km
+        };
+        console.log(
+          'User location:',
+          this.userCoords.latitude,
+          this.userCoords.longitude
+        );
+        this.loadRestaurants(); 
+      },
+      (error) => {
+        console.warn('Location access denied or unavailable', error);
+      }
+    );
   }
 
   setupFormSubscriptions() {
@@ -112,7 +141,10 @@ export class RestaurantsComponent implements OnInit {
     const params = {
       ...this.activeFilters,
       page: (this.currentPage + 1).toString(),
-      limit: this.pageSize.toString()
+      limit: this.pageSize.toString(),
+      latitude: this.userCoords?.latitude?.toString(),
+      longitude: this.userCoords?.longitude?.toString(),
+      radius:  this.userCoords?.radius?.toString() || "5" // Default radius as string
     }
 
     this.bookingService.getRestaurants(params).subscribe({

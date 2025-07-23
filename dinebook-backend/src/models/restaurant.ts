@@ -22,15 +22,43 @@ export const restaurantSchema = new mongoose.Schema({
         trim: true
     },
     coordinates: {
-        type: {
-            type: String,
-            enum: ['Point'],
-            default: 'Point'
+      latitude: {
+        type: Number,
+        min: [-90, "Latitude must be between -90 and 90 (North/South)"],
+        max: [90, "Latitude must be between -90 and 90 (North/South)"],
+        required: false,
+      },
+      longitude: {
+        type: Number,
+        min: [-180, "Longitude must be between -180 and 180 (East/West)"],
+        max: [180, "Longitude must be between -180 and 180 (East/West)"],
+        required: false,
+      },
+    },
+       geometry: {
+      type: {
+        type: String,
+        enum: ["Point"],
+        default: "Point",
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude] - MongoDB requirement
+        validate: {
+          validator: function (coordinates: number[]) {
+            // Only validate if coordinates are provided
+            if (!coordinates || coordinates.length === 0) return true;
+            return (
+              coordinates.length === 2 &&
+              coordinates[0] >= -180 &&
+              coordinates[0] <= 180 && // longitude
+              coordinates[1] >= -90 &&
+              coordinates[1] <= 90 // latitude
+            );
+          },
+          message:
+            "Coordinates must be [longitude, latitude] with valid ranges",
         },
-        coordinates: {
-            type: [Number], // [longitude, latitude]
-            index: '2dsphere'
-        }
+      },
     },
     address: {
         street: String,
@@ -86,5 +114,7 @@ export const restaurantSchema = new mongoose.Schema({
 restaurantSchema.virtual('averageRating').get(function () {
     return this._averageRating || 0;
 });
+
+restaurantSchema.index({ geometry: "2dsphere" }, { sparse: true }); // Create 2dsphere index for geospatial queries
 
 export const Restaurant = mongoose.model('Restaurant', restaurantSchema);
