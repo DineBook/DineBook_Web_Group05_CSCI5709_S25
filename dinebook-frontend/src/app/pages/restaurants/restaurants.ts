@@ -13,12 +13,14 @@ import { AuthService } from "../../services/auth.service"
 import { BookingService } from "../../services/booking.service"
 import { Restaurant } from "../../models/booking"
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
+import { ApiService } from '../../services/api.service';
 
 interface RestaurantDisplay extends Restaurant {
   badge: string
   badgeClass: string
   stars: string[]
   priceRangeDisplay: string
+  isFavorite?: boolean
 }
 
 @Component({
@@ -68,10 +70,11 @@ export class RestaurantsComponent implements OnInit {
   activeFilters: { location?: string, cuisine?: string, priceRange?: string } = {}
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router,
     private bookingService: BookingService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private apiService: ApiService
   ) {
     this.searchForm = this.fb.group({
       location: [''],
@@ -117,12 +120,26 @@ export class RestaurantsComponent implements OnInit {
 
     this.bookingService.getRestaurants(params).subscribe({
       next: (response) => {
-        this.restaurants = response.restaurants.map(restaurant => this.transformRestaurant(restaurant))
-        this.totalRestaurants = response.pagination.total
-        this.totalPages = response.pagination.pages
-        this.loading = false
-        console.log('Loaded restaurants:', this.restaurants)
-        console.log('Pagination:', response.pagination)
+        const restaurants = response.restaurants.map(restaurant => this.transformRestaurant(restaurant))
+        if (this.authService.isLoggedIn && this.authService.isCustomer()) {
+          const statusRequests = restaurants.map(r =>
+            this.apiService.checkFavoriteStatus(r._id).toPromise()
+              .then(res => ({ id: r._id, isFavorite: res && typeof res.isFavorite === 'boolean' ? res.isFavorite : false }))
+              .catch(() => ({ id: r._id, isFavorite: false }))
+          )
+          Promise.all(statusRequests).then(statuses => {
+            const statusMap = Object.fromEntries(statuses.map(s => [s.id, s.isFavorite]))
+            this.restaurants = restaurants.map(r => ({ ...r, isFavorite: statusMap[r._id] }))
+            this.totalRestaurants = response.pagination.total
+            this.totalPages = response.pagination.pages
+            this.loading = false
+          })
+        } else {
+          this.restaurants = restaurants.map(r => ({ ...r, isFavorite: false }))
+          this.totalRestaurants = response.pagination.total
+          this.totalPages = response.pagination.pages
+          this.loading = false
+        }
       },
       error: (error) => {
         console.error('Error loading restaurants:', error)
@@ -227,6 +244,20 @@ export class RestaurantsComponent implements OnInit {
 
   retry() {
     this.loadRestaurants()
+  }
+
+  onToggleFavorite(restaurant: RestaurantDisplay, event: Event) {
+    event.stopPropagation()
+    if (!this.authService.isLoggedIn || !this.authService.isCustomer()) return
+    this.apiService.toggleFavorite(restaurant._id).subscribe({
+      next: (res) => {
+        if (res && typeof res.isFavorite === 'boolean') {
+          restaurant.isFavorite = res.isFavorite
+        }
+      },
+      error: () => {
+      }
+    })
   }
 
   // Pagination methods

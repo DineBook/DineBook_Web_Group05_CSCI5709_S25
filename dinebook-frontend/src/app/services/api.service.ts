@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -56,5 +57,28 @@ export class ApiService {
 
   updateRestaurant(restaurantId: string, restaurantData: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/api/restaurants/${restaurantId}`, restaurantData, { headers: this.getAuthHeaders() });
+  }
+
+  getFavorites(): Observable<any[]> {
+    return this.http.get<{ favorites: any[] }>(`${this.apiUrl}/api/favorites`, { headers: this.getAuthHeaders() })
+      .pipe(
+        map(res => (res.favorites || []).map(fav => fav.restaurantId).filter(r => !!r))
+      );
+  }
+
+  /**
+   * Check if a specific restaurant is favorited by the current user
+   * @param restaurantId Restaurant ID
+   */
+  checkFavoriteStatus(restaurantId: string): Observable<{ isFavorite: boolean }> {
+    return this.http.get<{ isFavorite: boolean }>(`${this.apiUrl}/api/favorites/${restaurantId}/status`, { headers: this.getAuthHeaders() });
+  }
+
+  /**
+   * Toggle favorite status for a restaurant (add/remove)
+   * @param restaurantId Restaurant ID
+   */
+  toggleFavorite(restaurantId: string): Observable<{ isFavorite: boolean }> {
+    return this.http.post<{ isFavorite: boolean }>(`${this.apiUrl}/api/favorites/${restaurantId}`, {}, { headers: this.getAuthHeaders() });
   }
 }

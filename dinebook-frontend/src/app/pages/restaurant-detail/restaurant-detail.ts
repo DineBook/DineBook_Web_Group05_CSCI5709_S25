@@ -27,12 +27,14 @@ export class RestaurantDetailComponent implements OnInit {
     loading = false;
     error: string | null = null;
     restaurantId: string | null = null;
+    isFavorite: boolean = false;
+    favoriteLoading: boolean = false;
 
     constructor(
         private route: ActivatedRoute,
         private router: Router,
         private apiService: ApiService,
-        private authService: AuthService
+        public authService: AuthService
     ) { }
 
     ngOnInit() {
@@ -40,6 +42,7 @@ export class RestaurantDetailComponent implements OnInit {
             this.restaurantId = params.get('id');
             if (this.restaurantId) {
                 this.loadRestaurantDetails();
+                this.checkFavoriteStatus();
             }
         });
     }
@@ -64,6 +67,39 @@ export class RestaurantDetailComponent implements OnInit {
                     this.error = 'Failed to load restaurant details';
                 }
                 this.loading = false;
+            }
+        });
+    }
+
+    checkFavoriteStatus() {
+        if (!this.restaurantId || !this.authService.isLoggedIn || !this.authService.isCustomer()) {
+            this.isFavorite = false;
+            return;
+        }
+        this.apiService.checkFavoriteStatus(this.restaurantId).subscribe({
+            next: (res) => {
+                this.isFavorite =
+                  res && typeof (res as any).isFavorited === 'boolean' ? (res as any).isFavorited :
+                  (res && typeof res.isFavorite === 'boolean' ? res.isFavorite : false);
+            },
+            error: () => {
+                this.isFavorite = false;
+            }
+        });
+    }
+
+    onToggleFavorite() {
+        if (!this.restaurantId || !this.authService.isLoggedIn || !this.authService.isCustomer()) return;
+        this.favoriteLoading = true;
+        this.apiService.toggleFavorite(this.restaurantId).subscribe({
+            next: (res) => {
+                this.isFavorite =
+                  res && typeof (res as any).isFavorited === 'boolean' ? (res as any).isFavorited :
+                  (res && typeof res.isFavorite === 'boolean' ? res.isFavorite : false);
+                this.favoriteLoading = false;
+            },
+            error: () => {
+                this.favoriteLoading = false;
             }
         });
     }

@@ -82,9 +82,12 @@
                 <mat-icon>event_available</mat-icon>
                 Book a Table
               </button>
-              <button mat-button class="favorite-btn">
-                <mat-icon>favorite_border</mat-icon>
-                Add to Favorites
+              <button mat-button class="favorite-btn"
+                      *ngIf="authService.isLoggedIn && authService.isCustomer()"
+                      (click)="onToggleFavorite()" [disabled]="favoriteLoading">
+                <mat-icon *ngIf="!favoriteLoading">{{ isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+                <mat-icon *ngIf="favoriteLoading" class="spinning">refresh</mat-icon>
+                {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
               </button>
             </div>
           </div>
