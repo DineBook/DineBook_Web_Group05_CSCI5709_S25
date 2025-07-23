@@ -6,6 +6,7 @@ import authRoutes from './routes/auth';
 import restaurantRoutes from './routes/restaurant';
 import bookingRoutes from './routes/booking';
 import reviewRoutes from './routes/review';
+import favoriteRoutes from './routes/favorite';
 import mongoose from 'mongoose';
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/restaurants', restaurantRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/reviews', reviewRoutes); 
+app.use('/api/favorites', favoriteRoutes);
 
 // Basic route
 app.get('/', (req, res) => {
