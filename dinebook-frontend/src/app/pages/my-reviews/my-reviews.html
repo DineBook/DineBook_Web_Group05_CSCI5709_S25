@@ -1,0 +1,187 @@
+<div class="my-reviews-page">
+  <div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="header-content">
+        <div class="header-text">
+          <h1>
+            <mat-icon>rate_review</mat-icon>
+            My Reviews
+          </h1>
+          <p>Manage and edit your restaurant reviews</p>
+        </div>
+        <button mat-raised-button color="primary" routerLink="/restaurants">
+          <mat-icon>restaurant</mat-icon>
+          Browse Restaurants to Review
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="loading-container">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading your reviews...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="error-container">
+      <mat-icon class="error-icon">error_outline</mat-icon>
+      <h3>Unable to Load Reviews</h3>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="loadMyReviews()">
+        <mat-icon>refresh</mat-icon>
+        Try Again
+      </button>
+    </div>
+
+    <!-- Not Customer State -->
+    <div *ngIf="!isCustomer && !loading" class="not-customer-container">
+      <mat-icon class="info-icon">info</mat-icon>
+      <h3>Access Restricted</h3>
+      <p>Only customers can view and manage reviews.</p>
+      <button mat-raised-button color="primary" routerLink="/sign-in">
+        <mat-icon>login</mat-icon>
+        Sign In as Customer
+      </button>
+    </div>
+
+    <!-- No Reviews State -->
+    <div *ngIf="reviews.length === 0 && !loading && !error && isCustomer" class="no-reviews-container">
+      <mat-icon class="no-reviews-icon">rate_review</mat-icon>
+      <h3>No Reviews Yet</h3>
+      <p>You haven't written any reviews yet. Browse restaurants and select one to leave a review!</p>
+      <button mat-raised-button color="primary" routerLink="/restaurants">
+        <mat-icon>search</mat-icon>
+        Browse Restaurants
+      </button>
+    </div>
+
+    <!-- Reviews List -->
+    <div *ngIf="reviews.length > 0 && !loading && !error" class="reviews-container">
+      <div class="reviews-stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ reviews.length }}</span>
+          <span class="stat-label">Total Reviews</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-number">{{ getAverageRating() | number:'1.1-1' }}</span>
+          <span class="stat-label">Average Rating</span>
+        </div>
+      </div>
+
+      <div class="reviews-list">
+        <mat-card *ngFor="let review of reviews; trackBy: trackByReviewId" class="review-card">
+          <!-- Review Header -->
+          <mat-card-header>
+            <div class="restaurant-info" mat-card-avatar>
+              <mat-icon class="restaurant-icon">restaurant</mat-icon>
+            </div>
+            <mat-card-title>{{ getRestaurantName(review.restaurantId) }}</mat-card-title>
+            <mat-card-subtitle>
+              <div class="review-meta">
+                <div class="rating">
+                  <mat-icon *ngFor="let star of getStarArray(review.rating)" 
+                           [class.filled]="star.filled" 
+                           class="star-icon">
+                    {{ star.icon }}
+                  </mat-icon>
+                  <span class="rating-text">({{ review.rating }}/5)</span>
+                </div>
+                <span class="review-date">{{ formatDate(review.createdAt) }}</span>
+              </div>
+            </mat-card-subtitle>
+            
+            <!-- Action Menu -->
+            <div class="review-actions">
+              <button mat-icon-button 
+                      (click)="startEditReview(review)"
+                      *ngIf="editingReview !== review._id"
+                      matTooltip="Edit Review">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button 
+                      color="warn"
+                      (click)="deleteReview(review._id!, getRestaurantName(review.restaurantId))"
+                      *ngIf="editingReview !== review._id"
+                      matTooltip="Delete Review">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </mat-card-header>
+
+          <mat-card-content>
+            <!-- View Mode -->
+            <div *ngIf="editingReview !== review._id" class="review-content">
+              <p class="review-comment">{{ review.comment }}</p>
+              
+              <!-- Owner Reply -->
+              <div *ngIf="review.ownerReply" class="owner-reply">
+                <mat-divider></mat-divider>
+                <div class="reply-content">
+                  <div class="reply-header">
+                    <mat-icon class="reply-icon">reply</mat-icon>
+                    <span class="reply-label">Restaurant Response</span>
+                  </div>
+                  <p class="reply-text">{{ review.ownerReply }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Edit Mode -->
+            <div *ngIf="editingReview === review._id" class="edit-form">
+              <form [formGroup]="editForm" (ngSubmit)="updateReview(review._id!)">
+                <!-- Edit Rating -->
+                <div class="edit-rating-section">
+                  <label class="edit-rating-label">Rating *</label>
+                  <div class="star-rating">
+                    <mat-icon
+                      *ngFor="let star of [1, 2, 3, 4, 5]"
+                      [class]="getStarClass(star)"
+                      class="star-button"
+                      (click)="onStarClick(star)"
+                      (mouseenter)="onStarHover(star)"
+                      (mouseleave)="onStarLeave()">
+                      {{ getStarIcon(star) }}
+                    </mat-icon>
+                  </div>
+                  <div class="error-message" *ngIf="getFieldError('rating')">
+                    {{ getFieldError('rating') }}
+                  </div>
+                </div>
+
+                <!-- Edit Comment -->
+                <div class="edit-comment-section">
+                  <mat-form-field appearance="outline" class="comment-field">
+                    <mat-label>Your Review *</mat-label>
+                    <textarea
+                      matInput
+                      formControlName="comment"
+                      placeholder="Update your review..."
+                      rows="4"
+                      maxlength="500"></textarea>
+                    <mat-hint align="end">{{ commentCharCount }}/500</mat-hint>
+                    <mat-error *ngIf="getFieldError('comment')">
+                      {{ getFieldError('comment') }}
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- Edit Actions -->
+                <div class="edit-actions">
+                  <button type="button" mat-button (click)="cancelEdit()">
+                    <mat-icon>close</mat-icon>
+                    Cancel
+                  </button>
+                  <button type="submit" mat-raised-button color="primary" [disabled]="editForm.invalid">
+                    <mat-icon>save</mat-icon>
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

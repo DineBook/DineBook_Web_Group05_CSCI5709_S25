@@ -11,6 +11,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup } from "@angular/forms"
 import { Router, RouterLink } from "@angular/router"
 import { AuthService } from "../../services/auth.service"
 import { BookingService } from "../../services/booking.service"
+import { ReviewService } from "../../services/review.service"
 import { Restaurant } from "../../models/booking"
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { ApiService } from '../../services/api.service';
@@ -74,7 +75,9 @@ export class RestaurantsComponent implements OnInit {
     private router: Router,
     private bookingService: BookingService,
     private fb: FormBuilder,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private reviewService: ReviewService
+    
   ) {
     this.searchForm = this.fb.group({
       location: [''],
@@ -145,10 +148,13 @@ export class RestaurantsComponent implements OnInit {
       ...this.activeFilters,
       page: (this.currentPage + 1).toString(),
       limit: this.pageSize.toString(),
-      latitude: this.userCoords?.latitude?.toString(),
-      longitude: this.userCoords?.longitude?.toString(),
-      radius:  this.userCoords?.radius?.toString() || "5" // Default radius as string
+      latitude: this.userCoords?.latitude ? this.userCoords.latitude.toString().trim() : undefined,
+      longitude: this.userCoords?.longitude ? this.userCoords.longitude.toString().trim() : undefined,
+      radius: this.userCoords?.radius?.toString() || "5" // Default radius as string
     }
+
+    // Remove undefined values
+    Object.keys(params).forEach(key => params[key as keyof typeof params] === undefined && delete params[key as keyof typeof params]);
 
     this.bookingService.getRestaurants(params).subscribe({
       next: (response) => {
@@ -172,6 +178,15 @@ export class RestaurantsComponent implements OnInit {
           this.totalPages = response.pagination.pages
           this.loading = false
         }
+        this.restaurants = response.restaurants.map(restaurant => this.transformRestaurant(restaurant))
+        this.totalRestaurants = response.pagination.total
+        this.totalPages = response.pagination.pages
+        this.loading = false
+        console.log('Loaded restaurants:', this.restaurants)
+        console.log('Pagination:', response.pagination)
+        
+        // Load review data for each restaurant
+        this.loadReviewsForRestaurants();
       },
       error: (error) => {
         console.error('Error loading restaurants:', error)
@@ -330,5 +345,41 @@ export class RestaurantsComponent implements OnInit {
       default:
         return value
     }
+  }
+
+  private loadReviewsForRestaurants(): void {
+    this.restaurants.forEach((restaurant, index) => {
+      if (restaurant._id) {
+        this.reviewService.getReviewsByRestaurant(restaurant._id).subscribe({
+          next: (response) => {
+            const reviews = response.reviews || [];
+            const reviewCount = reviews.length;
+            const averageRating = reviewCount > 0 
+              ? reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / reviewCount 
+              : 0;
+
+            // Update the restaurant with review data
+            this.restaurants[index] = {
+              ...this.restaurants[index],
+              reviews: reviewCount,
+              averageRating: averageRating,
+              rating: averageRating,
+              stars: this.getStars(averageRating)
+            };
+          },
+          error: (error) => {
+            console.error(`Error loading reviews for restaurant ${restaurant._id}:`, error);
+            // Set default values on error
+            this.restaurants[index] = {
+              ...this.restaurants[index],
+              reviews: 0,
+              averageRating: 0,
+              rating: 0,
+              stars: this.getStars(0)
+            };
+          }
+        });
+      }
+    });
   }
 }

@@ -255,6 +255,29 @@
   
   .restaurant-content {
     padding: 0 1rem 3rem;
+
+    .restaurant-tabs {
+      .mat-mdc-tab-group {
+        .mat-mdc-tab-header {
+          border-bottom: 1px solid #e0e0e0;
+          
+          .mat-mdc-tab {
+            min-width: 120px;
+            
+            &.mdc-tab--active {
+              .mdc-tab__text-label {
+                color: var(--primary-600);
+                font-weight: 600;
+              }
+            }
+          }
+        }
+      }
+      
+      .tab-content {
+        padding: 2rem 0;
+      }
+    }
     
     .content-grid {
       display: grid;

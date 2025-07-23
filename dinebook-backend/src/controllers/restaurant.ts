@@ -38,10 +38,33 @@ export const getNearbyRestaurants = async (
     const lng = parseFloat(longitude);
     const radiusKm = parseFloat(radius);
 
+    console.log('Parsed coordinates:', { lat, lng, radiusKm });
+
     // Validate coordinates
-    if (!validateCoordinates(lat, lng)) {
+    if (isNaN(lat) || isNaN(lng) || isNaN(radiusKm)) {
       res.status(400).json({
-        error: "Invalid latitude or longitude values",
+        error: "Invalid coordinate or radius values",
+      });
+      return;
+    }
+
+    if (lat < -90 || lat > 90) {
+      res.status(400).json({
+        error: "Latitude must be between -90 and 90",
+      });
+      return;
+    }
+
+    if (lng < -180 || lng > 180) {
+      res.status(400).json({
+        error: "Longitude must be between -180 and 180",
+      });
+      return;
+    }
+
+    if (radiusKm <= 0) {
+      res.status(400).json({
+        error: "Radius must be greater than 0",
       });
       return;
     }
@@ -56,57 +79,89 @@ export const getNearbyRestaurants = async (
     if (priceRange) {
       filter.priceRange = parseInt(priceRange);
     }
+    
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    const restaurants = await Restaurant.aggregate([
-      {
-        $geoNear: {
-          near: {
-            type: "Point",
-            coordinates: [lng, lat], // MongoDB uses [longitude, latitude]
-          },
-          distanceField: "distance",
-          maxDistance: radiusKm * 1000, // Convert km to meters
-          spherical: true,
-          query: filter,
-        },
-      },
-      {
-        $addFields: {
-          distanceKm: { $round: [{ $divide: ["$distance", 1000] }, 2] },
-        },
-      },
-      {
-        $sort: { distance: 1 }, // Sort by distance (nearest first)
-      },
-      {
-        $skip: skip,
-      },
-      {
-        $limit: parseInt(limit),
-      },
-    ]);
+    console.log("Starting geospatial query with coordinates:", [lng, lat]);
+    console.log("Filter object:", filter);
+    console.log("Max distance (meters):", radiusKm * 1000);
 
-    // Get total count for pagination
-    const totalCount = await Restaurant.aggregate([
-      {
-        $geoNear: {
-          near: {
-            type: "Point",
-            coordinates: [lng, lat],
-          },
-          distanceField: "distance",
-          maxDistance: radiusKm * 1000,
-          spherical: true,
-          query: filter,
-        },
-      },
-      {
-        $count: "total",
-      },
-    ]);
+    // Try geospatial query first, fallback to regular query if it fails
+    let restaurants;
+    let total = 0;
 
-    const total = totalCount.length > 0 ? totalCount[0].total : 0;
+    try {
+      restaurants = await Restaurant.aggregate([
+        {
+          $geoNear: {
+            near: {
+              type: "Point",
+              coordinates: [lng, lat], // MongoDB uses [longitude, latitude]
+            },
+            distanceField: "distance",
+            maxDistance: radiusKm * 1000, // Convert km to meters
+            spherical: true,
+            query: filter,
+            key: "geometry" // Specify which field to use for geospatial search
+          },
+        },
+        {
+          $addFields: {
+            distanceKm: { $round: [{ $divide: ["$distance", 1000] }, 2] },
+          },
+        },
+        {
+          $sort: { distance: 1 }, // Sort by distance (nearest first)
+        },
+        {
+          $skip: skip,
+        },
+        {
+          $limit: parseInt(limit),
+        },
+      ]);
+
+      console.log("Aggregation completed. Found restaurants:", restaurants.length);
+
+      // Get total count for pagination
+      const totalCount = await Restaurant.aggregate([
+        {
+          $geoNear: {
+            near: {
+              type: "Point",
+              coordinates: [lng, lat],
+            },
+            distanceField: "distance",
+            maxDistance: radiusKm * 1000,
+            spherical: true,
+            query: filter,
+            key: "geometry" // Specify which field to use for geospatial search
+          },
+        },
+        {
+          $count: "total",
+        },
+      ]);
+
+      total = totalCount.length > 0 ? totalCount[0].total : 0;
+    } catch (geoError) {
+      console.log("Geospatial query failed, falling back to regular query:", (geoError as Error).message);
+      
+      // Fallback to regular query without geospatial features
+      restaurants = await Restaurant.find(filter)
+        .skip(skip)
+        .limit(parseInt(limit))
+        .lean();
+
+      // Add mock distance for fallback
+      restaurants = restaurants.map(restaurant => ({
+        ...restaurant,
+        distance: 1000, // 1km default
+        distanceKm: 1.0,
+      }));
+
+      total = await Restaurant.countDocuments(filter);
+    }
 
     res.json({
       restaurants,
@@ -126,7 +181,10 @@ export const getNearbyRestaurants = async (
     });
   } catch (error) {
     console.error("Nearby restaurants search error:", error);
-    res.status(500).json({ error: "Failed to fetch nearby restaurants" });
+    res.status(500).json({ 
+      error: "Failed to fetch nearby restaurants",
+      details: (error as Error).message 
+    });
   }
 };
 

@@ -167,11 +167,15 @@
               </div>
             </div>
             <div class="restaurant-actions">
-              <button mat-button class="view-menu-btn" (click)="$event.stopPropagation()">
+              <button mat-button class="view-menu-btn" [routerLink]="['/restaurants', restaurant._id]" (click)="$event.stopPropagation()">
                 <mat-icon>menu_book</mat-icon>
                 View Details
               </button>
-              <button mat-button class="view-menu-btn" (click)="bookTableForRestaurant(restaurant); $event.stopPropagation()" class="book-btn">
+              <button mat-button class="review-btn" [routerLink]="['/restaurants', restaurant._id]" [queryParams]="{tab: 'reviews'}" (click)="$event.stopPropagation()">
+                <mat-icon>rate_review</mat-icon>
+                Leave Review
+              </button>
+              <button mat-button class="book-btn" (click)="bookTableForRestaurant(restaurant); $event.stopPropagation()">
                 <mat-icon>event_available</mat-icon>
                 Book Table
               </button>

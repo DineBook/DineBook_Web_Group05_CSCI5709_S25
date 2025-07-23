@@ -94,84 +94,103 @@
         </div>
       </div>
 
-      <!-- Details Section -->
+      <!-- Details Section with Tabs -->
       <div class="restaurant-content">
-        <div class="content-grid">
-          <!-- Description -->
-          <div class="detail-card">
-            <h3>About This Restaurant</h3>
-            <p *ngIf="restaurant.description; else noDescription">
-              {{ restaurant.description }}
-            </p>
-            <ng-template #noDescription>
-              <p class="no-info">Restaurant description coming soon...</p>
-            </ng-template>
-          </div>
+        <mat-tab-group [(selectedIndex)]="selectedTabIndex" class="restaurant-tabs">
+          <!-- Overview Tab -->
+          <mat-tab label="Overview">
+            <div class="tab-content">
+              <div class="content-grid">
+                <!-- Description -->
+                <div class="detail-card">
+                  <h3>About This Restaurant</h3>
+                  <p *ngIf="restaurant.description; else noDescription">
+                    {{ restaurant.description }}
+                  </p>
+                  <ng-template #noDescription>
+                    <p class="no-info">Restaurant description coming soon...</p>
+                  </ng-template>
+                </div>
 
-          <!-- Contact Information -->
-          <div class="detail-card">
-            <h3>Contact Information</h3>
-            <div class="contact-info">
-              <div class="contact-item" *ngIf="restaurant.phoneNumber">
-                <mat-icon>phone</mat-icon>
-                <span>{{ restaurant.phoneNumber }}</span>
-              </div>
-              <div class="contact-item" *ngIf="restaurant.email">
-                <mat-icon>email</mat-icon>
-                <span>{{ restaurant.email }}</span>
-              </div>
-              <div class="contact-item" *ngIf="restaurant.address">
-                <mat-icon>location_on</mat-icon>
-                <div class="address">
-                  <span *ngIf="restaurant.address.street">{{ restaurant.address.street }}</span>
-                  <span *ngIf="restaurant.address.city">{{ restaurant.address.city }}, {{ restaurant.address.province }}</span>
-                  <span *ngIf="restaurant.address.postalCode">{{ restaurant.address.postalCode }}</span>
+                <!-- Contact Information -->
+                <div class="detail-card">
+                  <h3>Contact Information</h3>
+                  <div class="contact-info">
+                    <div class="contact-item" *ngIf="restaurant.phoneNumber">
+                      <mat-icon>phone</mat-icon>
+                      <span>{{ restaurant.phoneNumber }}</span>
+                    </div>
+                    <div class="contact-item" *ngIf="restaurant.email">
+                      <mat-icon>email</mat-icon>
+                      <span>{{ restaurant.email }}</span>
+                    </div>
+                    <div class="contact-item" *ngIf="restaurant.address">
+                      <mat-icon>location_on</mat-icon>
+                      <div class="address">
+                        <span *ngIf="restaurant.address.street">{{ restaurant.address.street }}</span>
+                        <span *ngIf="restaurant.address.city">{{ restaurant.address.city }}, {{ restaurant.address.province }}</span>
+                        <span *ngIf="restaurant.address.postalCode">{{ restaurant.address.postalCode }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Opening Hours -->
+                <div class="detail-card" *ngIf="restaurant.openingHours">
+                  <h3>Opening Hours</h3>
+                  <div class="hours-list">
+                    <div class="hour-item" *ngFor="let day of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']">
+                      <span class="day">{{ day | titlecase }}:</span>
+                      <span class="time" *ngIf="getOpeningHoursForDay(day)?.open && getOpeningHoursForDay(day)?.close">
+                        {{ getOpeningHoursForDay(day)!.open }} - {{ getOpeningHoursForDay(day)!.close }}
+                      </span>
+                      <span class="time closed" *ngIf="!getOpeningHoursForDay(day)?.open">
+                        Closed
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Features/Amenities -->
+                <div class="detail-card">
+                  <h3>Features & Amenities</h3>
+                  <div class="features-grid">
+                    <mat-chip-listbox class="features-chips">
+                      <mat-chip-option class="feature-chip">
+                        <mat-icon>restaurant</mat-icon>
+                        {{ restaurant.cuisine }} Cuisine
+                      </mat-chip-option>
+                      <mat-chip-option class="feature-chip" *ngIf="restaurant.capacity">
+                        <mat-icon>people</mat-icon>
+                        {{ restaurant.capacity }} Capacity
+                      </mat-chip-option>
+                      <mat-chip-option class="feature-chip">
+                        <mat-icon>star</mat-icon>
+                        {{ (restaurant.averageRating || 0) | number:'1.1-1' }} Rating
+                      </mat-chip-option>
+                      <mat-chip-option class="feature-chip">
+                        <mat-icon>attach_money</mat-icon>
+                        {{ formatPriceRange(restaurant.priceRange) }}
+                      </mat-chip-option>
+                    </mat-chip-listbox>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          </mat-tab>
 
-          <!-- Opening Hours -->
-          <div class="detail-card" *ngIf="restaurant.openingHours">
-            <h3>Opening Hours</h3>
-            <div class="hours-list">
-              <div class="hour-item" *ngFor="let day of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']">
-                <span class="day">{{ day | titlecase }}:</span>
-                <span class="time" *ngIf="getOpeningHoursForDay(day)?.open && getOpeningHoursForDay(day)?.close">
-                  {{ getOpeningHoursForDay(day)!.open }} - {{ getOpeningHoursForDay(day)!.close }}
-                </span>
-                <span class="time closed" *ngIf="!getOpeningHoursForDay(day)?.open">
-                  Closed
-                </span>
-              </div>
+          <!-- Reviews Tab -->
+          <mat-tab label="Reviews & Ratings">
+            <div class="tab-content">
+              <!-- Restaurant Reviews Component (handles both viewing and writing reviews) -->
+              <app-restaurant-reviews
+                [restaurantId]="restaurant._id"
+                [restaurantName]="restaurant.name"
+                (reviewsUpdated)="onReviewsUpdated($event)">
+              </app-restaurant-reviews>
             </div>
-          </div>
-
-          <!-- Features/Amenities -->
-          <div class="detail-card">
-            <h3>Features & Amenities</h3>
-            <div class="features-grid">
-              <mat-chip-listbox class="features-chips">
-                <mat-chip-option class="feature-chip">
-                  <mat-icon>restaurant</mat-icon>
-                  {{ restaurant.cuisine }} Cuisine
-                </mat-chip-option>
-                <mat-chip-option class="feature-chip" *ngIf="restaurant.capacity">
-                  <mat-icon>people</mat-icon>
-                  {{ restaurant.capacity }} Capacity
-                </mat-chip-option>
-                <mat-chip-option class="feature-chip">
-                  <mat-icon>star</mat-icon>
-                  {{ (restaurant.averageRating || 0) | number:'1.1-1' }} Rating
-                </mat-chip-option>
-                <mat-chip-option class="feature-chip">
-                  <mat-icon>attach_money</mat-icon>
-                  {{ formatPriceRange(restaurant.priceRange) }}
-                </mat-chip-option>
-              </mat-chip-listbox>
-            </div>
-          </div>
-        </div>
+          </mat-tab>
+        </mat-tab-group>
       </div>
 
       <!-- Book Table CTA -->

@@ -1,0 +1,123 @@
+<div class="write-review-section">
+  <!-- Not logged in state -->
+  <div *ngIf="!isLoggedIn" class="auth-prompt">
+    <mat-card class="auth-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>rate_review</mat-icon>
+          Write a Review
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Share your experience with {{ restaurantName }}!</p>
+        <p class="auth-message">Please sign in to write a review.</p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-raised-button color="primary" routerLink="/sign-in">
+          <mat-icon>login</mat-icon>
+          Sign In
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Not a customer state -->
+  <div *ngIf="isLoggedIn && !isCustomer" class="not-customer">
+    <mat-card class="info-card">
+      <mat-card-content>
+        <div class="info-content">
+          <mat-icon class="info-icon">info</mat-icon>
+          <p>Only customers can write reviews.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Write review form -->
+  <div *ngIf="isLoggedIn && isCustomer" class="review-form-container">
+    <mat-card class="review-form-card">
+      <mat-card-header>
+        <div class="form-header">
+          <mat-card-title>
+            <mat-icon>rate_review</mat-icon>
+            Write a Review for {{ restaurantName }}
+          </mat-card-title>
+          <mat-card-subtitle>
+            Share your experience to help other customers
+          </mat-card-subtitle>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="reviewForm" (ngSubmit)="onSubmit()" class="review-form">
+          <!-- Rating Section -->
+          <div class="rating-section">
+            <label class="rating-label">Your Rating *</label>
+            <div class="star-rating">
+              <mat-icon
+                *ngFor="let star of [1, 2, 3, 4, 5]"
+                [class]="getStarClass(star)"
+                class="star-button"
+                (click)="onStarClick(star)"
+                (mouseenter)="onStarHover(star)"
+                (mouseleave)="onStarLeave()">
+                {{ getStarIcon(star) }}
+              </mat-icon>
+            </div>
+            <div class="rating-text" *ngIf="selectedRating > 0">
+              <span class="rating-description">
+                {{ selectedRating === 1 ? 'Poor' : 
+                   selectedRating === 2 ? 'Fair' : 
+                   selectedRating === 3 ? 'Good' : 
+                   selectedRating === 4 ? 'Very Good' : 
+                   'Excellent' }}
+              </span>
+              <span class="rating-value">({{ selectedRating }}/5)</span>
+            </div>
+            <div class="error-message" *ngIf="getFieldError('rating')">
+              {{ getFieldError('rating') }}
+            </div>
+          </div>
+
+          <!-- Comment Section -->
+          <div class="comment-section">
+            <mat-form-field appearance="outline" class="comment-field">
+              <mat-label>Your Review *</mat-label>
+              <textarea
+                matInput
+                formControlName="comment"
+                placeholder="Tell us about your experience at {{ restaurantName }}. What did you like? What could be improved?"
+                rows="6"
+                maxlength="500"></textarea>
+              <mat-hint align="end">{{ commentCharCount }}/500</mat-hint>
+              <mat-error *ngIf="getFieldError('comment')">
+                {{ getFieldError('comment') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="form-actions">
+            <button 
+              type="button" 
+              mat-button 
+              (click)="resetForm()"
+              [disabled]="submitting">
+              <mat-icon>clear</mat-icon>
+              Clear
+            </button>
+            <button 
+              type="submit" 
+              mat-raised-button 
+              color="primary"
+              [disabled]="reviewForm.invalid || submitting">
+              <mat-spinner diameter="20" *ngIf="submitting"></mat-spinner>
+              <mat-icon *ngIf="!submitting">send</mat-icon>
+              {{ submitting ? 'Submitting...' : 'Submit Review' }}
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
