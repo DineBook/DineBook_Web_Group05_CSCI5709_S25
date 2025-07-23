@@ -30,22 +30,21 @@
             <mat-icon>arrow_back</mat-icon>
           </button>
         </div>
-        
+
         <div class="restaurant-hero">
           <div class="restaurant-image">
-            <img src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" 
-                 [alt]="restaurant.name" />
+            <img src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" [alt]="restaurant.name" />
             <div class="image-overlay">
               <div class="restaurant-badge featured">
                 Featured
               </div>
             </div>
           </div>
-          
+
           <div class="restaurant-info">
             <h1 class="restaurant-name">{{ restaurant.name }}</h1>
             <p class="restaurant-cuisine">{{ restaurant.cuisine }} Restaurant</p>
-            
+
             <div class="restaurant-rating">
               <div class="stars">
                 <mat-icon *ngFor="let star of getStars(restaurant.averageRating || 0)" class="star-icon">
@@ -53,11 +52,11 @@
                 </mat-icon>
               </div>
               <span class="rating-text">
-                {{ (restaurant.averageRating || 0) | number:'1.1-1' }} 
+                {{ (restaurant.averageRating || 0) | number:'1.1-1' }}
                 ({{ restaurant.reviews || 0 }} reviews)
               </span>
             </div>
-            
+
             <div class="restaurant-meta">
               <div class="meta-item">
                 <mat-icon>location_on</mat-icon>
@@ -76,7 +75,7 @@
                 <span>Capacity: {{ restaurant.capacity }} guests</span>
               </div>
             </div>
-            
+
             <div class="restaurant-actions">
               <button mat-raised-button color="primary" (click)="bookTable()" class="book-btn">
                 <mat-icon>event_available</mat-icon>
@@ -121,7 +120,8 @@
                 <mat-icon>location_on</mat-icon>
                 <div class="address">
                   <span *ngIf="restaurant.address.street">{{ restaurant.address.street }}</span>
-                  <span *ngIf="restaurant.address.city">{{ restaurant.address.city }}, {{ restaurant.address.province }}</span>
+                  <span *ngIf="restaurant.address.city">{{ restaurant.address.city }}, {{ restaurant.address.province
+                    }}</span>
                   <span *ngIf="restaurant.address.postalCode">{{ restaurant.address.postalCode }}</span>
                 </div>
               </div>
@@ -132,7 +132,8 @@
           <div class="detail-card" *ngIf="restaurant.openingHours">
             <h3>Opening Hours</h3>
             <div class="hours-list">
-              <div class="hour-item" *ngFor="let day of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']">
+              <div class="hour-item"
+                *ngFor="let day of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']">
                 <span class="day">{{ day | titlecase }}:</span>
                 <span class="time" *ngIf="getOpeningHoursForDay(day)?.open && getOpeningHoursForDay(day)?.close">
                   {{ getOpeningHoursForDay(day)!.open }} - {{ getOpeningHoursForDay(day)!.close }}
@@ -183,6 +184,33 @@
             </button>
           </div>
         </div>
+      </div>
+      <!-- Add Review Section -->
+      <div *ngIf="isCustomer" class="review-form-section">
+        <h3>Leave a Review</h3>
+        <form [formGroup]="reviewForm" (ngSubmit)="submitReview()">
+          <mat-form-field appearance="outline" class="review-field">
+            <mat-label>Your Review</mat-label>
+            <textarea matInput formControlName="text" rows="4" required></textarea>
+            <mat-error *ngIf="reviewForm.get('text')?.invalid">Review is required</mat-error>
+          </mat-form-field>
+
+          <label class="rating-label">Your Rating</label>
+          <div class="star-rating">
+            <mat-icon *ngFor="let star of [1, 2, 3, 4, 5]" (click)="setRating(star)"
+              [class.selected]="star <= reviewForm.get('rating')?.value">
+              {{ star <= reviewForm.get('rating')?.value ? 'star' : 'star_border' }} </mat-icon>
+          </div>
+          <mat-error *ngIf="reviewForm.get('rating')?.invalid">Rating is required</mat-error>
+
+
+          <button mat-raised-button color="primary" type="submit" [disabled]="reviewForm.invalid || loadingReview">
+            Submit Review
+          </button>
+
+          <mat-spinner *ngIf="loadingReview" diameter="20"></mat-spinner>
+          <div *ngIf="reviewMessage" class="review-message">{{ reviewMessage }}</div>
+        </form>
       </div>
     </div>
   </div>

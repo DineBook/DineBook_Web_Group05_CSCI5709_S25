@@ -30,7 +30,8 @@ export const createReview = async (
       res.status(403).json({ error: "Only customers can create reviews" });
       return;
     }
-    const { restaurantId, rating, comment } = req.body;
+    const { rating, comment } = req.body;
+    const restaurantId = req.params.restaurantId;
     const customerId = req.user.id;
 
     // Input validation
