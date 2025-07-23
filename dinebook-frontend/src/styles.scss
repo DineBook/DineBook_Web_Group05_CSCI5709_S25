@@ -136,49 +136,297 @@ html, body {
   }
 }
 
-.mat-mdc-button, .mat-mdc-raised-button {
-  border-radius: var(--border-radius-md);
-  font-weight: 500;
-  text-transform: none;
-  letter-spacing: 0;
-  padding: 0 24px;
-  height: 44px;
-  font-size: 0.95rem;
-  transition: var(--transition-fast);
+// Modern Button Design System - Consistent & Clean
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button, .mat-mdc-fab, .mat-mdc-stroked-button {
+  border-radius: var(--border-radius-md) !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  padding: 0 20px !important;
+  height: 44px !important;
+  font-size: 0.95rem !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  overflow: hidden;
+  
+  // Completely neutralize ALL Material Design colors
+  &.mat-primary, &.mat-accent, &.mat-warn {
+    --mdc-filled-button-container-color: transparent !important;
+    --mdc-outlined-button-outline-color: transparent !important;
+    --mdc-text-button-label-text-color: inherit !important;
+    --mdc-filled-button-label-text-color: inherit !important;
+    background-color: transparent !important;
+    color: inherit !important;
+  }
+  
+  // Override any Material Design state colors
+  &:hover.mat-primary, &:hover.mat-accent, &:hover.mat-warn,
+  &:focus.mat-primary, &:focus.mat-accent, &:focus.mat-warn,
+  &:active.mat-primary, &:active.mat-accent, &:active.mat-warn {
+    background-color: transparent !important;
+    color: inherit !important;
+  }
   
   &:focus {
-    outline: 2px solid var(--primary-500);
-    outline-offset: 2px;
-  }
-}
-
-.mat-mdc-raised-button.mat-primary {
-  background-color: var(--primary-500);
-  color: white;
-  box-shadow: var(--shadow-sm);
-  
-  &:hover {
-    background-color: var(--primary-600);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-1px);
-  }
-  
-  &:active {
-    transform: translateY(0);
+    outline: 2px solid var(--primary-500) !important;
+    outline-offset: 2px !important;
   }
   
   &:disabled {
-    opacity: 0.6;
-    transform: none;
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  
+  // Size variants
+  &.btn-sm {
+    height: 36px !important;
+    padding: 0 16px !important;
+    font-size: 0.875rem !important;
+  }
+  
+  &.btn-lg {
+    height: 48px !important;
+    padding: 0 24px !important;
+    font-size: 1rem !important;
+  }
+  
+  &.btn-xl {
+    height: 52px !important;
+    padding: 0 32px !important;
+    font-size: 1.1rem !important;
   }
 }
 
-.mat-mdc-button.mat-primary {
-  color: var(--primary-500);
+// Primary Button - Main actions (Blue theme)
+.btn-primary, .mat-mdc-raised-button.btn-primary {
+  background-color: var(--primary-500) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: var(--shadow-sm) !important;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--primary-600) !important;
+    box-shadow: var(--shadow-md) !important;
+    transform: translateY(-1px) !important;
+  }
+  
+  &:active {
+    transform: translateY(0) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+}
+
+// Secondary Button - Secondary actions (Outlined blue)
+.btn-secondary, .mat-mdc-outlined-button.btn-secondary, .mat-mdc-stroked-button.btn-secondary {
+  background-color: transparent !important;
+  color: var(--primary-600) !important;
+  border: 1px solid var(--primary-300) !important;
+  box-shadow: none !important;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--primary-50) !important;
+    border-color: var(--primary-400) !important;
+    color: var(--primary-700) !important;
+    transform: none !important;
+  }
+  
+  &:active {
+    background-color: var(--primary-100) !important;
+  }
+}
+
+// White Button - For colored backgrounds like hero sections
+.btn-white, .mat-mdc-button.btn-white, .mat-mdc-outlined-button.btn-white {
+  background-color: white !important;
+  color: var(--gray-700) !important;
+  border: 1px solid white !important;
+  box-shadow: var(--shadow-sm) !important;
+  font-weight: 500 !important;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--gray-50) !important;
+    color: var(--gray-900) !important;
+    border-color: var(--gray-200) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: var(--shadow-md) !important;
+  }
+  
+  &:active {
+    transform: translateY(0) !important;
+    background-color: var(--gray-100) !important;
+  }
+  
+  // Icon styling for Learn More buttons
+  mat-icon {
+    font-size: 1.125rem !important;
+    width: 1.125rem !important;
+    height: 1.125rem !important;
+  }
+}
+
+// Ghost Button - Minimal actions
+.btn-ghost, .mat-mdc-button.btn-ghost {
+  background-color: transparent !important;
+  color: var(--gray-700) !important;
+  border: none !important;
+  box-shadow: none !important;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--gray-100) !important;
+    color: var(--gray-900) !important;
+    transform: none !important;
+  }
+  
+  &:active {
+    background-color: var(--gray-200) !important;
+  }
+}
+
+// Danger Button - Destructive actions
+.btn-danger {
+  background-color: var(--error-500) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: var(--shadow-sm) !important;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--error-600) !important;
+    box-shadow: var(--shadow-md) !important;
+    transform: translateY(-1px) !important;
+  }
+  
+  &:active {
+    transform: translateY(0) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+}
+
+// Success Button - Positive actions
+.btn-success {
+  background-color: var(--success-500) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: var(--shadow-sm) !important;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--success-600) !important;
+    box-shadow: var(--shadow-md) !important;
+    transform: translateY(-1px) !important;
+  }
+  
+  &:active {
+    transform: translateY(0) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+}
+
+// Override Material Design defaults that cause unwanted colors
+.mat-mdc-button:not(.btn-primary):not(.btn-secondary):not(.btn-ghost):not(.btn-danger):not(.btn-success):not(.btn-white) {
+  color: var(--gray-700) !important;
+  background-color: transparent !important;
   
   &:hover {
-    background-color: var(--primary-50);
+    background-color: var(--gray-100) !important;
+    color: var(--gray-900) !important;
   }
+}
+
+.mat-mdc-raised-button:not(.btn-primary):not(.btn-secondary):not(.btn-ghost):not(.btn-danger):not(.btn-success):not(.btn-white) {
+  background-color: var(--gray-100) !important;
+  color: var(--gray-700) !important;
+  box-shadow: var(--shadow-sm) !important;
+  
+  &:hover {
+    background-color: var(--gray-200) !important;
+    color: var(--gray-900) !important;
+    box-shadow: var(--shadow-md) !important;
+  }
+}
+
+.mat-mdc-outlined-button:not(.btn-primary):not(.btn-secondary):not(.btn-ghost):not(.btn-danger):not(.btn-success):not(.btn-white),
+.mat-mdc-stroked-button:not(.btn-primary):not(.btn-secondary):not(.btn-ghost):not(.btn-danger):not(.btn-success):not(.btn-white) {
+  color: var(--gray-700) !important;
+  border-color: var(--gray-300) !important;
+  background-color: transparent !important;
+  
+  &:hover {
+    background-color: var(--gray-50) !important;
+    border-color: var(--gray-400) !important;
+    color: var(--gray-900) !important;
+  }
+}
+
+// Completely neutralize ALL Material Design theme variables
+:root {
+  --mdc-theme-primary: var(--primary-500) !important;
+  --mdc-theme-secondary: var(--secondary-500) !important;
+  --mdc-theme-surface: var(--surface) !important;
+  --mdc-theme-background: var(--background) !important;
+  --mdc-theme-error: var(--error-500) !important;
+  
+  // Button specific overrides
+  --mdc-filled-button-container-color: transparent !important;
+  --mdc-filled-button-label-text-color: inherit !important;
+  --mdc-outlined-button-outline-color: var(--gray-300) !important;
+  --mdc-text-button-label-text-color: inherit !important;
+}
+
+// Icon Button styling
+.mat-mdc-icon-button {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: var(--border-radius-md) !important;
+  transition: all 0.2s ease !important;
+  
+  &:hover {
+    background-color: var(--gray-100) !important;
+    transform: scale(1.05) !important;
+  }
+  
+  &.btn-sm {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  
+  &.btn-lg {
+    width: 48px !important;
+    height: 48px !important;
+  }
+}
+
+// Button with icons
+.btn-with-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  
+  mat-icon {
+    font-size: 1.25rem !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+  }
+  
+  &.icon-right {
+    flex-direction: row-reverse !important;
+  }
+}
+
+// Remove Material Design ripple effects that cause color issues
+.mat-mdc-button .mat-mdc-button-ripple,
+.mat-mdc-raised-button .mat-mdc-button-ripple,
+.mat-mdc-outlined-button .mat-mdc-button-ripple {
+  display: none !important;
+}
+
+// Force consistent focus styles
+.mat-mdc-button:focus,
+.mat-mdc-raised-button:focus,
+.mat-mdc-outlined-button:focus,
+.mat-mdc-stroked-button:focus {
+  outline: 2px solid var(--primary-500) !important;
+  outline-offset: 2px !important;
 }
 
 // Enhanced utility classes

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Restaurant } from "../models/";
+import { Restaurant, Booking, Review } from "../models/";
 
 import type { AuthenticatedRequest, RestaurantQueryParams, CreateRestaurantBody } from "../types";
 
@@ -202,5 +202,204 @@ export const createRestaurant = async (
     } catch (error) {
         console.error("Restaurant creation error:", error);
         res.status(500).json({ error: "Failed to create restaurant" });
+    }
+};
+
+/**
+ * Get restaurants owned by the authenticated user
+ */
+export const getMyRestaurants = async (
+    req: AuthenticatedRequest,
+    res: Response
+): Promise<void> => {
+    try {
+        const ownerId = req.user.id;
+
+        const restaurants = await Restaurant.find({ ownerId, isActive: true })
+            .populate("ownerId", "name email")
+            .sort({ createdAt: -1 });
+
+        res.json({
+            restaurants,
+            total: restaurants.length
+        });
+    } catch (error) {
+        console.error("Get my restaurants error:", error);
+        res.status(500).json({ error: "Failed to fetch restaurants" });
+    }
+};
+
+/**
+ * Get bookings for a specific restaurant (owner only)
+ */
+export const getRestaurantBookings = async (
+    req: AuthenticatedRequest,
+    res: Response
+): Promise<void> => {
+    try {
+        const { id: restaurantId } = req.params;
+        const ownerId = req.user.id;
+        const { limit = "10", status, date } = req.query as {
+            limit?: string;
+            status?: string;
+            date?: string;
+        };
+
+        // Verify restaurant ownership
+        const restaurant = await Restaurant.findById(restaurantId);
+        if (!restaurant) {
+            res.status(404).json({ error: "Restaurant not found" });
+            return;
+        }
+
+        if (restaurant.ownerId.toString() !== ownerId) {
+            res.status(403).json({ error: "You don't have permission to view these bookings" });
+            return;
+        }
+
+        // Build filter
+        const filter: any = { restaurantId };
+        if (status && status !== 'all') {
+            filter.status = status;
+        }
+        if (date) {
+            filter.date = date;
+        }
+
+        const bookings = await Booking.find(filter)
+            .populate('customerId', 'name email')
+            .sort({ createdAt: -1 })
+            .limit(parseInt(limit));
+
+        res.json({
+            restaurantId,
+            restaurantName: restaurant.name,
+            bookings,
+            total: bookings.length
+        });
+    } catch (error) {
+        console.error("Get restaurant bookings error:", error);
+        res.status(500).json({ error: "Failed to fetch bookings" });
+    }
+};
+
+/**
+ * Get statistics for a specific restaurant (owner only)
+ */
+export const getRestaurantStats = async (
+    req: AuthenticatedRequest,
+    res: Response
+): Promise<void> => {
+    try {
+        const { id: restaurantId } = req.params;
+        const ownerId = req.user.id;
+
+        // Verify restaurant ownership
+        const restaurant = await Restaurant.findById(restaurantId);
+        if (!restaurant) {
+            res.status(404).json({ error: "Restaurant not found" });
+            return;
+        }
+
+        if (restaurant.ownerId.toString() !== ownerId) {
+            res.status(403).json({ error: "You don't have permission to view these stats" });
+            return;
+        }
+
+        // Calculate stats in parallel
+        const [
+            totalBookings,
+            todayBookings,
+            upcomingBookings,
+            totalReviews,
+            averageRating
+        ] = await Promise.all([
+            Booking.countDocuments({ restaurantId }),
+            Booking.countDocuments({
+                restaurantId,
+                date: new Date().toISOString().split('T')[0],
+                status: { $in: ['confirmed', 'pending'] }
+            }),
+            Booking.countDocuments({
+                restaurantId,
+                date: { $gte: new Date().toISOString().split('T')[0] },
+                status: { $in: ['confirmed', 'pending'] }
+            }),
+            Review.countDocuments({ restaurantId }),
+            Review.aggregate([
+                { $match: { restaurantId: restaurant._id } },
+                { $group: { _id: null, avgRating: { $avg: "$rating" } } }
+            ])
+        ]);
+
+        res.json({
+            restaurantId,
+            restaurantName: restaurant.name,
+            stats: {
+                totalBookings,
+                todayBookings,
+                upcomingBookings,
+                totalReviews,
+                averageRating: averageRating[0]?.avgRating || 0
+            }
+        });
+    } catch (error) {
+        console.error("Get restaurant stats error:", error);
+        res.status(500).json({ error: "Failed to fetch restaurant statistics" });
+    }
+};
+
+/**
+ * Update a restaurant (owner only)
+ */
+export const updateRestaurant = async (
+    req: AuthenticatedRequest,
+    res: Response
+): Promise<void> => {
+    try {
+        const { id: restaurantId } = req.params;
+        const ownerId = req.user.id;
+        const updateData = req.body;
+
+        // Verify restaurant ownership
+        const restaurant = await Restaurant.findById(restaurantId);
+        if (!restaurant) {
+            res.status(404).json({ error: "Restaurant not found" });
+            return;
+        }
+
+        if (restaurant.ownerId.toString() !== ownerId) {
+            res.status(403).json({ error: "You don't have permission to update this restaurant" });
+            return;
+        }
+
+        // Handle coordinates if provided
+        if (updateData.coordinates) {
+            updateData.coordinates = {
+                type: 'Point',
+                coordinates: [updateData.coordinates.longitude, updateData.coordinates.latitude]
+            };
+        }
+
+        // Update the restaurant
+        const updatedRestaurant = await Restaurant.findByIdAndUpdate(
+            restaurantId,
+            updateData,
+            { new: true, runValidators: true }
+        ).populate("ownerId", "name email");
+
+        res.json({
+            message: "Restaurant updated successfully",
+            restaurant: updatedRestaurant
+        });
+    } catch (error) {
+        console.error("Restaurant update error:", error);
+
+        if (error instanceof Error && error.name === "ValidationError") {
+            res.status(400).json({ error: "Validation error: " + error.message });
+            return;
+        }
+
+        res.status(500).json({ error: "Failed to update restaurant" });
     }
 };
