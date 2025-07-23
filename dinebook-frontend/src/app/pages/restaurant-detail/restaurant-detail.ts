@@ -5,9 +5,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTabsModule } from '@angular/material/tabs';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { Restaurant } from '../../models/booking';
+import { RestaurantReviewsComponent } from '../../components/restaurant-reviews/restaurant-reviews';
 
 @Component({
     selector: 'app-restaurant-detail',
@@ -17,7 +19,9 @@ import { Restaurant } from '../../models/booking';
         MatButtonModule,
         MatIconModule,
         MatCardModule,
-        MatChipsModule
+        MatChipsModule,
+        MatTabsModule,
+        RestaurantReviewsComponent
     ],
     templateUrl: './restaurant-detail.html',
     styleUrl: './restaurant-detail.scss',
@@ -29,6 +33,7 @@ export class RestaurantDetailComponent implements OnInit {
     restaurantId: string | null = null;
     isFavorite: boolean = false;
     favoriteLoading: boolean = false;
+    selectedTabIndex = 0;
 
     constructor(
         private route: ActivatedRoute,
@@ -43,6 +48,14 @@ export class RestaurantDetailComponent implements OnInit {
             if (this.restaurantId) {
                 this.loadRestaurantDetails();
                 this.checkFavoriteStatus();
+            }
+        });
+
+        // Handle query parameters for tab selection
+        this.route.queryParamMap.subscribe(params => {
+            const tab = params.get('tab');
+            if (tab === 'reviews') {
+                this.selectedTabIndex = 1; // Switch to reviews tab
             }
         });
     }
@@ -177,5 +190,20 @@ export class RestaurantDetailComponent implements OnInit {
 
         const dayKey = day as keyof typeof this.restaurant.openingHours;
         return this.restaurant.openingHours[dayKey] || null;
+    }
+
+    onReviewSubmitted() {
+        // Refresh the reviews section by switching tab
+        this.selectedTabIndex = 0; // Switch to overview tab first
+        setTimeout(() => {
+            this.selectedTabIndex = 1; // Then switch back to reviews tab
+        }, 100);
+    }
+
+    onReviewsUpdated(reviewStats: {totalReviews: number, averageRating: number}) {
+        if (this.restaurant) {
+            this.restaurant.reviews = reviewStats.totalReviews;
+            this.restaurant.averageRating = reviewStats.averageRating;
+        }
     }
 }

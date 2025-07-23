@@ -12,6 +12,7 @@ import { AboutComponent } from './pages/about/about';
 import { ContactComponent } from './pages/contact/contact';
 import { BookTableComponent } from './pages/book-table/book-table';
 import { MyBookingsComponent } from './pages/my-bookings/my-bookings';
+import { MyReviewsComponent } from './pages/my-reviews/my-reviews';
 import { BookingConfirmationComponent } from './components/booking-confirmation/booking-confirmation';
 import { PublicGuard } from './guards/public.guard';
 import { OwnerGuard } from './guards/owner.guard';
@@ -32,6 +33,7 @@ export const routes: Routes = [
   { path: 'book-table', component: BookTableComponent, canActivate: [CustomerGuard] },
   { path: 'book-table/:restaurantId', component: BookTableComponent, canActivate: [CustomerGuard] },
   { path: 'my-bookings', component: MyBookingsComponent, canActivate: [CustomerGuard] },
+  { path: 'my-reviews', component: MyReviewsComponent, canActivate: [CustomerGuard] },
   { path: 'booking-confirmation/:bookingId', component: BookingConfirmationComponent, canActivate: [CustomerGuard] },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },

@@ -64,6 +64,15 @@
             </a>
           </li>
           
+          <!-- My Reviews - show only for customers -->
+          <li class="nav-item" *ngIf="isCustomer$ | async">
+            <a routerLink="/my-reviews" 
+               routerLinkActive="active" 
+               class="nav-link">
+              My Reviews
+            </a>
+          </li>
+          
           <!-- About - show only when not logged in -->
           <li class="nav-item" *ngIf="!(isLoggedIn$ | async)">
             <a routerLink="/about" 
