@@ -61,6 +61,9 @@ export class BookingService {
     priceRange?: string;
     page?: string;
     limit?: string;
+    latitude?: string;
+    longitude?: string;
+    radius?: string;
   }): Observable<{ restaurants: Restaurant[], pagination: any, filters: any }> {
     let httpParams = new HttpParams();
 
@@ -70,6 +73,9 @@ export class BookingService {
       if (params.priceRange) httpParams = httpParams.set('priceRange', params.priceRange);
       if (params.page) httpParams = httpParams.set('page', params.page);
       if (params.limit) httpParams = httpParams.set('limit', params.limit);
+      if (params.latitude) httpParams = httpParams.set('latitude', params.latitude);
+      if (params.longitude) httpParams = httpParams.set('longitude', params.longitude);
+      if (params.radius) httpParams = httpParams.set('radius', params.radius);
     }
 
     return this.http.get<any>(`${this.apiUrl}/restaurants`, { params: httpParams })
