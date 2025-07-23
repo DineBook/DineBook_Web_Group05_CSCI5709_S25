@@ -37,15 +37,15 @@
           </div>
         </div>
         
-        <div class="dashboard-card">
+        <div class="dashboard-card" *ngIf="authService.isLoggedIn && authService.isCustomer()">
           <div class="card-icon">⭐</div>
           <div class="card-content">
             <h3 class="card-title">Favorites</h3>
             <p class="card-description">
               Keep track of your favorite restaurants and dishes
             </p>
-            <button mat-button class="card-action secondary">
-              Coming Soon
+            <button mat-raised-button color="primary" routerLink="/favorites" class="card-action">
+              View Favorites
             </button>
           </div>
         </div>

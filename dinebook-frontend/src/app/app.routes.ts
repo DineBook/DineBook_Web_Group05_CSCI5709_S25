@@ -16,6 +16,7 @@ import { BookingConfirmationComponent } from './components/booking-confirmation/
 import { PublicGuard } from './guards/public.guard';
 import { OwnerGuard } from './guards/owner.guard';
 import { CustomerGuard } from './guards/customer.guard';
+import { FavoritesPageComponent } from './pages/favorites/favorites-page.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/landing', pathMatch: 'full' },
@@ -34,5 +35,6 @@ export const routes: Routes = [
   { path: 'booking-confirmation/:bookingId', component: BookingConfirmationComponent, canActivate: [CustomerGuard] },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
+  { path: 'favorites', component: FavoritesPageComponent },
   { path: '**', redirectTo: '/landing' }
 ];

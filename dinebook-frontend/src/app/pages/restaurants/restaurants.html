@@ -130,8 +130,11 @@
           <div class="restaurant-image">
             <img src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" alt="Rooftop Restaurant" />
             <div class="image-overlay">
-              <button mat-icon-button class="favorite-btn" [attr.aria-label]="'Add ' + restaurant.name + ' to favorites'" (click)="$event.stopPropagation()">
-                <mat-icon>favorite_border</mat-icon>
+              <button *ngIf="authService.isLoggedIn && authService.isCustomer()"
+                      mat-icon-button class="favorite-btn"
+                      [attr.aria-label]="(restaurant.isFavorite ? 'Remove ' : 'Add ') + restaurant.name + ' to favorites'"
+                      (click)="onToggleFavorite(restaurant, $event)">
+                <mat-icon>{{ restaurant.isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
               </button>
             </div>
             <div class="restaurant-badge" [ngClass]="restaurant.badgeClass">
