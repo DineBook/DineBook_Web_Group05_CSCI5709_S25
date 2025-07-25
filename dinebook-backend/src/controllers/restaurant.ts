@@ -38,8 +38,6 @@ export const getNearbyRestaurants = async (
     const lng = parseFloat(longitude);
     const radiusKm = parseFloat(radius);
 
-    console.log('Parsed coordinates:', { lat, lng, radiusKm });
-
     // Validate coordinates
     if (isNaN(lat) || isNaN(lng) || isNaN(radiusKm)) {
       res.status(400).json({
@@ -82,10 +80,6 @@ export const getNearbyRestaurants = async (
     
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    console.log("Starting geospatial query with coordinates:", [lng, lat]);
-    console.log("Filter object:", filter);
-    console.log("Max distance (meters):", radiusKm * 1000);
-
     // Try geospatial query first, fallback to regular query if it fails
     let restaurants;
     let total = 0;
@@ -121,8 +115,6 @@ export const getNearbyRestaurants = async (
         },
       ]);
 
-      console.log("Aggregation completed. Found restaurants:", restaurants.length);
-
       // Get total count for pagination
       const totalCount = await Restaurant.aggregate([
         {
@@ -145,8 +137,6 @@ export const getNearbyRestaurants = async (
 
       total = totalCount.length > 0 ? totalCount[0].total : 0;
     } catch (geoError) {
-      console.log("Geospatial query failed, falling back to regular query:", (geoError as Error).message);
-      
       // Fallback to regular query without geospatial features
       restaurants = await Restaurant.find(filter)
         .skip(skip)
@@ -368,8 +358,6 @@ export const createRestaurant = async (
 
     // If coordinates are provided, use them
     if (latitude !== undefined && longitude !== undefined) {
-      console.log(`Using provided coordinates: ${latitude}, ${longitude}`);
-
       if (!validateCoordinates(latitude, longitude)) {
         res.status(400).json({ error: "Invalid latitude or longitude values" });
         return;
@@ -377,11 +365,9 @@ export const createRestaurant = async (
       coordinates = [longitude, latitude]; // MongoDB format: [lng, lat]
     } else if (location) {
       // Try to geocode the location address
-      console.log(`Attempting to geocode address: ${location}`);
       const geocodeResult = await geocodeAddress(location);
       if (geocodeResult) {
         coordinates = [geocodeResult.longitude, geocodeResult.latitude];
-        console.log(`Geocoded to: ${coordinates}`);
       }
     }
 
@@ -402,10 +388,6 @@ export const createRestaurant = async (
       },
       ownerId: req.user.id,
     };
-
-    console.log(
-      `Creating restaurant with coordinates: [${coordinates[0]}, ${coordinates[1]}]`
-    );
 
     const restaurant = new Restaurant(restaurantData);
     await restaurant.save();

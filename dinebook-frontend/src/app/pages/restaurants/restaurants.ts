@@ -107,11 +107,6 @@ export class RestaurantsComponent implements OnInit {
           longitude: position.coords.longitude,
           radius: 5 // Default radius in km
         };
-        console.log(
-          'User location:',
-          this.userCoords.latitude,
-          this.userCoords.longitude
-        );
         this.loadRestaurants(); 
       },
       (error) => {
@@ -182,8 +177,6 @@ export class RestaurantsComponent implements OnInit {
         this.totalRestaurants = response.pagination.total
         this.totalPages = response.pagination.pages
         this.loading = false
-        console.log('Loaded restaurants:', this.restaurants)
-        console.log('Pagination:', response.pagination)
         
         // Load review data for each restaurant
         this.loadReviewsForRestaurants();
