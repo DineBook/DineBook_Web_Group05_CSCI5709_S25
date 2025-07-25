@@ -272,8 +272,6 @@ async function sendConfirmationEmail(
     specialRequests?: string
 ): Promise<void> {
     try {
-        console.log(`Attempting to send email to: ${userEmail}`);
-
         await sendBookingConfirmationEmail(userEmail, {
             bookingId: booking._id.toString(),
             restaurantName,
@@ -283,7 +281,6 @@ async function sendConfirmationEmail(
             specialRequests
         });
 
-        console.log(`Booking confirmation email sent successfully to: ${userEmail}`);
     } catch (emailError) {
         console.error("Failed to send confirmation email:", emailError);
         console.error("Email error details:", {
