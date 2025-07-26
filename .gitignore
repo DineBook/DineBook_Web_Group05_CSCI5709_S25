@@ -95,3 +95,20 @@ dinebook-backend/Thumbs.db
 .DS_Store
 
 .tool-versions
+
+# Development and temporary files
+**/*-new.*
+**/*-backup.*
+**/*-old.*
+**/*.bak
+**/*.orig
+**/*.swp
+**/*.swo
+**/*~
+
+# IDE and editor files
+.vscode/
+.idea/
+*.iml
+*.ipr
+*.iws

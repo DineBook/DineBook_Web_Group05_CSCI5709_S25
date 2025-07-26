@@ -2,15 +2,15 @@
   <div class="container">
     <div class="header-content">
       <div class="logo-section">
-        <a routerLink="/landing" class="logo-link" aria-label="DineBook Home">
+        <a [routerLink]="(isOwner$ | async) ? '/owner-home' : '/landing'" class="logo-link" aria-label="DineBook Home">
           <span class="logo-text">DineBook</span>
         </a>
       </div>
       
       <nav class="nav-desktop" role="navigation" aria-label="Main navigation">
         <ul class="nav-list">
-          <!-- Always show Home -->
-          <li class="nav-item">
+          <!-- Home link - only show for non-owners -->
+          <li class="nav-item" *ngIf="!(isOwner$ | async)">
             <a routerLink="/landing" 
                routerLinkActive="active" 
                [routerLinkActiveOptions]="{exact: true}"
@@ -55,12 +55,39 @@
             </a>
           </li>
           
-          <!-- My Bookings - show for both customers and owners -->
-          <li class="nav-item" *ngIf="(isCustomer$ | async) || (isOwner$ | async)">
+          <!-- Owner Restaurant Management -->
+          <li class="nav-item" *ngIf="isOwner$ | async">
+            <a routerLink="/owner/restaurant" 
+               routerLinkActive="active" 
+               class="nav-link">
+              Manage Restaurant
+            </a>
+          </li>
+          
+          <!-- Owner Menu Management -->
+          <li class="nav-item" *ngIf="isOwner$ | async">
+            <a routerLink="/owner/menu" 
+               routerLinkActive="active" 
+               class="nav-link">
+              Manage Menu
+            </a>
+          </li>
+          
+          <!-- My Bookings for customers -->
+          <li class="nav-item" *ngIf="isCustomer$ | async">
             <a routerLink="/my-bookings" 
                routerLinkActive="active" 
                class="nav-link">
               My Bookings
+            </a>
+          </li>
+          
+          <!-- Restaurant Bookings for owners -->
+          <li class="nav-item" *ngIf="isOwner$ | async">
+            <a routerLink="/owner/bookings" 
+               routerLinkActive="active" 
+               class="nav-link">
+              Restaurant Bookings
             </a>
           </li>
           
@@ -96,7 +123,9 @@
       <div class="auth-section">
         <ng-container *ngIf="isLoggedIn$ | async; else loggedOutTemplate">
           <div class="user-menu">
-            <span class="welcome-text">Welcome back<span *ngIf="isOwner$ | async"> (Owner)</span>!</span>
+            <span class="welcome-text">
+              Welcome back, {{ getUserName() }}!
+            </span>
             <button 
               mat-flat-button 
               class="logout-btn" 

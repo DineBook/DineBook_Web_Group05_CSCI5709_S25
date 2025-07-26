@@ -106,7 +106,60 @@ export const restaurantSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
-    }
+    },
+    menuItems: [{
+        _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            default: () => new mongoose.Types.ObjectId()
+        },
+        name: {
+            type: String,
+            required: true,
+            trim: true,
+            maxlength: [100, 'Menu item name cannot exceed 100 characters']
+        },
+        description: {
+            type: String,
+            maxlength: [300, 'Menu item description cannot exceed 300 characters']
+        },
+        price: {
+            type: Number,
+            required: true,
+            min: [0, 'Price must be positive']
+        },
+        category: {
+            type: String,
+            required: true,
+            enum: ['Appetizers', 'Mains', 'Desserts', 'Beverages', 'Salads', 'Soups', 'Specials', 'Other']
+        },
+        imageUrl: {
+            type: String
+        },
+        isVegetarian: {
+            type: Boolean,
+            default: false
+        },
+        isVegan: {
+            type: Boolean,
+            default: false
+        },
+        isGlutenFree: {
+            type: Boolean,
+            default: false
+        },
+        isAvailable: {
+            type: Boolean,
+            default: true
+        },
+        createdAt: {
+            type: Date,
+            default: Date.now
+        },
+        updatedAt: {
+            type: Date,
+            default: Date.now
+        }
+    }]
 }, {
     timestamps: true
 });

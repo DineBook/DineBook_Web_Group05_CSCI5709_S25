@@ -186,6 +186,7 @@
               <app-restaurant-reviews
                 [restaurantId]="restaurant._id"
                 [restaurantName]="restaurant.name"
+                [restaurantOwnerId]="restaurant.ownerId"
                 (reviewsUpdated)="onReviewsUpdated($event)">
               </app-restaurant-reviews>
             </div>

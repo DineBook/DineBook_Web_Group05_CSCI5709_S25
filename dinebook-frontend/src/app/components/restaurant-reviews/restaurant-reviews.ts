@@ -35,6 +35,7 @@ import { AuthService } from '../../services/auth.service';
 export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() restaurantId!: string;
   @Input() restaurantName!: string;
+  @Input() restaurantOwnerId!: string;
   @Output() reviewsUpdated = new EventEmitter<{totalReviews: number, averageRating: number}>();
 
   reviews: Review[] = [];
@@ -48,11 +49,13 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
   editingReply = '';
   newReply = '';
   isEditingReview = false;
+  editingReviewId = '';
+  showWriteReviewForm = false;
   editReviewData = { rating: 0, comment: '' };
 
   constructor(
     private reviewService: ReviewService,
-    private authService: AuthService,
+    public authService: AuthService,
     private snackBar: MatSnackBar
   ) { }
 
@@ -135,14 +138,68 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
   }
 
   editReviewInList(review: any): void {
-    this.userReview = { ...review };
+    this.editingReviewId = review._id;
     this.editReviewData.rating = review.rating;
     this.editReviewData.comment = review.comment;
-    this.isEditingReview = true;
-    
-    const reviewForm = document.querySelector('.review-form');
-    if (reviewForm) {
-      reviewForm.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  cancelEditReviewInList(): void {
+    this.editingReviewId = '';
+    this.editReviewData = { rating: 0, comment: '' };
+  }
+
+  cancelWriteReview(): void {
+    this.showWriteReviewForm = false;
+    this.editReviewData = { rating: 0, comment: '' };
+  }
+
+  async submitNewReview(): Promise<void> {
+    if (!this.editReviewData.rating || !this.editReviewData.comment.trim()) {
+      return;
+    }
+
+    try {
+      const reviewData = {
+        restaurantId: this.restaurantId,
+        rating: this.editReviewData.rating,
+        comment: this.editReviewData.comment.trim()
+      };
+      
+      await this.reviewService.createReview(reviewData).toPromise();
+      
+      this.snackBar.open('Review submitted successfully!', 'Close', { duration: 3000 });
+      this.cancelWriteReview();
+      await this.loadReviews();
+      this.reviewsUpdated.emit();
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      this.snackBar.open('Failed to submit review. Please try again.', 'Close', { duration: 3000 });
+    }
+  }
+
+  async updateReviewInList(): Promise<void> {
+    if (!this.editReviewData.rating || !this.editReviewData.comment.trim()) {
+      return;
+    }
+
+    try {
+      const updateData = {
+        rating: this.editReviewData.rating,
+        comment: this.editReviewData.comment.trim()
+      };
+      
+      console.log('Updating review with data:', updateData);
+      console.log('Review ID:', this.editingReviewId);
+      
+      await this.reviewService.updateReview(this.editingReviewId, updateData).toPromise();
+      
+      this.snackBar.open('Review updated successfully!', 'Close', { duration: 3000 });
+      this.cancelEditReviewInList();
+      await this.loadReviews();
+      this.reviewsUpdated.emit();
+    } catch (error) {
+      console.error('Error updating review:', error);
+      this.snackBar.open('Failed to update review. Please try again.', 'Close', { duration: 3000 });
     }
   }
 
@@ -152,9 +209,10 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
     }
 
     try {
-      await this.reviewService.deleteReview(review._id);
+      console.log('Deleting review with ID:', review._id);
+      await this.reviewService.deleteReview(review._id).toPromise();
       this.snackBar.open('Review deleted successfully!', 'Close', { duration: 3000 });
-      this.loadReviews();
+      await this.loadReviews();
       this.reviewsUpdated.emit();
     } catch (error) {
       console.error('Error deleting review:', error);
@@ -330,56 +388,18 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
     return this.reviews.filter(review => review._id !== this.userReview!._id);
   }
 
-  submitNewReview() {
-    if (!this.editReviewData.rating || !this.editReviewData.comment.trim()) {
-      this.snackBar.open('Please provide both rating and comment', 'Close', { duration: 3000 });
-      return;
-    }
-
-    if (!this.isLoggedIn) {
-      this.snackBar.open('Please sign in to write a review', 'Close', { duration: 3000 });
-      return;
-    }
-
-    if (!this.isCustomer) {
-      this.snackBar.open('Only customers can write reviews', 'Close', { duration: 3000 });
-      return;
-    }
-
-    if (this.hasUserReviewed) {
-      this.snackBar.open('You have already reviewed this restaurant. You can edit your existing review.', 'Close', { duration: 3000 });
-      return;
-    }
-
-    const reviewData = {
-      restaurantId: this.restaurantId,
-      rating: this.editReviewData.rating,
-      comment: this.editReviewData.comment.trim()
-    };
-
-    this.reviewService.createReview(reviewData).subscribe({
-      next: (response) => {
-        this.snackBar.open('Review submitted successfully!', 'Close', { duration: 3000 });
-        this.editReviewData = { rating: 0, comment: '' };
-        this.loadReviews();
-      },
-      error: (error) => {
-        console.error('Error submitting review:', error);
-        const errorMessage = error.error?.error || 'Failed to submit review';
-        
-        if (errorMessage.includes('already reviewed') || errorMessage.includes('duplicate')) {
-          this.snackBar.open('You have already reviewed this restaurant', 'Close', { duration: 3000 });
-          this.loadReviews();
-        } else {
-          this.snackBar.open(errorMessage, 'Close', { duration: 5000 });
-        }
-      }
-    });
-  }
-
   startEditReply(review: Review) {
     this.editingReply = review._id!;
     this.newReply = review.ownerReply || '';
+  }
+
+  startNewReply(review: Review) {
+    console.log('🔥 startNewReply called!', review._id);
+    console.log('🔥 Before - editingReply:', this.editingReply);
+    this.editingReply = review._id!;
+    this.newReply = '';
+    console.log('🔥 After - editingReply:', this.editingReply);
+    console.log('🔥 newReply:', this.newReply);
   }
 
   onReplyToReview(reviewId: string, reply: string) {
@@ -408,7 +428,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
       return;
     }
 
-    this.reviewService.replyToReview(reviewId, { reply: reply.trim() }).subscribe({
+    this.reviewService.updateReply(reviewId, { reply: reply.trim() }).subscribe({
       next: (response) => {
         this.snackBar.open('Reply updated successfully', 'Close', { duration: 3000 });
         this.loadReviews(); // Reload to show the updated reply
@@ -423,8 +443,20 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
   }
 
   onDeleteReply(reviewId: string) {
-    // Implement delete reply functionality when backend supports it
-    this.snackBar.open('Delete reply functionality not yet implemented', 'Close', { duration: 3000 });
+    if (confirm('Are you sure you want to delete this reply?')) {
+      this.reviewService.deleteReply(reviewId).subscribe({
+        next: (response) => {
+          this.snackBar.open('Reply deleted successfully', 'Close', { duration: 3000 });
+          this.loadReviews(); // Reload to show the updated review without reply
+          this.editingReply = '';
+          this.newReply = '';
+        },
+        error: (error) => {
+          console.error('Error deleting reply:', error);
+          this.snackBar.open(error.error?.error || 'Failed to delete reply', 'Close', { duration: 3000 });
+        }
+      });
+    }
   }
 
   trackByReviewId(index: number, review: Review): string {
@@ -435,11 +467,58 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
     return this.authService.isOwner();
   }
 
+  get isRestaurantOwner(): boolean {
+    console.log('🔍 Checking isRestaurantOwner...');
+    console.log('🔍 isOwner:', this.isOwner);
+    console.log('🔍 restaurantOwnerId:', this.restaurantOwnerId);
+    
+    if (!this.isOwner || !this.restaurantOwnerId) {
+      console.log('🔍 Early return false - no owner or no restaurantOwnerId');
+      return false;
+    }
+    
+    const currentUser = this.authService.getUser();
+    console.log('🔍 currentUser:', currentUser);
+    if (!currentUser) {
+      console.log('🔍 Early return false - no current user');
+      return false;
+    }
+    
+    const currentUserId = String(currentUser.id || currentUser._id || '').trim();
+    const restaurantOwnerIdStr = String(this.restaurantOwnerId).trim();
+    console.log('🔍 currentUserId:', currentUserId);
+    console.log('🔍 restaurantOwnerIdStr:', restaurantOwnerIdStr);
+    console.log('🔍 Match:', currentUserId === restaurantOwnerIdStr);
+    
+    return currentUserId === restaurantOwnerIdStr;
+  }
+
   get isCustomer(): boolean {
     return this.authService.isCustomer();
   }
 
   get isLoggedIn(): boolean {
     return this.authService.isLoggedIn;
+  }
+
+  getCurrentUserId(): string {
+    const user = this.authService.getUser();
+    return user ? (user.id || user._id || 'NO_ID') : 'NO_USER';
+  }
+
+  testClick() {
+    alert('🎉 Click event works! Button is responsive.');
+    console.log('🎉 Test click works!');
+  }
+
+  getRatingText(rating: number): string {
+    const ratingTexts = {
+      1: '😞 Poor - Needs significant improvement',
+      2: '😐 Fair - Below average experience',  
+      3: '🙂 Good - Average experience',
+      4: '😊 Very Good - Above average',
+      5: '🤩 Excellent - Outstanding experience!'
+    };
+    return ratingTexts[rating as keyof typeof ratingTexts] || '';
   }
 }

@@ -7,7 +7,12 @@ import {
   getRestaurantBookings,
   getRestaurantStats,
   updateRestaurant,
+  deleteRestaurant,
   getNearbyRestaurants,
+  getMenuItems,
+  createMenuItem,
+  updateMenuItem,
+  deleteMenuItem,
 } from "../controllers/";
 import { authenticate, checkOwner } from "../utils";
 
@@ -38,6 +43,12 @@ router.put(
   checkOwner as any,
   updateRestaurant as any
 );
+router.delete(
+  "/:id",
+  authenticate as any,
+  checkOwner as any,
+  deleteRestaurant as any
+);
 router.get(
   "/:id/bookings",
   authenticate as any,
@@ -49,6 +60,27 @@ router.get(
   authenticate as any,
   checkOwner as any,
   getRestaurantStats as any
+);
+
+// Menu management routes
+router.get("/:id/menu", authenticate as any, getMenuItems as any);
+router.post(
+  "/:id/menu",
+  authenticate as any,
+  checkOwner as any,
+  createMenuItem as any
+);
+router.put(
+  "/:id/menu/:itemId",
+  authenticate as any,
+  checkOwner as any,
+  updateMenuItem as any
+);
+router.delete(
+  "/:id/menu/:itemId",
+  authenticate as any,
+  checkOwner as any,
+  deleteMenuItem as any
 );
 
 export default router;

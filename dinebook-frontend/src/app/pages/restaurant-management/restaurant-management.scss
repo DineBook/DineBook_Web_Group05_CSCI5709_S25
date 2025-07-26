@@ -4,32 +4,35 @@
   padding: 2rem 0;
 
   .container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0 1rem;
   }
 
   .page-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
     margin-bottom: 2rem;
 
-    .back-button {
-      color: var(--primary-600);
-    }
-
     .header-content {
-      h1 {
-        font-size: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .title-section h1 {
+        font-size: 2.5rem;
         font-weight: 700;
         color: var(--gray-900);
         margin: 0 0 0.5rem 0;
       }
 
-      p {
+      .title-section p {
         color: var(--gray-600);
+        font-size: 1.1rem;
         margin: 0;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 1rem;
       }
     }
   }
@@ -54,263 +57,462 @@
 
     mat-icon {
       font-size: 3rem;
-      color: var(--error-500);
+      color: var(--gray-400);
       margin-bottom: 1rem;
     }
 
     p {
       color: var(--gray-600);
-      font-size: 1.1rem;
       margin-bottom: 2rem;
     }
   }
 
-  .restaurant-form {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  .error-state mat-icon { color: var(--error-500); }
+  .error-state p { color: var(--error-600); }
 
-    .form-section {
+  // Details View Styles
+  .details-view {
+    .restaurant-details-card {
       background: var(--surface);
+      box-shadow: var(--shadow-md);
       border-radius: var(--border-radius-lg);
-      box-shadow: var(--shadow-sm);
-      transition: box-shadow 0.2s ease;
 
-      &:hover {
-        box-shadow: var(--shadow-md);
+      .restaurant-header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 100%;
       }
 
-      mat-card-header {
-        background: var(--gray-50);
-        border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-        padding: 1.5rem;
-        border-bottom: 1px solid var(--gray-100);
+      .restaurant-main-info {
+        flex: 1;
+      }
 
-        mat-card-title {
+      .restaurant-name {
+        font-size: 2rem !important;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+
+      .restaurant-basic-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-size: 1rem !important;
+        color: var(--gray-600) !important;
+
+        .cuisine-type {
+          background: var(--primary-50);
+          color: var(--primary-700);
+          padding: 0.25rem 0.75rem;
+          border-radius: var(--border-radius-full);
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+
+        .price-range {
+          color: var(--green-600);
+          font-weight: 600;
+        }
+
+        .rating {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          color: var(--amber-600);
+          font-weight: 600;
+
+          mat-icon {
+            font-size: 1.1rem;
+            color: var(--amber-500);
+          }
+        }
+      }
+
+      .restaurant-details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .detail-section {
+        h4 {
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          font-size: 1.25rem;
+          color: var(--gray-700);
+          font-size: 0.9rem;
           font-weight: 600;
-          color: var(--gray-900);
+          margin-bottom: 0.5rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
 
           mat-icon {
+            font-size: 1.1rem;
             color: var(--primary-500);
           }
         }
 
-        mat-card-subtitle {
-          color: var(--gray-600);
-          margin-top: 0.5rem;
+        p {
+          color: var(--gray-900);
+          margin: 0;
+          line-height: 1.5;
         }
       }
 
-      mat-card-content {
-        padding: 2rem;
-      }
-    }
+      .restaurant-description {
+        margin-bottom: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--gray-200);
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-
-    .full-width {
-      grid-column: 1 / -1;
-    }
-
-    mat-form-field {
-      width: 100%;
-
-      mat-label {
-        color: var(--gray-700);
-        font-weight: 500;
-      }
-
-      .mat-mdc-form-field-outline {
-        color: var(--gray-200);
-      }
-
-      &.mat-focused .mat-mdc-form-field-outline {
-        color: var(--primary-500);
-      }
-
-      &:hover:not(.mat-focused) .mat-mdc-form-field-outline {
-        color: var(--gray-300);
-      }
-
-      .mat-mdc-form-field-infix {
-        padding: 14px 0;
-      }
-    }
-
-    .address-section {
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--gray-100);
-
-      h4 {
-        color: var(--gray-800);
-        margin-bottom: 1rem;
-        font-weight: 600;
-      }
-    }
-
-    .opening-hours {
-      .day-hours {
-        margin-bottom: 1.5rem;
-        padding: 1.5rem;
-        border-radius: var(--border-radius-md);
-        background: var(--gray-50);
-        transition: background-color 0.2s ease;
-
-        &:hover {
-          background: var(--surface-hover);
-        }
-
-        .day-header {
+        h4 {
           display: flex;
-          justify-content: space-between;
           align-items: center;
-          margin-bottom: 1rem;
+          gap: 0.5rem;
+          color: var(--gray-700);
+          font-size: 0.9rem;
+          font-weight: 600;
+          margin-bottom: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
 
-          h4 {
-            margin: 0;
-            color: var(--gray-800);
-            font-weight: 600;
+          mat-icon {
+            font-size: 1.1rem;
+            color: var(--primary-500);
+          }
+        }
+
+        p {
+          color: var(--gray-700);
+          line-height: 1.6;
+          margin: 0;
+        }
+      }
+
+      .opening-hours, .coordinates-section {
+        padding-top: 1rem;
+        border-top: 1px solid var(--gray-200);
+        margin-bottom: 1rem;
+
+        h4 {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: var(--gray-700);
+          font-size: 0.9rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+
+          mat-icon {
+            font-size: 1.1rem;
+            color: var(--primary-500);
+          }
+        }
+
+        .hours-cards-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+          gap: 1.2rem;
+        }
+
+        .day-card {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 16px;
+          box-shadow: 0 8px 32px rgba(102, 126, 234, 0.25);
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          border: none;
+          color: white;
+          position: relative;
+          overflow: hidden;
+
+          &:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
+            pointer-events: none;
           }
 
-          .day-actions {
+          &:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 0 16px 48px rgba(102, 126, 234, 0.4);
+          }
+
+          &:nth-child(1) { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.25);
+          }
+          &:nth-child(2) { 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            box-shadow: 0 8px 32px rgba(240, 147, 251, 0.25);
+          }
+          &:nth-child(3) { 
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 8px 32px rgba(79, 172, 254, 0.25);
+          }
+          &:nth-child(4) { 
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            box-shadow: 0 8px 32px rgba(67, 233, 123, 0.25);
+          }
+          &:nth-child(5) { 
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            box-shadow: 0 8px 32px rgba(250, 112, 154, 0.25);
+          }
+          &:nth-child(6) { 
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            box-shadow: 0 8px 32px rgba(168, 237, 234, 0.25);
+            color: #333;
+          }
+          &:nth-child(7) { 
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            box-shadow: 0 8px 32px rgba(255, 154, 158, 0.25);
+            color: #333;
+          }
+
+          &.closed-day {
+            background: linear-gradient(135deg, #ff7b7b 0%, #d63384 100%) !important;
+            box-shadow: 0 8px 32px rgba(255, 123, 123, 0.25) !important;
+            color: white !important;
+
+            &:hover {
+              box-shadow: 0 16px 48px rgba(255, 123, 123, 0.4) !important;
+            }
+          }
+
+          mat-card-content {
+            padding: 0 !important;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            margin: 0.5rem;
+          }
+
+          .day-header {
             display: flex;
-            gap: 0.5rem;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.2rem 0.5rem;
+            background: none;
 
-            button {
-              color: var(--gray-500);
-              transition: color 0.2s ease;
+            .day-name {
+              font-weight: 700;
+              font-size: 1rem;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
 
-              &:hover {
-                color: var(--primary-500);
+            .status-icon {
+              font-size: 1.4rem;
+              
+              &.open {
+                color: #4ade80;
+                animation: pulse 2s infinite;
+                filter: drop-shadow(0 0 8px rgba(74, 222, 128, 0.6));
+              }
+
+              &.closed {
+                color: #fca5a5;
+                opacity: 0.9;
+              }
+            }
+          }
+
+          .hours-info {
+            padding: 0.5rem 1.2rem 1.2rem;
+            text-align: center;
+
+            .hours {
+              font-size: 1rem;
+              font-weight: 600;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 0.5rem;
+              text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+
+              &:before {
+                content: "🕐";
+                font-size: 1.1rem;
+                filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+              }
+              
+              &.closed {
+                opacity: 0.8;
+                
+                &:before {
+                  content: "🚫";
+                }
               }
             }
           }
         }
 
-        .time-inputs {
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.7;
+            transform: scale(1.15);
+          }
+        }
+
+        .hours-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+          gap: 0.75rem;
+        }
+
+        .day-hours {
           display: flex;
+          justify-content: space-between;
           align-items: center;
-          gap: 1rem;
+          padding: 0.5rem 0.75rem;
+          background: var(--gray-50);
+          border-radius: var(--border-radius-md);
 
-          mat-form-field {
-            flex: 1;
+          .day {
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 0.875rem;
           }
 
-          .time-separator {
-            color: var(--gray-600);
-            font-weight: 500;
+          .hours {
+            font-size: 0.875rem;
+            color: var(--gray-900);
+            
+            &.closed {
+              color: var(--gray-500);
+              font-style: italic;
+            }
           }
         }
       }
 
-      .hours-help {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-top: 1rem;
-        padding: 1rem;
-        background: var(--primary-50);
-        border-radius: var(--border-radius-sm);
-        color: var(--primary-700);
-        font-size: 0.9rem;
-        border: 1px solid var(--primary-100);
-
-        mat-icon {
-          font-size: 1rem;
-        }
-      }
-    }
-
-    .form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 1rem;
-      padding: 2rem 0;
-      border-top: 1px solid var(--gray-100);
-
-      button {
-        min-width: 120px;
-        border-radius: var(--border-radius-md);
-        font-weight: 500;
-        transition: all 0.2s ease;
-
-        mat-icon {
-          margin-right: 0.5rem;
-        }
-
-        &[color="primary"] {
-          box-shadow: var(--shadow-sm);
-
-          &:hover {
-            box-shadow: var(--shadow-md);
-            transform: translateY(-1px);
-          }
-        }
+      .card-actions {
+        border-top: 1px solid var(--gray-200);
+        padding: 1rem 1.5rem;
       }
     }
   }
 
-  @media (max-width: 768px) {
-    padding: 1rem 0;
-
-    .container {
-      padding: 0 0.5rem;
-    }
-
-    .page-header {
-      .header-content h1 {
-        font-size: 1.5rem;
-      }
-    }
-
+  // Form View Styles
+  .form-view {
     .restaurant-form {
-      gap: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
 
       .form-section {
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
+        border-radius: var(--border-radius-lg);
+
         mat-card-header {
-          padding: 1rem;
+          background: var(--gray-50);
+          border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+          padding: 1.5rem;
+
+          mat-card-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+
+            mat-icon {
+              color: var(--primary-500);
+            }
+          }
         }
 
         mat-card-content {
-          padding: 1rem;
+          padding: 2rem;
         }
       }
 
       .form-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 1rem;
       }
 
-      .opening-hours .day-hours .time-inputs {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.5rem;
+      .full-width {
+        grid-column: 1 / -1;
+      }
 
-        .time-separator {
-          text-align: center;
+      .address-section, .coordinates-section {
+        margin-top: 1.5rem;
+        
+        h4 {
+          color: var(--gray-700);
+          font-size: 1rem;
+          font-weight: 600;
+          margin-bottom: 1rem;
+          border-bottom: 1px solid var(--gray-200);
+          padding-bottom: 0.5rem;
+        }
+      }
+
+      .coordinates-section .form-grid {
+        align-items: end;
+      }
+
+      .location-button {
+        height: 56px; // Match form field height
+      }
+
+      .opening-hours-section {
+        .day-hours-row {
+          display: grid;
+          grid-template-columns: 100px 1fr;
+          gap: 1rem;
+          align-items: center;
+          margin-bottom: 1rem;
+          padding: 1rem;
+          background: var(--gray-50);
+          border-radius: var(--border-radius-md);
+
+          .day-label span {
+            font-weight: 600;
+            color: var(--gray-700);
+          }
+
+          .hours-inputs {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            .time-separator {
+              color: var(--gray-600);
+              font-weight: 500;
+            }
+
+            .day-actions {
+              display: flex;
+              gap: 0.5rem;
+            }
+          }
         }
       }
 
       .form-actions {
-        flex-direction: column-reverse;
-
-        button {
-          width: 100%;
-        }
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-start;
+        padding: 2rem 0;
+        border-top: 1px solid var(--gray-200);
       }
     }
   }
@@ -319,4 +521,33 @@
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .restaurant-management {
+    .page-header .header-content {
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .restaurant-details-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    .day-hours-row {
+      grid-template-columns: 1fr !important;
+      
+      .hours-inputs {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+      }
+    }
+  }
 }

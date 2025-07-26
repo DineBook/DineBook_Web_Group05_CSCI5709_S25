@@ -41,6 +41,8 @@ export class RestaurantManagementComponent implements OnInit {
     loading = true;
     saving = false;
     error: string | null = null;
+    isEditMode = false;
+    viewMode = 'details'; // 'details' or 'edit'
 
     cuisineTypes = [
         'Italian', 'Indian', 'Chinese', 'Mexican', 'American',
@@ -83,6 +85,10 @@ export class RestaurantManagementComponent implements OnInit {
             email: ['', [Validators.email]],
             capacity: [50, [Validators.required, Validators.min(1)]],
             priceRange: [1, [Validators.required, Validators.min(1), Validators.max(4)]],
+            coordinates: this.fb.group({
+                latitude: ['', [Validators.min(-90), Validators.max(90)]],
+                longitude: ['', [Validators.min(-180), Validators.max(180)]]
+            }),
             address: this.fb.group({
                 street: [''],
                 city: [''],
@@ -112,8 +118,13 @@ export class RestaurantManagementComponent implements OnInit {
             if (response.restaurants && response.restaurants.length > 0) {
                 this.restaurant = response.restaurants[0];
                 this.populateForm();
+                this.viewMode = 'details'; // Show details view when restaurant exists
+                this.isEditMode = false;
             } else {
-                this.error = 'No restaurant found. Please create a restaurant first.';
+                // No restaurant found - show edit form for creation
+                this.restaurant = null;
+                this.viewMode = 'edit';
+                this.isEditMode = true;
             }
         } catch (error) {
             console.error('Error loading restaurant:', error);
@@ -135,6 +146,10 @@ export class RestaurantManagementComponent implements OnInit {
             email: (this.restaurant as any).email || '',
             capacity: (this.restaurant as any).capacity || 50,
             priceRange: this.restaurant.priceRange,
+            coordinates: {
+                latitude: (this.restaurant as any).coordinates?.latitude || '',
+                longitude: (this.restaurant as any).coordinates?.longitude || ''
+            },
             address: {
                 street: (this.restaurant as any).address?.street || '',
                 city: (this.restaurant as any).address?.city || '',
@@ -157,7 +172,7 @@ export class RestaurantManagementComponent implements OnInit {
     }
 
     async onSubmit() {
-        if (this.restaurantForm.valid && this.restaurant) {
+        if (this.restaurantForm.valid) {
             try {
                 this.saving = true;
 
@@ -171,23 +186,43 @@ export class RestaurantManagementComponent implements OnInit {
                     }
                 });
 
-                const response = await this.apiService.updateRestaurant(
-                    this.restaurant._id,
-                    formData
-                ).toPromise();
+                let response;
+                if (this.restaurant) {
+                    // Update existing restaurant
+                    response = await this.apiService.updateRestaurant(
+                        this.restaurant._id,
+                        formData
+                    ).toPromise();
 
-                this.snackBar.open('Restaurant updated successfully!', 'Close', {
-                    duration: 3000,
-                    panelClass: ['success-snackbar']
-                });
+                    this.snackBar.open('Restaurant updated successfully!', 'Close', {
+                        duration: 3000,
+                        panelClass: ['success-snackbar']
+                    });
 
-                // Update local restaurant data
-                this.restaurant = response.restaurant;
+                    // Navigate back to dashboard after successful update
+                    setTimeout(() => {
+                        this.router.navigate(['/owner/dashboard']);
+                    }, 1500);
+                } else {
+                    // Create new restaurant
+                    response = await this.apiService.createRestaurant(formData).toPromise();
+
+                    this.snackBar.open('Restaurant created successfully!', 'Close', {
+                        duration: 3000,
+                        panelClass: ['success-snackbar']
+                    });
+
+                    // Navigate to dashboard after successful creation
+                    setTimeout(() => {
+                        this.router.navigate(['/owner/dashboard']);
+                    }, 1500);
+                }
 
             } catch (error: any) {
-                console.error('Error updating restaurant:', error);
+                console.error('Error saving restaurant:', error);
+                const action = this.restaurant ? 'update' : 'create';
                 this.snackBar.open(
-                    error.error?.error || 'Failed to update restaurant',
+                    error.error?.error || `Failed to ${action} restaurant`,
                     'Close',
                     { duration: 5000, panelClass: ['error-snackbar'] }
                 );
@@ -199,6 +234,69 @@ export class RestaurantManagementComponent implements OnInit {
 
     onCancel() {
         this.router.navigate(['/owner/dashboard']);
+    }
+
+    async deleteRestaurant() {
+        if (!this.restaurant) return;
+
+        const confirmed = confirm('Are you sure you want to delete this restaurant? This action cannot be undone.');
+        if (!confirmed) return;
+
+        try {
+            this.saving = true;
+            await this.apiService.deleteRestaurant(this.restaurant._id).toPromise();
+            
+            this.snackBar.open('Restaurant deleted successfully!', 'Close', {
+                duration: 3000,
+                panelClass: ['success-snackbar']
+            });
+
+            // Navigate to dashboard after successful deletion
+            setTimeout(() => {
+                this.router.navigate(['/owner/dashboard']);
+            }, 1500);
+
+        } catch (error: any) {
+            console.error('Error deleting restaurant:', error);
+            this.snackBar.open(
+                error.error?.error || 'Failed to delete restaurant',
+                'Close',
+                { duration: 5000, panelClass: ['error-snackbar'] }
+            );
+        } finally {
+            this.saving = false;
+        }
+    }
+
+    getCurrentLocation() {
+        if ('geolocation' in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    this.restaurantForm.patchValue({
+                        coordinates: {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                        }
+                    });
+                    this.snackBar.open('Location detected successfully!', 'Close', {
+                        duration: 3000,
+                        panelClass: ['success-snackbar']
+                    });
+                },
+                (error) => {
+                    console.error('Geolocation error:', error);
+                    this.snackBar.open('Could not detect location. Please enter manually.', 'Close', {
+                        duration: 3000,
+                        panelClass: ['error-snackbar']
+                    });
+                }
+            );
+        } else {
+            this.snackBar.open('Geolocation is not supported by this browser.', 'Close', {
+                duration: 3000,
+                panelClass: ['error-snackbar']
+            });
+        }
     }
 
     copyHours(sourceDay: string) {
@@ -234,5 +332,52 @@ export class RestaurantManagementComponent implements OnInit {
 
     formatDayName(day: string): string {
         return day.charAt(0).toUpperCase() + day.slice(1);
+    }
+
+    // View mode methods
+    switchToEditMode() {
+        this.viewMode = 'edit';
+        this.isEditMode = true;
+    }
+
+    switchToViewMode() {
+        this.viewMode = 'details';
+        this.isEditMode = false;
+    }
+
+    getPriceRangeDisplay(priceRange: number): string {
+        return '$'.repeat(priceRange);
+    }
+
+    getDaysOfWeek(): { key: string; label: string }[] {
+        return [
+            { key: 'monday', label: 'Monday' },
+            { key: 'tuesday', label: 'Tuesday' },
+            { key: 'wednesday', label: 'Wednesday' },
+            { key: 'thursday', label: 'Thursday' },
+            { key: 'friday', label: 'Friday' },
+            { key: 'saturday', label: 'Saturday' },
+            { key: 'sunday', label: 'Sunday' }
+        ];
+    }
+
+    isRestaurantOpen(hours: any): boolean {
+        if (!hours?.open || !hours?.close) return false;
+        // Simple check - could be enhanced with current time logic
+        return true;
+    }
+
+    formatTime(timeStr: string): string {
+        if (!timeStr) return '';
+        try {
+            // Convert 24-hour time to 12-hour format
+            const [hours, minutes] = timeStr.split(':');
+            const hour = parseInt(hours);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12;
+            return `${displayHour}:${minutes} ${ampm}`;
+        } catch {
+            return timeStr; // Return original if parsing fails
+        }
     }
 }
