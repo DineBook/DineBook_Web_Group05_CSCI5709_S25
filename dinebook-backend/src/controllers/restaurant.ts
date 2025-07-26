@@ -612,3 +612,231 @@ export const updateRestaurant = async (
         res.status(500).json({ error: "Failed to update restaurant" });
     }
 };
+
+/**
+ * Delete a restaurant (owner only)
+ */
+export const deleteRestaurant = async (
+    req: AuthenticatedRequest,
+    res: Response
+): Promise<void> => {
+    try {
+        const { id: restaurantId } = req.params;
+        const ownerId = req.user.id;
+
+        // Verify restaurant ownership
+        const restaurant = await Restaurant.findById(restaurantId);
+        if (!restaurant) {
+            res.status(404).json({ error: "Restaurant not found" });
+            return;
+        }
+
+        if (restaurant.ownerId.toString() !== ownerId) {
+            res.status(403).json({ error: "You don't have permission to delete this restaurant" });
+            return;
+        }
+
+        // Soft delete - set isActive to false instead of actually deleting
+        // This preserves historical data for bookings, reviews, etc.
+        restaurant.isActive = false;
+        await restaurant.save();
+
+        res.json({
+            message: "Restaurant deleted successfully"
+        });
+    } catch (error) {
+        console.error("Restaurant deletion error:", error);
+        res.status(500).json({ error: "Failed to delete restaurant" });
+    }
+};
+
+// Menu Management Functions
+
+/**
+ * Get menu items for a restaurant
+ */
+export const getMenuItems = async (
+    req: AuthenticatedRequest,
+    res: Response
+): Promise<void> => {
+    try {
+        const { id: restaurantId } = req.params;
+
+        const restaurant = await Restaurant.findById(restaurantId);
+        if (!restaurant) {
+            res.status(404).json({ error: "Restaurant not found" });
+            return;
+        }
+
+        res.json({
+            menuItems: restaurant.menuItems || []
+        });
+    } catch (error) {
+        console.error("Menu items fetch error:", error);
+        res.status(500).json({ error: "Failed to fetch menu items" });
+    }
+};
+
+/**
+ * Create a new menu item
+ */
+export const createMenuItem = async (
+    req: AuthenticatedRequest,
+    res: Response
+): Promise<void> => {
+    try {
+        const { id: restaurantId } = req.params;
+        const ownerId = req.user.id;
+        const menuItemData = req.body;
+
+        // Verify restaurant ownership
+        const restaurant = await Restaurant.findById(restaurantId);
+        if (!restaurant) {
+            res.status(404).json({ error: "Restaurant not found" });
+            return;
+        }
+
+        if (restaurant.ownerId.toString() !== ownerId) {
+            res.status(403).json({ error: "You don't have permission to manage this restaurant's menu" });
+            return;
+        }
+
+        // Create new menu item (ObjectId will be auto-generated)
+        const newMenuItem = {
+            name: menuItemData.name,
+            description: menuItemData.description || '',
+            price: parseFloat(menuItemData.price),
+            category: menuItemData.category,
+            imageUrl: menuItemData.imageUrl || '',
+            isVegetarian: menuItemData.isVegetarian || false,
+            isVegan: menuItemData.isVegan || false,
+            isGlutenFree: menuItemData.isGlutenFree || false,
+            isAvailable: menuItemData.isAvailable !== false, // Default to true
+            createdAt: new Date(),
+            updatedAt: new Date()
+        };
+
+        // Initialize menuItems array if it doesn't exist
+        if (!restaurant.menuItems) {
+            restaurant.menuItems = [] as any;
+        }
+
+        restaurant.menuItems.push(newMenuItem as any);
+        await restaurant.save();
+
+        res.status(201).json({
+            message: "Menu item created successfully",
+            menuItem: newMenuItem
+        });
+    } catch (error) {
+        console.error("Menu item creation error:", error);
+        res.status(500).json({ error: "Failed to create menu item" });
+    }
+};
+
+/**
+ * Update a menu item
+ */
+export const updateMenuItem = async (
+    req: AuthenticatedRequest,
+    res: Response
+): Promise<void> => {
+    try {
+        const { id: restaurantId, itemId } = req.params;
+        const ownerId = req.user.id;
+        const updateData = req.body;
+
+        // Verify restaurant ownership
+        const restaurant = await Restaurant.findById(restaurantId);
+        if (!restaurant) {
+            res.status(404).json({ error: "Restaurant not found" });
+            return;
+        }
+
+        if (restaurant.ownerId.toString() !== ownerId) {
+            res.status(403).json({ error: "You don't have permission to manage this restaurant's menu" });
+            return;
+        }
+
+        // Find and update the menu item
+        const menuItemIndex = restaurant.menuItems.findIndex(
+            item => item._id.toString() === itemId.toString()
+        );
+
+        if (menuItemIndex === -1) {
+            res.status(404).json({ error: "Menu item not found" });
+            return;
+        }
+
+        // Update menu item
+        const updatedItem = {
+            ...restaurant.menuItems[menuItemIndex],
+            name: updateData.name,
+            description: updateData.description || '',
+            price: parseFloat(updateData.price),
+            category: updateData.category,
+            imageUrl: updateData.imageUrl || '',
+            isVegetarian: updateData.isVegetarian || false,
+            isVegan: updateData.isVegan || false,
+            isGlutenFree: updateData.isGlutenFree || false,
+            isAvailable: updateData.isAvailable !== false,
+            updatedAt: new Date()
+        };
+
+        restaurant.menuItems[menuItemIndex] = updatedItem as any;
+        await restaurant.save();
+
+        res.json({
+            message: "Menu item updated successfully",
+            menuItem: updatedItem
+        });
+    } catch (error) {
+        console.error("Menu item update error:", error);
+        res.status(500).json({ error: "Failed to update menu item" });
+    }
+};
+
+/**
+ * Delete a menu item
+ */
+export const deleteMenuItem = async (
+    req: AuthenticatedRequest,
+    res: Response
+): Promise<void> => {
+    try {
+        const { id: restaurantId, itemId } = req.params;
+        const ownerId = req.user.id;
+
+        // Verify restaurant ownership
+        const restaurant = await Restaurant.findById(restaurantId);
+        if (!restaurant) {
+            res.status(404).json({ error: "Restaurant not found" });
+            return;
+        }
+
+        if (restaurant.ownerId.toString() !== ownerId) {
+            res.status(403).json({ error: "You don't have permission to manage this restaurant's menu" });
+            return;
+        }
+
+        // Remove the menu item
+        const initialLength = restaurant.menuItems.length;
+        restaurant.menuItems = restaurant.menuItems.filter(
+            item => item._id.toString() !== itemId.toString()
+        ) as any;
+
+        if (restaurant.menuItems.length === initialLength) {
+            res.status(404).json({ error: "Menu item not found" });
+            return;
+        }
+
+        await restaurant.save();
+
+        res.json({
+            message: "Menu item deleted successfully"
+        });
+    } catch (error) {
+        console.error("Menu item deletion error:", error);
+        res.status(500).json({ error: "Failed to delete menu item" });
+    }
+};

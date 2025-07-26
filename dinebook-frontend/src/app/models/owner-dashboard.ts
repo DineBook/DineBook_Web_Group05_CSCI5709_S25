@@ -2,14 +2,32 @@ export interface Restaurant {
     _id: string;
     name: string;
     location: string;
+    address?: {
+        street: string;
+        city: string;
+        province: string;
+        postalCode: string;
+    };
     cuisine: string;
     priceRange: number;
+    description?: string;
+    phoneNumber?: string;
+    email?: string;
+    capacity?: number;
+    coordinates?: {
+        latitude: number;
+        longitude: number;
+    };
+    openingHours?: {
+        [key: string]: { open: string; close: string };
+    };
     ownerId: {
         _id: string;
         name: string;
         email: string;
     };
     isActive: boolean;
+    averageRating?: number;
     createdAt: string;
 }
 

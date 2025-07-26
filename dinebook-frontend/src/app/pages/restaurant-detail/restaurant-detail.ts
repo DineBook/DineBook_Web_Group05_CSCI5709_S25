@@ -69,6 +69,8 @@ export class RestaurantDetailComponent implements OnInit {
         // Use the dedicated getRestaurantById API endpoint
         this.apiService.getRestaurantById(this.restaurantId).subscribe({
             next: (restaurant: Restaurant) => {
+                console.log('🍽️ Restaurant loaded:', restaurant);
+                console.log('🍽️ Restaurant ownerId:', restaurant.ownerId);
                 this.restaurant = restaurant;
                 this.loading = false;
             },

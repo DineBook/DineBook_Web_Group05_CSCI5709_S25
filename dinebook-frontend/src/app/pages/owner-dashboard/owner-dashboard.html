@@ -19,26 +19,92 @@
     <!-- Dashboard Content -->
     <div *ngIf="!loading && !error && restaurant" class="dashboard-content">
       
-      <!-- Header -->
-      <div class="dashboard-header">
-        <div class="restaurant-info">
+      <!-- Restaurant Details Card -->
+      <mat-card class="restaurant-card">
+        <mat-card-header>
           <div class="restaurant-header-content">
-            <div class="restaurant-details-section">
-              <h1 class="restaurant-name">{{ restaurant.name }}</h1>
-              <p class="restaurant-details">
-                <mat-icon>location_on</mat-icon>
-                {{ restaurant.location }} • {{ restaurant.cuisine }} • ${{ ''.repeat(restaurant.priceRange) }}
-              </p>
+            <div class="restaurant-main-info">
+              <mat-card-title class="restaurant-name">{{ restaurant.name }}</mat-card-title>
+              <mat-card-subtitle class="restaurant-basic-info">
+                <span class="cuisine-type">{{ restaurant.cuisine }}</span>
+                <span class="price-range">{{ getPriceRangeDisplay(restaurant.priceRange) }}</span>
+                <span class="rating" *ngIf="restaurant.averageRating">
+                  <mat-icon>star</mat-icon>
+                  {{ restaurant.averageRating.toFixed(1) }}
+                </span>
+              </mat-card-subtitle>
             </div>
             <div class="restaurant-actions">
-              <button mat-raised-button class="btn-primary btn-with-icon" routerLink="/owner/restaurant">
+              <button mat-raised-button color="primary" routerLink="/owner/restaurant">
                 <mat-icon>edit</mat-icon>
                 Edit Restaurant
               </button>
             </div>
           </div>
-        </div>
-      </div>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <div class="restaurant-details-grid">
+            <div class="detail-section">
+              <h4><mat-icon>location_on</mat-icon>Location</h4>
+              <p *ngIf="restaurant.address">
+                {{ restaurant.address.street }}<br>
+                {{ restaurant.address.city }}, {{ restaurant.address.province }} {{ restaurant.address.postalCode }}
+              </p>
+              <p *ngIf="!restaurant.address && restaurant.location">{{ restaurant.location }}</p>
+            </div>
+            
+            <div class="detail-section" *ngIf="restaurant.phoneNumber">
+              <h4><mat-icon>phone</mat-icon>Phone</h4>
+              <p>{{ restaurant.phoneNumber }}</p>
+            </div>
+            
+            <div class="detail-section" *ngIf="restaurant.email">
+              <h4><mat-icon>email</mat-icon>Email</h4>
+              <p>{{ restaurant.email }}</p>
+            </div>
+            
+            <div class="detail-section" *ngIf="restaurant.capacity">
+              <h4><mat-icon>people</mat-icon>Capacity</h4>
+              <p>{{ restaurant.capacity }} guests</p>
+            </div>
+          </div>
+          
+          <div class="restaurant-description" *ngIf="restaurant.description">
+            <h4><mat-icon>description</mat-icon>Description</h4>
+            <p>{{ restaurant.description }}</p>
+          </div>
+          
+          <div class="restaurant-timings" *ngIf="restaurant.openingHours">
+            <h4><mat-icon>schedule</mat-icon>Restaurant Timings</h4>
+            <div class="hours-cards-grid">
+              <mat-card *ngFor="let day of getDaysOfWeek(); let i = index" 
+                        class="day-card"
+                        [class.closed-day]="!restaurant.openingHours![day.key].open || !restaurant.openingHours![day.key].close"
+                        [attr.data-day-index]="i">
+                <mat-card-content>
+                  <div class="day-header">
+                    <span class="day-name">{{ day.label }}</span>
+                    <mat-icon class="status-icon" 
+                              [class.open]="restaurant.openingHours![day.key].open && restaurant.openingHours![day.key].close"
+                              [class.closed]="!restaurant.openingHours![day.key].open || !restaurant.openingHours![day.key].close">
+                      {{ (restaurant.openingHours![day.key].open && restaurant.openingHours![day.key].close) ? 'schedule' : 'schedule_send' }}
+                    </mat-icon>
+                  </div>
+                  <div class="hours-info">
+                    <div class="hours" *ngIf="restaurant.openingHours![day.key].open && restaurant.openingHours![day.key].close">
+                      {{ restaurant.openingHours![day.key].open }} - {{ restaurant.openingHours![day.key].close }}
+                    </div>
+                    <div class="hours closed" *ngIf="!restaurant.openingHours![day.key]?.open || !restaurant.openingHours![day.key]?.close">
+                      Closed
+                    </div>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
       <!-- Stats Cards -->
       <div class="stats-grid" *ngIf="stats">
@@ -164,20 +230,62 @@
                       <p>{{ review.comment }}</p>
                     </div>
                     
-                    <div *ngIf="review.ownerReply" class="owner-reply">
-                      <div class="reply-label">
-                        <mat-icon>reply</mat-icon>
-                        <span>Your Reply:</span>
+                    <!-- Owner Reply Section -->
+                    <div class="owner-reply-section">
+                      <!-- Existing Reply Display -->
+                      <div *ngIf="review.ownerReply && editingReply !== review._id" class="owner-reply">
+                        <div class="reply-label">
+                          <mat-icon>reply</mat-icon>
+                          <span>Your Reply:</span>
+                        </div>
+                        <p>{{ review.ownerReply }}</p>
+                        
+                        <!-- Edit/Delete Actions -->
+                        <div class="reply-actions">
+                          <button mat-button class="btn-secondary btn-with-icon" (click)="startReply(review)">
+                            <mat-icon>edit</mat-icon>
+                            Edit Reply
+                          </button>
+                          <button mat-button class="btn-danger btn-with-icon" (click)="deleteReply(review._id!)">
+                            <mat-icon>delete</mat-icon>
+                            Delete Reply
+                          </button>
+                        </div>
                       </div>
-                      <p>{{ review.ownerReply }}</p>
+                      
+                      <!-- Reply Button for new replies -->
+                      <div *ngIf="!review.ownerReply && editingReply !== review._id" class="reply-actions">
+                        <button mat-button class="btn-primary btn-with-icon" (click)="startReply(review)">
+                          <mat-icon>reply</mat-icon>
+                          Reply to Review
+                        </button>
+                      </div>
+                      
+                      <!-- Reply Form (for new reply or editing) -->
+                      <div *ngIf="editingReply === review._id" class="reply-form">
+                        <div class="reply-input">
+                          <mat-icon class="reply-icon">reply</mat-icon>
+                          <div class="input-container">
+                            <textarea 
+                              [(ngModel)]="newReply"
+                              placeholder="Write your response to this review..."
+                              rows="3"
+                              class="reply-textarea"></textarea>
+                            <div class="reply-form-actions">
+                              <button mat-button (click)="cancelReply()">
+                                Cancel
+                              </button>
+                              <button mat-raised-button color="primary" 
+                                      [disabled]="!newReply.trim()"
+                                      (click)="saveReply(review._id!)">
+                                {{ review.ownerReply ? 'Update Reply' : 'Post Reply' }}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     
-                    <div *ngIf="!review.ownerReply" class="reply-actions">
-                      <button mat-button class="btn-secondary btn-with-icon">
-                        <mat-icon>reply</mat-icon>
-                        Reply
-                      </button>
-                    </div>
                   </mat-card-content>
                 </mat-card>
               </div>
@@ -193,8 +301,8 @@
       <mat-icon>restaurant</mat-icon>
       <h2>No Restaurant Found</h2>
       <p>You don't have a restaurant registered yet.</p>
-      <button mat-raised-button class="btn-primary">
-        Create Restaurant
+      <button mat-raised-button class="btn-primary" (click)="createRestaurant()">
+        Register Restaurant
       </button>
     </div>
 

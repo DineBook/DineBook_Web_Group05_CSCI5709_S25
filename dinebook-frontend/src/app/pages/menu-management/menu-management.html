@@ -1,0 +1,196 @@
+<div class="menu-management-container">
+  <!-- Header Section -->
+  <div class="menu-header">
+    <h1 class="page-title">
+      <mat-icon>restaurant_menu</mat-icon>
+      Menu Management
+    </h1>
+    <button mat-raised-button color="primary" (click)="showAddForm()" class="add-btn" [disabled]="!restaurant">
+      <mat-icon>add</mat-icon>
+      Add New Item
+    </button>
+  </div>
+
+  <!-- Categories Filter -->
+  <div class="category-filter">
+    <div class="category-chips">
+      <mat-chip 
+        [class.selected]="selectedCategory === ''"
+        (click)="selectedCategory = ''; onCategoryChange()">
+        All Items
+      </mat-chip>
+      <mat-chip 
+        *ngFor="let category of categories" 
+        [class.selected]="selectedCategory === category"
+        (click)="selectedCategory = category; onCategoryChange()">
+        {{ category }}
+      </mat-chip>
+    </div>
+  </div>
+
+  <!-- Add/Edit Form -->
+  <mat-card *ngIf="showForm && restaurant" class="form-card">
+    <mat-card-header>
+      <mat-card-title>
+        {{ isEditing ? 'Edit Menu Item' : 'Add New Menu Item' }}
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="menuForm" (ngSubmit)="saveItem()">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Item Name</mat-label>
+            <input matInput formControlName="name" placeholder="Enter item name">
+            <mat-error *ngIf="menuForm.get('name')?.hasError('required')">
+              Item name is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor="let category of categories" [value]="category">
+                {{ category }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="menuForm.get('category')?.hasError('required')">
+              Category is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Price</mat-label>
+            <input matInput type="number" formControlName="price" placeholder="0.00">
+            <span matPrefix>$</span>
+            <mat-error *ngIf="menuForm.get('price')?.hasError('required')">
+              Price is required
+            </mat-error>
+            <mat-error *ngIf="menuForm.get('price')?.hasError('min')">
+              Price must be greater than 0
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea matInput formControlName="description" rows="3" 
+                      placeholder="Enter item description"></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Image URL</mat-label>
+            <input matInput formControlName="imageUrl" placeholder="Enter image URL">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row checkbox-row">
+          <mat-checkbox formControlName="isVegetarian">Vegetarian</mat-checkbox>
+          <mat-checkbox formControlName="isVegan">Vegan</mat-checkbox>
+          <mat-checkbox formControlName="isGlutenFree">Gluten Free</mat-checkbox>
+          <mat-checkbox formControlName="isAvailable">Available</mat-checkbox>
+        </div>
+
+        <div class="form-actions">
+          <button mat-button type="button" (click)="cancelForm()">Cancel</button>
+          <button mat-raised-button color="primary" type="submit" 
+                  [disabled]="menuForm.invalid || saving">
+            <mat-icon *ngIf="saving">hourglass_empty</mat-icon>
+            {{ saving ? 'Saving...' : (isEditing ? 'Update' : 'Add') }} Item
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- No Restaurant State -->
+  <mat-card *ngIf="!loading && !restaurant" class="no-restaurant-state">
+    <mat-card-content>
+      <div class="empty-state">
+        <mat-icon>store</mat-icon>
+        <h3>No Restaurant Found</h3>
+        <p>You need to create a restaurant first before managing menu items.</p>
+        <button mat-raised-button color="primary" routerLink="/manage-restaurant">
+          Create Restaurant
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Menu Items List -->
+  <div class="menu-items-container">
+    <div *ngIf="loading" class="loading-state">
+      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+      <p>Loading menu items...</p>
+    </div>
+
+    <div *ngIf="!loading && filteredMenuItems.length === 0" class="empty-state">
+      <mat-icon>restaurant_menu</mat-icon>
+      <h3>No menu items found</h3>
+      <p>{{ selectedCategory ? 'No items in this category' : 'Start by adding your first menu item' }}</p>
+    </div>
+
+    <div class="menu-grid" *ngIf="!loading && filteredMenuItems.length > 0">
+      <mat-card *ngFor="let item of filteredMenuItems" class="menu-item-card">
+        <div class="item-image" *ngIf="item.imageUrl">
+          <img [src]="item.imageUrl" [alt]="item.name" (error)="handleImageError($event)">
+        </div>
+        <div class="item-image placeholder" *ngIf="!item.imageUrl">
+          <mat-icon>restaurant</mat-icon>
+        </div>
+        
+        <mat-card-content>
+          <div class="item-header">
+            <h3 class="item-name">{{ item.name }}</h3>
+            <span class="item-price">${{ item.price | number:'1.2-2' }}</span>
+          </div>
+          
+          <p class="item-description">{{ item.description }}</p>
+          
+          <div class="item-category">
+            <mat-chip class="category-chip">{{ item.category }}</mat-chip>
+          </div>
+          
+          <div class="item-tags" *ngIf="hasAnyTag(item)">
+            <mat-chip class="tag-chip vegetarian" *ngIf="item.isVegetarian">
+              <mat-icon>eco</mat-icon> Vegetarian
+            </mat-chip>
+            <mat-chip class="tag-chip vegan" *ngIf="item.isVegan">
+              <mat-icon>nature</mat-icon> Vegan
+            </mat-chip>
+            <mat-chip class="tag-chip gluten-free" *ngIf="item.isGlutenFree">
+              <mat-icon>no_meals</mat-icon> Gluten Free
+            </mat-chip>
+          </div>
+          
+          <div class="item-status">
+            <mat-chip [class]="item.isAvailable ? 'status-available' : 'status-unavailable'">
+              <mat-icon>{{ item.isAvailable ? 'check_circle' : 'cancel' }}</mat-icon>
+              {{ item.isAvailable ? 'Available' : 'Unavailable' }}
+            </mat-chip>
+          </div>
+        </mat-card-content>
+        
+        <mat-card-actions class="item-actions">
+          <button mat-icon-button color="primary" (click)="editItem(item)" 
+                  matTooltip="Edit Item">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteItem(item)" 
+                  matTooltip="Delete Item">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button [color]="item.isAvailable ? 'warn' : 'primary'" 
+                  (click)="toggleAvailability(item)"
+                  [matTooltip]="item.isAvailable ? 'Mark Unavailable' : 'Mark Available'">
+            <mat-icon>{{ item.isAvailable ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

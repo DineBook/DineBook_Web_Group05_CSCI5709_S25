@@ -1,0 +1,148 @@
+<div class="owner-landing">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1 class="hero-title">
+            Welcome back, <span class="owner-name">{{ ownerName }}</span>!
+          </h1>
+          <p class="hero-subtitle" *ngIf="restaurant">
+            Ready to manage <strong>{{ restaurant.name }}</strong> and serve amazing experiences?
+          </p>
+          <p class="hero-subtitle" *ngIf="!restaurant && !loading">
+            Ready to get your restaurant on DineBook and start accepting reservations?
+          </p>
+          <p class="hero-subtitle" *ngIf="loading">
+            Loading your restaurant information...
+          </p>
+        </div>
+        
+        <div class="hero-visual">
+          <div class="restaurant-card" *ngIf="restaurant">
+            <div class="card-icon">🏪</div>
+            <h3>{{ restaurant.name }}</h3>
+            <p>{{ restaurant.cuisine }} • {{ '$'.repeat(restaurant.priceRange) }}</p>
+            <div class="stats-mini" *ngIf="stats">
+              <span class="stat">{{ stats.totalBookings }} Bookings</span>
+              <span class="stat">{{ (stats.averageRating || 0).toFixed(1) }}⭐</span>
+            </div>
+          </div>
+          
+          <div class="welcome-card" *ngIf="!restaurant && !loading">
+            <div class="card-icon">🚀</div>
+            <h3>Start Your Journey</h3>
+            <p>Join thousands of restaurants on DineBook</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Actions Section -->
+  <section class="actions-section">
+    <div class="container">
+      <h2 class="section-title">Quick Actions</h2>
+      <div class="actions-grid">
+        <mat-card 
+          *ngFor="let action of getQuickActions()" 
+          class="action-card"
+          [routerLink]="action.route">
+          <mat-card-content>
+            <div class="action-icon" [ngClass]="'icon-' + action.color">
+              <mat-icon>{{ action.icon }}</mat-icon>
+            </div>
+            <h3>{{ action.title }}</h3>
+            <p>{{ action.subtitle }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Today's Overview -->
+  <section class="overview-section" *ngIf="restaurant && stats">
+    <div class="container">
+      <h2 class="section-title">Today's Overview</h2>
+      <div class="overview-grid">
+        <div class="overview-card">
+          <div class="overview-icon">📅</div>
+          <div class="overview-content">
+            <h3>{{ stats.todayBookings || 0 }}</h3>
+            <p>Today's Bookings</p>
+          </div>
+        </div>
+        
+        <div class="overview-card">
+          <div class="overview-icon">⏰</div>
+          <div class="overview-content">
+            <h3>{{ stats.upcomingBookings || 0 }}</h3>
+            <p>Upcoming This Week</p>
+          </div>
+        </div>
+        
+        <div class="overview-card">
+          <div class="overview-icon">⭐</div>
+          <div class="overview-content">
+            <h3>{{ (stats.averageRating || 0).toFixed(1) }}</h3>
+            <p>Average Rating</p>
+          </div>
+        </div>
+        
+        <div class="overview-card">
+          <div class="overview-icon">👥</div>
+          <div class="overview-content">
+            <h3>{{ restaurant.capacity || 0 }}</h3>
+            <p>Total Capacity</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section for New Owners -->
+  <section class="features-section" *ngIf="!restaurant && !loading">
+    <div class="container">
+      <h2 class="section-title">Grow Your Business with DineBook</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Analytics & Insights</h3>
+          <p>Track your restaurant's performance with detailed analytics and customer insights.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <h3>Easy Reservations</h3>
+          <p>Let customers book tables instantly with our user-friendly booking system.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">⭐</div>
+          <h3>Customer Reviews</h3>
+          <p>Build your reputation with genuine customer reviews and feedback management.</p>
+        </div>
+        
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Targeted Reach</h3>
+          <p>Reach more customers in your area with our location-based discovery features.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="cta-section" *ngIf="!restaurant && !loading">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready to Get Started?</h2>
+        <p>Join DineBook today and start accepting reservations in minutes.</p>
+        <button mat-raised-button color="primary" size="large" routerLink="/owner/restaurant">
+          <mat-icon>add_business</mat-icon>
+          Register Your Restaurant
+        </button>
+      </div>
+    </div>
+  </section>
+</div>

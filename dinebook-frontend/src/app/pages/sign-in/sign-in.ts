@@ -73,7 +73,7 @@ export class SignInComponent {
           if (userRole === 'customer') {
             this.router.navigate(["/dashboard"])
           } else if (userRole === 'owner') {
-            this.router.navigate(["/owner/dashboard"])
+            this.router.navigate(["/owner-home"])
           } else {
             this.router.navigate(["/dashboard"])
           }

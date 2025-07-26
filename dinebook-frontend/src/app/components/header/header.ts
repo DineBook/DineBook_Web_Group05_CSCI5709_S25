@@ -44,4 +44,9 @@ export class HeaderComponent {
       map(() => this.authService.isCustomer())
     );
   }
+
+  getUserName(): string {
+    const user = this.authService.getUser();
+    return user?.name || 'User';
+  }
 }

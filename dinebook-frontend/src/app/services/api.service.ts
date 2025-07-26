@@ -55,8 +55,37 @@ export class ApiService {
     return this.http.get(`${this.apiUrl}/api/reviews/restaurant/${restaurantId}`);
   }
 
+  createRestaurant(restaurantData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/restaurants`, restaurantData, { headers: this.getAuthHeaders() });
+  }
+
   updateRestaurant(restaurantId: string, restaurantData: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/api/restaurants/${restaurantId}`, restaurantData, { headers: this.getAuthHeaders() });
+  }
+
+  deleteRestaurant(restaurantId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/restaurants/${restaurantId}`, { headers: this.getAuthHeaders() });
+  }
+
+  // Restaurant search and filtering
+  getRestaurants(filters?: any): Observable<any> {
+    let params = '';
+    if (filters) {
+      const queryParams = new URLSearchParams(filters).toString();
+      params = queryParams ? `?${queryParams}` : '';
+    }
+    return this.http.get(`${this.apiUrl}/api/restaurants${params}`);
+  }
+
+  searchNearbyRestaurants(latitude: number, longitude: number, radius?: number, filters?: any): Observable<any> {
+    let params = `?latitude=${latitude}&longitude=${longitude}`;
+    if (radius) params += `&radius=${radius}`;
+    if (filters) {
+      Object.keys(filters).forEach(key => {
+        if (filters[key]) params += `&${key}=${filters[key]}`;
+      });
+    }
+    return this.http.get(`${this.apiUrl}/api/restaurants/nearby${params}`);
   }
 
   getFavorites(): Observable<any[]> {
@@ -80,5 +109,22 @@ export class ApiService {
    */
   toggleFavorite(restaurantId: string): Observable<{ isFavorite: boolean }> {
     return this.http.post<{ isFavorite: boolean }>(`${this.apiUrl}/api/favorites/${restaurantId}`, {}, { headers: this.getAuthHeaders() });
+  }
+
+  // Menu Management APIs
+  getMenuItems(restaurantId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/api/restaurants/${restaurantId}/menu`, { headers: this.getAuthHeaders() });
+  }
+
+  createMenuItem(restaurantId: string, menuItem: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/restaurants/${restaurantId}/menu`, menuItem, { headers: this.getAuthHeaders() });
+  }
+
+  updateMenuItem(restaurantId: string, itemId: string, menuItem: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/api/restaurants/${restaurantId}/menu/${itemId}`, menuItem, { headers: this.getAuthHeaders() });
+  }
+
+  deleteMenuItem(restaurantId: string, itemId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/api/restaurants/${restaurantId}/menu/${itemId}`, { headers: this.getAuthHeaders() });
   }
 }
