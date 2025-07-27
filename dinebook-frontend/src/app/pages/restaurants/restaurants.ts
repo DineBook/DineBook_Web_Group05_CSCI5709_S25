@@ -50,7 +50,7 @@ export class RestaurantsComponent implements OnInit {
   // Filter and pagination properties
   searchForm: FormGroup
   currentPage = 0
-  pageSize = 2  // Smaller page size for testing with current data
+  pageSize = 6  // Better page size for grid layout
   totalRestaurants = 0
   totalPages = 0
 
@@ -77,7 +77,7 @@ export class RestaurantsComponent implements OnInit {
     private fb: FormBuilder,
     private apiService: ApiService,
     private reviewService: ReviewService
-    
+
   ) {
     this.searchForm = this.fb.group({
       location: [''],
@@ -94,7 +94,7 @@ export class RestaurantsComponent implements OnInit {
     this.setupFormSubscriptions()
   }
 
-   getUserLocation() {
+  getUserLocation() {
     if (!navigator.geolocation) {
       console.warn('Geolocation is not supported by this browser.');
       return;
@@ -107,7 +107,7 @@ export class RestaurantsComponent implements OnInit {
           longitude: position.coords.longitude,
           radius: 5 // Default radius in km
         };
-        this.loadRestaurants(); 
+        this.loadRestaurants();
       },
       (error) => {
         console.warn('Location access denied or unavailable', error);
@@ -177,7 +177,7 @@ export class RestaurantsComponent implements OnInit {
         this.totalRestaurants = response.pagination.total
         this.totalPages = response.pagination.pages
         this.loading = false
-        
+
         // Load review data for each restaurant
         this.loadReviewsForRestaurants();
       },
@@ -347,8 +347,8 @@ export class RestaurantsComponent implements OnInit {
           next: (response) => {
             const reviews = response.reviews || [];
             const reviewCount = reviews.length;
-            const averageRating = reviewCount > 0 
-              ? reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / reviewCount 
+            const averageRating = reviewCount > 0
+              ? reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / reviewCount
               : 0;
 
             // Update the restaurant with review data

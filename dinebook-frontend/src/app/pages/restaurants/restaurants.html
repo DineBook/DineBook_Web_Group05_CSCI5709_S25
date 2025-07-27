@@ -3,107 +3,138 @@
     <div class="page-header">
       <div class="header-content">
         <div class="header-text">
-          <h1 class="page-title">Discover Restaurants</h1>
+          <h1 class="page-title">Find Your Perfect Dining Experience</h1>
           <p class="page-description">
-            Explore our curated selection of amazing restaurants and book your perfect dining experience.
+            Discover exceptional restaurants, read authentic reviews, and book your table with ease. 
+            From cozy cafes to fine dining, find exactly what you're craving.
           </p>
         </div>
-        <!-- <div class="header-actions">
-          <button mat-raised-button color="primary" (click)="bookTable()" class="quick-book-btn">
-            <mat-icon>restaurant</mat-icon>
-            Quick Book
-          </button>
-        </div> -->
+        <div class="header-visual">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <span class="stat-number">{{ totalRestaurants }}+</span>
+              <span class="stat-label">Restaurants</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">4.8</span>
+              <span class="stat-label">Avg Rating</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Search and Filters Section -->
     <div class="search-filters-section">
-      <form [formGroup]="searchForm" class="search-filters-form">
-        <!-- Search Bar -->
-        <div class="search-bar">
-          <mat-form-field appearance="outline" class="search-field">
-            <mat-label>Search by location</mat-label>
-            <input matInput 
-                   formControlName="location" 
-                   placeholder="e.g., Downtown, Halifax, etc." 
-                   type="text">
-            <mat-icon matSuffix>search</mat-icon>
-          </mat-form-field>
+      <div class="filters-container">
+        <form [formGroup]="searchForm" class="search-filters-form">
+          <!-- Search Bar -->
+          <div class="search-section">
+            <mat-form-field appearance="outline" class="search-field">
+              <mat-label>Where would you like to dine?</mat-label>
+              <input matInput 
+                     formControlName="location" 
+                     placeholder="Search by location..." 
+                     type="text">
+              <mat-icon matSuffix class="search-icon">search</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <!-- Filters Row -->
+          <div class="filters-row">
+            <mat-form-field appearance="outline" class="filter-field cuisine-filter">
+              <mat-label>Cuisine</mat-label>
+              <mat-select formControlName="cuisine">
+                <mat-option value="">All Cuisines</mat-option>
+                <mat-option *ngFor="let cuisine of cuisineOptions" [value]="cuisine">
+                  {{ cuisine }}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix>restaurant</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="filter-field price-filter">
+              <mat-label>Price Range</mat-label>
+              <mat-select formControlName="priceRange">
+                <mat-option value="">Any Price</mat-option>
+                <mat-option *ngFor="let option of priceRangeOptions" [value]="option.value">
+                  {{ option.icon }} {{ option.label }}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix>attach_money</mat-icon>
+            </mat-form-field>
+
+            <button mat-stroked-button 
+                    type="button" 
+                    (click)="clearFilters()" 
+                    class="clear-filters-btn"
+                    *ngIf="getActiveFilterKeys().length > 0">
+              <mat-icon>clear_all</mat-icon>
+              Clear All
+            </button>
+          </div>
+        </form>
+
+        <!-- Active Filters Display -->
+        <div class="active-filters-section" *ngIf="getActiveFilterKeys().length > 0">
+          <div class="active-filters-header">
+            <span class="filters-label">Active filters:</span>
+            <span class="results-count">{{ restaurants.length }} restaurant{{ restaurants.length !== 1 ? 's' : '' }} found</span>
+          </div>
+          <div class="active-filters-chips">
+            <mat-chip-listbox class="filters-chips">
+              <mat-chip-option 
+                *ngFor="let filterKey of getActiveFilterKeys()" 
+                (removed)="removeFilter(filterKey)"
+                class="filter-chip">
+                {{ filterKey }}: {{ getFilterDisplayValue(filterKey) }}
+                <mat-icon matChipRemove>close</mat-icon>
+              </mat-chip-option>
+            </mat-chip-listbox>
+          </div>
         </div>
-
-        <!-- Filters -->
-        <div class="filters-row">
-          <mat-form-field appearance="outline" class="filter-field">
-            <mat-label>Cuisine Type</mat-label>
-            <mat-select formControlName="cuisine">
-              <mat-option value="">All Cuisines</mat-option>
-              <mat-option *ngFor="let cuisine of cuisineOptions" [value]="cuisine">
-                {{ cuisine }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="filter-field">
-            <mat-label>Price Range</mat-label>
-            <mat-select formControlName="priceRange">
-              <mat-option value="">All Prices</mat-option>
-              <mat-option *ngFor="let option of priceRangeOptions" [value]="option.value">
-                {{ option.icon }} {{ option.label }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-
-          <button mat-button 
-                  type="button" 
-                  (click)="clearFilters()" 
-                  class="clear-filters-btn"
-                  *ngIf="getActiveFilterKeys().length > 0">
-            <mat-icon>clear</mat-icon>
-            Clear Filters
-          </button>
-        </div>
-      </form>
-
-      <!-- Active Filters Display -->
-      <div class="active-filters" *ngIf="getActiveFilterKeys().length > 0">
-        <span class="filters-label">Active filters:</span>
-        <mat-chip-listbox class="filters-chips">
-          <mat-chip-option 
-            *ngFor="let filterKey of getActiveFilterKeys()" 
-            (removed)="removeFilter(filterKey)"
-            class="filter-chip">
-            {{ filterKey }}: {{ getFilterDisplayValue(filterKey) }}
-            <mat-icon matChipRemove>cancel</mat-icon>
-          </mat-chip-option>
-        </mat-chip-listbox>
       </div>
 
       <!-- Results Summary -->
       <div class="results-summary" *ngIf="!loading && !error">
-        <p>
-          Showing {{ restaurants.length }} of {{ totalRestaurants }} restaurants
-          <span *ngIf="getActiveFilterKeys().length > 0"> with current filters</span>
-        </p>
+        <div class="summary-content">
+          <h2 class="results-title">
+            <span *ngIf="getActiveFilterKeys().length === 0">Discover Amazing Restaurants</span>
+            <span *ngIf="getActiveFilterKeys().length > 0">Filtered Results</span>
+          </h2>
+          <p class="results-description">
+            <span *ngIf="getActiveFilterKeys().length === 0">
+              Showing {{ restaurants.length }} of {{ totalRestaurants }} restaurants in your area
+            </span>
+            <span *ngIf="getActiveFilterKeys().length > 0">
+              {{ restaurants.length }} restaurant{{ restaurants.length !== 1 ? 's' : '' }} match your criteria
+            </span>
+          </p>
+        </div>
       </div>
     </div>
     
     <div class="restaurants-content">
       <!-- Loading State -->
       <div *ngIf="loading" class="loading-state">
-        <div class="loading-spinner">
-          <mat-icon class="spinning">refresh</mat-icon>
+        <div class="loading-content">
+          <div class="loading-animation">
+            <div class="loading-spinner"></div>
+          </div>
+          <h3 class="loading-title">Finding amazing restaurants for you</h3>
+          <p class="loading-description">Searching through our curated collection...</p>
         </div>
-        <p>Loading restaurants...</p>
       </div>
 
       <!-- Error State -->
       <div *ngIf="error && !loading" class="error-state">
         <div class="error-content">
-          <mat-icon class="error-icon">error_outline</mat-icon>
-          <h3>Oops! Something went wrong</h3>
-          <p>{{ error }}</p>
-          <button mat-raised-button color="primary" (click)="retry()">
+          <div class="error-icon-container">
+            <mat-icon class="error-icon">restaurant_menu</mat-icon>
+          </div>
+          <h3 class="error-title">Unable to load restaurants</h3>
+          <p class="error-description">{{ error }}</p>
+          <button mat-raised-button color="primary" (click)="retry()" class="retry-btn">
             <mat-icon>refresh</mat-icon>
             Try Again
           </button>
@@ -113,71 +144,113 @@
       <!-- Empty State -->
       <div *ngIf="!loading && !error && restaurants.length === 0" class="empty-state">
         <div class="empty-content">
-          <mat-icon class="empty-icon">restaurant</mat-icon>
-          <h3>No Restaurants Found</h3>
-          <p>We couldn't find any restaurants at the moment. Please check back later or try refreshing the page.</p>
-          <button mat-raised-button color="primary" (click)="retry()">
-            <mat-icon>refresh</mat-icon>
-            Refresh
-          </button>
+          <div class="empty-icon-container">
+            <mat-icon class="empty-icon">search_off</mat-icon>
+          </div>
+          <h3 class="empty-title">No restaurants found</h3>
+          <p class="empty-description">
+            <span *ngIf="getActiveFilterKeys().length > 0">
+              Try adjusting your filters or search in a different area.
+            </span>
+            <span *ngIf="getActiveFilterKeys().length === 0">
+              We couldn't find any restaurants in your area. Try expanding your search or check back later.
+            </span>
+          </p>
+          <div class="empty-actions">
+            <button mat-raised-button color="primary" (click)="retry()" class="action-btn">
+              <mat-icon>refresh</mat-icon>
+              Refresh
+            </button>
+            <button *ngIf="getActiveFilterKeys().length > 0" 
+                    mat-stroked-button 
+                    (click)="clearFilters()" 
+                    class="action-btn">
+              <mat-icon>clear_all</mat-icon>
+              Clear Filters
+            </button>
+          </div>
         </div>
       </div>
 
       <!-- Restaurants Grid -->
       <div *ngIf="!loading && !error && restaurants.length > 0" class="restaurants-grid">
         <div class="restaurant-card" *ngFor="let restaurant of restaurants" (click)="viewRestaurantDetails(restaurant)">
+          
+          <div class="card-image-container">
+            <img 
+              src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" 
+              [alt]="restaurant.name + ' restaurant'"
+              class="restaurant-image" />
             
-          <div class="restaurant-image">
-            <img src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" alt="Rooftop Restaurant" />
-            <div class="image-overlay">
-              <button *ngIf="authService.isLoggedIn && authService.isCustomer()"
-                      mat-icon-button class="favorite-btn"
-                      [attr.aria-label]="(restaurant.isFavorite ? 'Remove ' : 'Add ') + restaurant.name + ' to favorites'"
-                      (click)="onToggleFavorite(restaurant, $event)">
-                <mat-icon>{{ restaurant.isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
-              </button>
-            </div>
-            <div class="restaurant-badge" [ngClass]="restaurant.badgeClass">
+            <!-- Image Overlay with Gradient -->
+            <div class="image-overlay"></div>
+            
+            <!-- Favorite Button -->
+            <button *ngIf="authService.isLoggedIn && authService.isCustomer()"
+                    mat-icon-button 
+                    class="favorite-btn"
+                    [class.is-favorite]="restaurant.isFavorite"
+                    [attr.aria-label]="(restaurant.isFavorite ? 'Remove ' : 'Add ') + restaurant.name + ' to favorites'"
+                    (click)="onToggleFavorite(restaurant, $event)">
+              <mat-icon>{{ restaurant.isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+            </button>
+            
+            <!-- Status Badge -->
+            <div class="status-badge" [ngClass]="restaurant.badgeClass" *ngIf="restaurant.badge">
               {{ restaurant.badge }}
             </div>
           </div>
-          <div class="restaurant-info">
-            <div class="restaurant-header">
-                
-              <h3 class="restaurant-name">{{ restaurant.name }}</h3>
-              <span class="price-indicator">{{ restaurant.priceRangeDisplay }}</span>
-            </div>
-            <p class="restaurant-cuisine">{{ restaurant.cuisine }}</p>
-            <div class="restaurant-rating">
-              <div class="stars">
-                <mat-icon *ngFor="let star of restaurant.stars" class="star-icon">
-                  {{ star }}
-                </mat-icon>
+          
+          <div class="card-content">
+            <!-- Header Section -->
+            <div class="content-header">
+              <div class="title-section">
+                <h3 class="restaurant-name">{{ restaurant.name }}</h3>
+                <p class="restaurant-cuisine">{{ restaurant.cuisine }}</p>
               </div>
-              <span class="rating-text">{{ (restaurant.rating || restaurant.averageRating || 0) | number:'1.1-1' }} ({{ restaurant.reviews || 0 }} reviews)</span>
+              <div class="price-section">
+                <span class="price-range">{{ restaurant.priceRangeDisplay }}</span>
+              </div>
             </div>
-            <div class="restaurant-details">
-              <div class="detail-item">
+            
+            <!-- Rating Section -->
+            <div class="rating-section">
+              <div class="rating-stars">
+                <div class="stars-container">
+                  <mat-icon *ngFor="let star of restaurant.stars" class="star-icon">{{ star }}</mat-icon>
+                </div>
+                <span class="rating-value">{{ (restaurant.rating || restaurant.averageRating || 0) | number:'1.1-1' }}</span>
+                <span class="reviews-count">({{ restaurant.reviews || 0 }} reviews)</span>
+              </div>
+            </div>
+            
+            <!-- Location and Hours -->
+            <div class="details-section">
+              <div class="detail-row">
                 <mat-icon class="detail-icon">location_on</mat-icon>
-                <span>{{ restaurant.location }}</span>
+                <span class="detail-text">{{ restaurant.location }}</span>
               </div>
-              <div class="detail-item">
-                <mat-icon class="detail-icon">access_time</mat-icon>
-                <span>{{ restaurant.timing || 'Hours vary' }}</span>
+              <div class="detail-row">
+                <mat-icon class="detail-icon">schedule</mat-icon>
+                <span class="detail-text">{{ restaurant.timing || 'Hours vary' }}</span>
               </div>
             </div>
-            <div class="restaurant-actions">
-              <button mat-button class="view-menu-btn" [routerLink]="['/restaurants', restaurant._id]" (click)="$event.stopPropagation()">
-                <mat-icon>menu_book</mat-icon>
+            
+            <!-- Action Buttons -->
+            <div class="card-actions">
+              <button 
+                mat-stroked-button 
+                class="action-btn secondary"
+                [routerLink]="['/restaurants', restaurant._id]" 
+                (click)="$event.stopPropagation()">
                 View Details
               </button>
-              <button mat-button class="review-btn" [routerLink]="['/restaurants', restaurant._id]" [queryParams]="{tab: 'reviews'}" (click)="$event.stopPropagation()">
-                <mat-icon>rate_review</mat-icon>
-                Leave Review
-              </button>
-              <button mat-button class="book-btn" (click)="bookTableForRestaurant(restaurant); $event.stopPropagation()">
-                <mat-icon>event_available</mat-icon>
-                Book Table
+              <button 
+                mat-raised-button 
+                color="primary"
+                class="action-btn primary"
+                (click)="bookTableForRestaurant(restaurant); $event.stopPropagation()">
+                Reserve Table
               </button>
             </div>
           </div>
@@ -186,37 +259,54 @@
 
       <!-- Pagination -->
       <div *ngIf="!loading && !error && restaurants.length > 0 && totalRestaurants > pageSize" class="pagination-section">
-        <mat-paginator 
-          [length]="totalRestaurants"
-          [pageSize]="pageSize"
-          [pageIndex]="currentPage"
-          [pageSizeOptions]="[2, 4, 6, 10]"
-          [showFirstLastButtons]="true"
-          (page)="onPageChange($event)"
-          aria-label="Select page of restaurants">
-        </mat-paginator>
+        <div class="pagination-container">
+          <mat-paginator 
+            [length]="totalRestaurants"
+            [pageSize]="pageSize"
+            [pageIndex]="currentPage"
+            [pageSizeOptions]="[6, 12, 18, 24]"
+            [showFirstLastButtons]="true"
+            (page)="onPageChange($event)"
+            aria-label="Select page of restaurants"
+            class="custom-paginator">
+          </mat-paginator>
+        </div>
       </div>
       
-      <div class="cta-section">
-        <div class="cta-card">
+      <!-- CTA Section -->
+      <div class="cta-section" *ngIf="!loading && !error">
+        <div class="cta-container">
           <div class="cta-content">
-            <div class="cta-icon">
-              <mat-icon class="large-icon">restaurant_menu</mat-icon>
+            <div class="cta-header">
+              <h2 class="cta-title">Ready to dine?</h2>
+              <p class="cta-description">
+                Join thousands of food enthusiasts who discover and book amazing dining experiences through DineBook.
+              </p>
             </div>
-            <h2 class="cta-title">Ready to Book Your Table?</h2>
-            <p class="cta-description">
-              Join thousands of food lovers who trust DineBook for their dining experiences. 
-              Sign in to book tables instantly or create an account to get started.
-            </p>
             <div class="cta-actions">
               <button mat-raised-button color="primary" (click)="bookTable()" class="cta-button primary">
-                <mat-icon>restaurant</mat-icon>
-                Book a Table Now
+                <mat-icon>restaurant_menu</mat-icon>
+                Find a Table
               </button>
-              <button mat-button routerLink="/about" class="cta-button secondary">
-                <mat-icon>info</mat-icon>
+              <button mat-raised-button routerLink="/about" class="cta-button secondary">
                 Learn More
               </button>
+            </div>
+          </div>
+          <div class="cta-visual">
+            <div class="feature-list">
+              <div class="feature-item">
+                <mat-icon>verified</mat-icon>
+                <span>Verified Reviews</span>
+              </div>
+              <div class="feature-item">
+                <mat-icon>schedule</mat-icon>
+                <span>Instant Booking</span>
+              </div>
+              <div class="feature-item">
+                <mat-icon>local_offer</mat-icon>
+                <span>Special Offers</span>
+              </div>
             </div>
           </div>
         </div>
