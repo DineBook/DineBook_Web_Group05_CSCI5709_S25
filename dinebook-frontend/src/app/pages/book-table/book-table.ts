@@ -11,7 +11,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { Router, ActivatedRoute } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
 import { BookingService } from '../../services/booking.service';
@@ -32,7 +33,9 @@ import { Restaurant, AvailabilityResponse, TimeSlot, CreateBookingRequest } from
     MatCardModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTooltipModule,
+    RouterModule
   ],
   templateUrl: './book-table.html',
   styleUrls: ['./book-table.scss']
@@ -46,6 +49,7 @@ export class BookTableComponent implements OnInit, OnDestroy {
   isSubmitting = false;
   minDate = new Date();
   maxDate = new Date();
+  currentStep = 1;
 
   // Store preselected restaurant info from navigation
   preselectedRestaurant: {
@@ -75,6 +79,9 @@ export class BookTableComponent implements OnInit, OnDestroy {
       guests: [2, [Validators.required, Validators.min(1), Validators.max(20)]],
       specialRequests: ['', [Validators.maxLength(500)]]
     });
+
+    // Watch form changes to update step progress
+    this.setupStepWatchers();
   }
 
   ngOnInit(): void {
@@ -86,6 +93,80 @@ export class BookTableComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private setupStepWatchers(): void {
+    // Watch for form changes to auto-expand next section
+    this.bookingForm.valueChanges
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(300) // Small delay to avoid rapid changes
+      )
+      .subscribe(() => {
+        this.autoExpandNextSection();
+      });
+  }
+
+  private autoExpandNextSection(): void {
+    // Step 1: Restaurant selected -> go to step 2
+    if (this.bookingForm.get('restaurantId')?.value && this.currentStep === 1) {
+      setTimeout(() => {
+        this.goToStep(2);
+        this.scrollToSection(2);
+      }, 500); // Small delay for user to see the completion
+    }
+
+    // Step 2: Date, guests, and time selected -> go to step 3
+    else if (
+      this.bookingForm.get('date')?.value &&
+      this.bookingForm.get('guests')?.value &&
+      this.selectedTimeSlot &&
+      this.currentStep === 2
+    ) {
+      setTimeout(() => {
+        this.goToStep(3);
+        this.scrollToSection(3);
+      }, 500);
+    }
+  }
+
+  private scrollToSection(stepNumber: number): void {
+    // Find the section element and scroll to it smoothly
+    const sectionSelector = stepNumber === 1 ? '.restaurant-section' :
+      stepNumber === 2 ? '.details-section' :
+        '.confirmation-section';
+
+    const sectionElement = document.querySelector(sectionSelector);
+    if (sectionElement) {
+      sectionElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+      });
+    }
+  }
+
+  private updateCurrentStep(): void {
+    // This method is no longer used for automatic progression
+    // Steps remain editable at all times
+  }
+
+  // New method to allow manual step navigation
+  goToStep(step: number): void {
+    // Ensure step is within valid range (1-3)
+    if (step >= 1 && step <= 3) {
+      this.currentStep = step;
+    }
+  }
+
+  goBack(): void {
+    this.router.navigate(['/restaurants']);
+  }
+
+  goToPreviousStep(): void {
+    if (this.currentStep > 1) {
+      this.currentStep = this.currentStep - 1;
+    }
   }
 
   private loadRestaurants(): void {
@@ -208,6 +289,9 @@ export class BookTableComponent implements OnInit, OnDestroy {
 
     this.selectedTimeSlot = slot;
     this.bookingForm.get('time')?.setValue(slot.time);
+
+    // Trigger auto-expansion to next section
+    this.autoExpandNextSection();
   }
 
   onSubmit(): void {
