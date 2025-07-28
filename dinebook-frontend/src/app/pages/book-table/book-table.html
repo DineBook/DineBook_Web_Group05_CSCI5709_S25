@@ -220,7 +220,7 @@
 
                     <!-- Available Times -->
                     <div *ngIf="availability && !isLoading" class="availability-section">
-                      <div class="availability-header">
+                      <!-- <div class="availability-header">
                         <div class="restaurant-info">
                           <h4 class="restaurant-name">{{ availability.restaurantName }}</h4>
                           <div class="date-info">
@@ -232,7 +232,7 @@
                             <span>Open {{ availability.openingHours.open }} - {{ availability.openingHours.close }}</span>
                           </div>
                         </div>
-                      </div>
+                      </div> -->
 
                       <div class="time-slots-container" *ngIf="availableSlots.length > 0; else noSlotsTemplate">
                         <div class="time-slots-grid">
