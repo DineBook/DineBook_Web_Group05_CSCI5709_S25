@@ -36,7 +36,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
   @Input() restaurantId!: string;
   @Input() restaurantName!: string;
   @Input() restaurantOwnerId!: string;
-  @Output() reviewsUpdated = new EventEmitter<{totalReviews: number, averageRating: number}>();
+  @Output() reviewsUpdated = new EventEmitter<{ totalReviews: number, averageRating: number }>();
 
   reviews: Review[] = [];
   userReview: Review | null = null;
@@ -45,7 +45,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
   averageRating = 0;
   totalReviews = 0;
   ratingDistribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
-  
+
   editingReply = '';
   newReply = '';
   isEditingReview = false;
@@ -77,19 +77,19 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
 
   loadReviews() {
     if (!this.restaurantId) return;
-    
+
     this.loading = true;
     this.error = null;
-    
+
     this.reviewService.getReviewsByRestaurant(this.restaurantId).subscribe({
       next: (response) => {
         this.reviews = response.reviews;
         this.calculateStats();
-        
+
         setTimeout(() => {
           this.findUserReview();
         }, 50);
-        
+
         this.loading = false;
       },
       error: (error) => {
@@ -107,20 +107,20 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
     if (!this.isLoggedIn || !this.isCustomer || !review) {
       return false;
     }
-    
+
     const currentUser = this.authService.getUser();
     if (!currentUser) {
       return false;
     }
-    
+
     const currentUserId = String(currentUser.id || currentUser._id || '').trim();
-    
+
     if (!currentUserId) {
       return false;
     }
-    
+
     let customerIdToCheck = null;
-    
+
     if (review.customerId) {
       if (typeof review.customerId === 'string') {
         customerIdToCheck = review.customerId;
@@ -128,12 +128,12 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
         customerIdToCheck = review.customerId._id;
       }
     }
-    
+
     if (customerIdToCheck) {
       const customerIdStr = String(customerIdToCheck).trim();
       return customerIdStr === currentUserId;
     }
-    
+
     return false;
   }
 
@@ -164,9 +164,9 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
         rating: this.editReviewData.rating,
         comment: this.editReviewData.comment.trim()
       };
-      
+
       await this.reviewService.createReview(reviewData).toPromise();
-      
+
       this.snackBar.open('Review submitted successfully!', 'Close', { duration: 3000 });
       this.cancelWriteReview();
       await this.loadReviews();
@@ -187,12 +187,12 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
         rating: this.editReviewData.rating,
         comment: this.editReviewData.comment.trim()
       };
-      
+
       console.log('Updating review with data:', updateData);
       console.log('Review ID:', this.editingReviewId);
-      
+
       await this.reviewService.updateReview(this.editingReviewId, updateData).toPromise();
-      
+
       this.snackBar.open('Review updated successfully!', 'Close', { duration: 3000 });
       this.cancelEditReviewInList();
       await this.loadReviews();
@@ -222,7 +222,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
 
   private findUserReview() {
     this.userReview = null;
-    
+
     if (!this.isLoggedIn) {
       return;
     }
@@ -240,7 +240,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
 
     for (const review of this.reviews) {
       let customerIdToCheck = null;
-      
+
       if (review.customerId) {
         if (typeof review.customerId === 'string') {
           customerIdToCheck = review.customerId;
@@ -248,10 +248,10 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
           customerIdToCheck = review.customerId._id;
         }
       }
-      
+
       if (customerIdToCheck) {
         const customerIdStr = String(customerIdToCheck).trim();
-        
+
         if (customerIdStr === currentUserId) {
           this.userReview = review;
           break;
@@ -266,7 +266,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
 
   private calculateStats() {
     this.totalReviews = this.reviews.length;
-    
+
     if (this.totalReviews === 0) {
       this.averageRating = 0;
       this.ratingDistribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
@@ -275,7 +275,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
       this.averageRating = sum / this.totalReviews;
 
       this.ratingDistribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
-      
+
       this.reviews.forEach(review => {
         this.ratingDistribution[review.rating as keyof typeof this.ratingDistribution]++;
       });
@@ -300,6 +300,15 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
     return (this.ratingDistribution[rating as keyof typeof this.ratingDistribution] / this.totalReviews) * 100;
   }
 
+  getRatingCount(rating: number): number {
+    return this.ratingDistribution[rating as keyof typeof this.ratingDistribution];
+  }
+
+  // Filter out reviews with empty comments for display
+  getFilteredReviews(): Review[] {
+    return this.reviews.filter(review => review.comment && review.comment.trim().length > 0);
+  }
+
   startEditUserReview() {
     if (!this.userReview) return;
     this.isEditingReview = true;
@@ -312,7 +321,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
   cancelEditUserReview() {
     this.isEditingReview = false;
     this.editReviewData = { rating: 0, comment: '' };
-    
+
     if (this.userReview) {
       this.editReviewData = {
         rating: this.userReview.rating,
@@ -471,25 +480,25 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
     console.log('🔍 Checking isRestaurantOwner...');
     console.log('🔍 isOwner:', this.isOwner);
     console.log('🔍 restaurantOwnerId:', this.restaurantOwnerId);
-    
+
     if (!this.isOwner || !this.restaurantOwnerId) {
       console.log('🔍 Early return false - no owner or no restaurantOwnerId');
       return false;
     }
-    
+
     const currentUser = this.authService.getUser();
     console.log('🔍 currentUser:', currentUser);
     if (!currentUser) {
       console.log('🔍 Early return false - no current user');
       return false;
     }
-    
+
     const currentUserId = String(currentUser.id || currentUser._id || '').trim();
     const restaurantOwnerIdStr = String(this.restaurantOwnerId).trim();
     console.log('🔍 currentUserId:', currentUserId);
     console.log('🔍 restaurantOwnerIdStr:', restaurantOwnerIdStr);
     console.log('🔍 Match:', currentUserId === restaurantOwnerIdStr);
-    
+
     return currentUserId === restaurantOwnerIdStr;
   }
 
@@ -514,7 +523,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
   getRatingText(rating: number): string {
     const ratingTexts = {
       1: '😞 Poor - Needs significant improvement',
-      2: '😐 Fair - Below average experience',  
+      2: '😐 Fair - Below average experience',
       3: '🙂 Good - Average experience',
       4: '😊 Very Good - Above average',
       5: '🤩 Excellent - Outstanding experience!'
