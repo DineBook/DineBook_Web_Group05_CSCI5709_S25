@@ -1,754 +1,729 @@
-// ============================================
-// BEAUTIFUL RESTAURANT REVIEWS STYLING
-// ============================================
-
-// Global Variables
-$primary-gold: #ffd700;
-$primary-purple: #667eea;
-$secondary-purple: #764ba2;
-$white: #ffffff;
-$text-dark: #333;
-$text-light: #666;
-$text-muted: #999;
-$error-red: #f44336;
-$success-green: #4caf50;
-$border-light: #e0e0e0;
-
-// Star Styling
-.golden-star, 
-.star-clickable {
-  font-size: 1.8rem !important;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  color: $border-light;
-  user-select: none;
-  
-  &:hover {
-    color: $primary-gold;
-    transform: scale(1.15);
-    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
-  }
-
-  &.filled {
-    color: $primary-gold !important;
-    filter: drop-shadow(0 2px 4px rgba(255, 215, 0, 0.3));
-  }
-
-  &.empty {
-    color: $border-light !important;
-  }
-}
-
-.star-icon {
-  font-size: 1.5rem;
-  color: $border-light;
-  
-  &.filled {
-    color: $primary-gold;
-  }
-}
-
-.star-small {
-  font-size: 1rem;
-  color: $primary-gold;
-}
-
-// Main Reviews Section
+// Modern Restaurant Reviews - Airbnb Inspired Design
 .reviews-section {
-  margin: 2rem 0;
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 32px;
+    text-align: center;
+    
+    .loading-spinner {
+      margin-bottom: 24px;
+      
+      .spinner-ring {
+        width: 40px;
+        height: 40px;
+        border: 3px solid #f3f4f6;
+        border-top: 3px solid #6366f1;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+    }
+    
+    p {
+      color: #6b7280;
+      font-size: 1rem;
+      margin: 0;
+    }
+  }
   
-  // Loading and Error States
-  .loading-container, 
   .error-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4rem 2rem;
+    padding: 80px 32px;
     text-align: center;
-    background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
-    border-radius: 16px;
     
-    .error-icon {
-      font-size: 3.5rem;
-      color: $error-red;
-      margin-bottom: 1.5rem;
-      animation: pulse 2s infinite;
-    }
-    
-    h3 {
-      color: $text-dark;
-      margin-bottom: 0.5rem;
-    }
-    
-    p {
-      margin: 1rem 0;
-      color: $text-light;
-      font-size: 1.1rem;
-    }
-  }
-
-  // Login Prompt
-  .login-prompt {
-    margin-bottom: 2rem;
-    
-    .prompt-card {
-      background: linear-gradient(135deg, $white 0%, #f8f9ff 100%);
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
-      overflow: hidden;
+    .error-content {
+      max-width: 400px;
       
-      .prompt-content {
-        text-align: center;
-        padding: 2rem;
+      .error-icon {
+        font-size: 3rem;
+        width: 3rem;
+        height: 3rem;
+        color: #ef4444;
+        margin-bottom: 24px;
+      }
+      
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 16px;
+      }
+      
+      p {
+        color: #6b7280;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin: 0 0 32px;
+      }
+      
+      .retry-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 8px;
         
-        .prompt-icon {
-          font-size: 3rem;
-          color: $primary-purple;
-          margin-bottom: 1rem;
-        }
-        
-        h3 {
-          color: $text-dark;
-          margin-bottom: 0.5rem;
-          font-weight: 600;
-        }
-        
-        p {
-          color: $text-light;
-          margin-bottom: 2rem;
-        }
-        
-        button {
-          background: linear-gradient(45deg, $primary-purple 0%, $secondary-purple 100%);
-          color: $white;
-          padding: 0.8rem 2rem;
-          border-radius: 25px;
-          font-weight: 600;
-          transition: all 0.3s ease;
-          
-          &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-          }
+        mat-icon {
+          font-size: 1.125rem;
+          width: 1.125rem;
+          height: 1.125rem;
         }
       }
     }
   }
 }
 
-// Reviews Content
-.reviews-content {
+// Login Prompt
+.login-prompt {
+  margin-bottom: 48px;
   
-  // Rating Summary Header
-  .rating-summary {
-    background: linear-gradient(135deg, $primary-purple 0%, $secondary-purple 100%);
-    color: $white;
-    padding: 2.5rem;
-    border-radius: 20px;
-    margin-bottom: 2.5rem;
-    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.3);
-    position: relative;
-    overflow: hidden;
-    
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-      z-index: 1;
-    }
-    
-    > * {
-      position: relative;
-      z-index: 2;
-    }
-
-    .summary-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-
-      h2 {
-        margin: 0;
-        font-size: 2rem;
-        font-weight: 700;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      }
-
-      .write-review-prompt {
-        button {
-          background: linear-gradient(45deg, $primary-gold 0%, #ffed4e 100%);
-          color: $text-dark;
-          padding: 0.8rem 1.5rem;
-          border-radius: 25px;
-          font-weight: 600;
-          font-size: 1rem;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-          
-          &:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(255, 215, 0, 0.5);
-          }
-          
-          mat-icon {
-            margin-right: 0.5rem;
-          }
-        }
-      }
-
-      .overall-rating {
-        text-align: center;
-        
-        .rating-display {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          margin-bottom: 0.5rem;
-          
-          .rating-number {
-            font-size: 3rem;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-          }
-          
-          .stars {
-            display: flex;
-            gap: 0.25rem;
-          }
-        }
-        
-        .review-count {
-          margin: 0;
-          opacity: 0.9;
-          font-size: 1.1rem;
-        }
-      }
-    }
-
-    // Rating Distribution
-    .rating-distribution {
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-      
-      .distribution-item {
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-        
-        .rating-label {
-          font-weight: 600;
-          min-width: 20px;
-        }
-        
-        .progress-bar {
-          flex: 1;
-          height: 8px;
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 4px;
-          overflow: hidden;
-          
-          .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, $primary-gold 0%, #ffed4e 100%);
-            border-radius: 4px;
-            transition: width 0.6s ease;
-          }
-        }
-        
-        .percentage {
-          min-width: 35px;
-          text-align: right;
-          font-weight: 600;
-        }
-      }
-    }
-  }
-
-  // Write Review Form
-  .write-review-section {
-    margin-bottom: 2.5rem;
-    
-    .write-review-card {
-      background: linear-gradient(135deg, $white 0%, #f8f9ff 100%);
-      border-radius: 20px;
-      box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
-      overflow: hidden;
-      border: 1px solid rgba(255, 215, 0, 0.2);
-      
-      mat-card-header {
-        background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 215, 0, 0.05) 100%);
-        padding: 2rem;
-        
-        mat-card-title {
-          display: flex;
-          align-items: center;
-          gap: 0.8rem;
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: $text-dark;
-          margin: 0;
-          
-          .write-icon {
-            font-size: 1.8rem;
-            color: $primary-gold;
-          }
-        }
-        
-        mat-card-subtitle {
-          color: $text-light;
-          font-size: 1.1rem;
-          margin-top: 0.5rem;
-        }
-      }
-      
-      mat-card-content {
-        padding: 2rem;
-        
-        .rating-input {
-          margin-bottom: 2rem;
-          
-          label {
-            display: block;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: $text-dark;
-            margin-bottom: 1rem;
-          }
-          
-          .star-rating {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-            padding: 1rem;
-            background: rgba(255, 215, 0, 0.05);
-            border-radius: 12px;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-          }
-          
-          .rating-text {
-            text-align: center;
-            font-size: 1rem;
-            font-weight: 600;
-            color: $primary-gold;
-            margin: 0.8rem 0 0 0;
-            padding: 0.8rem;
-            background: rgba(255, 215, 0, 0.1);
-            border-radius: 8px;
-            animation: fadeInUp 0.3s ease;
-          }
-        }
-        
-        .review-input {
-          display: flex;
-          align-items: flex-start;
-          gap: 1rem;
-          
-          .input-icon {
-            font-size: 1.5rem;
-            color: $primary-gold;
-            margin-top: 0.8rem;
-            text-shadow: 0 1px 2px rgba(255, 215, 0, 0.3);
-          }
-          
-          .input-container {
-            flex: 1;
-            
-            .review-write-textarea {
-              width: 100%;
-              padding: 1.2rem 1.8rem;
-              border: 2px solid rgba(255, 215, 0, 0.3);
-              border-radius: 16px;
-              font-family: inherit;
-              font-size: 1rem;
-              line-height: 1.6;
-              resize: vertical;
-              min-height: 120px;
-              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-              background: linear-gradient(145deg, $white 0%, #fefcf3 100%);
-              color: $text-dark;
-              box-shadow: 0 4px 12px rgba(255, 215, 0, 0.1);
-              
-              &:focus {
-                outline: none;
-                border-color: $primary-gold;
-                box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2), 0 8px 24px rgba(255, 215, 0, 0.3);
-                transform: translateY(-2px);
-                background: $white;
-              }
-              
-              &::placeholder {
-                color: $text-muted;
-                font-style: italic;
-              }
-            }
-            
-            .char-count {
-              text-align: right;
-              font-size: 0.9rem;
-              color: $text-light;
-              margin-top: 0.5rem;
-              font-weight: 500;
-            }
-          }
-        }
-      }
-      
-      mat-card-actions {
-        padding: 1.5rem 2rem;
-        background: rgba(255, 215, 0, 0.03);
-        display: flex;
-        justify-content: flex-end;
-        gap: 1rem;
-        
-        button {
-          padding: 0.8rem 1.8rem;
-          border-radius: 25px;
-          font-weight: 600;
-          font-size: 1rem;
-          transition: all 0.3s ease;
-          
-          &.mat-button {
-            color: $text-light;
-            border: 1px solid rgba(102, 126, 234, 0.3);
-            
-            &:hover {
-              background: rgba(102, 126, 234, 0.1);
-              transform: translateY(-1px);
-              color: $primary-purple;
-            }
-          }
-          
-          &.mat-raised-button {
-            background: linear-gradient(45deg, $primary-gold 0%, #ffed4e 100%);
-            color: $text-dark;
-            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-            
-            &:hover {
-              transform: translateY(-2px);
-              box-shadow: 0 8px 24px rgba(255, 215, 0, 0.5);
-            }
-            
-            &:disabled {
-              background: rgba(255, 215, 0, 0.3);
-              color: rgba(51, 51, 51, 0.6);
-              box-shadow: none;
-              transform: none;
-            }
-            
-            mat-icon {
-              margin-right: 0.5rem;
-            }
-          }
-        }
-      }
-    }
-  }
-
-  // Inline Edit Form
-  .inline-edit-form {
-    background: $white;
+  .prompt-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    background: white;
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.15);
-    border: 2px solid rgba(255, 215, 0, 0.2);
-    padding: 1.5rem;
-    margin: 1rem 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 32px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f3f4f6;
     
-    &:hover {
-      box-shadow: 0 8px 32px rgba(255, 215, 0, 0.25);
-      transform: translateY(-2px);
+    @media (max-width: 768px) {
+      flex-direction: column;
+      text-align: center;
+      gap: 20px;
     }
-
-    .edit-header {
+    
+    .prompt-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #f3f4f6;
       display: flex;
       align-items: center;
-      margin-bottom: 1.5rem;
+      justify-content: center;
+      flex-shrink: 0;
       
-      .edit-icon {
-        color: $primary-gold;
-        margin-right: 0.8rem;
-        font-size: 1.4rem;
-      }
-      
-      .edit-label {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: $text-dark;
+      mat-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+        color: #6b7280;
       }
     }
-
-    .rating-input {
-      margin-bottom: 1.5rem;
+    
+    .prompt-content {
+      flex: 1;
       
-      label {
-        display: block;
-        margin-bottom: 0.8rem;
-        font-weight: 600;
-        color: $text-dark;
-      }
-    }
-
-    .review-input {
-      .input-icon {
-        color: $primary-gold;
-        margin-bottom: 0.8rem;
-        font-size: 1.2rem;
+      h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 8px;
       }
       
-      .input-container {
-        position: relative;
-        
-        .review-write-textarea {
-          width: 100%;
-          border: 2px solid rgba(255, 215, 0, 0.3);
-          border-radius: 12px;
-          padding: 1rem 1.2rem;
-          font-family: inherit;
-          font-size: 1rem;
-          line-height: 1.6;
-          resize: vertical;
-          min-height: 120px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          background: linear-gradient(145deg, $white 0%, #fefcf3 100%);
-          color: $text-dark;
-          box-shadow: 0 4px 12px rgba(255, 215, 0, 0.1);
-          
-          &:focus {
-            outline: none;
-            border-color: $primary-gold;
-            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.2), 0 8px 24px rgba(255, 215, 0, 0.3);
-            transform: translateY(-2px);
-            background: $white;
-          }
-          
-          &::placeholder {
-            color: $text-muted;
-            font-style: italic;
-          }
-        }
-        
-        .char-count {
-          text-align: right;
-          font-size: 0.9rem;
-          color: $text-light;
-          margin-top: 0.5rem;
-          font-weight: 500;
-        }
+      p {
+        color: #6b7280;
+        font-size: 1rem;
+        line-height: 1.5;
+        margin: 0 0 24px;
       }
-    }
-
-    .edit-form-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 1rem;
-      margin-top: 1rem;
       
       button {
-        padding: 0.6rem 1.4rem;
-        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 8px;
         font-weight: 600;
-        font-size: 0.9rem;
-        transition: all 0.3s ease;
         
-        &.mat-button {
-          color: $text-light;
-          border: 1px solid rgba(102, 126, 234, 0.3);
-          
-          &:hover {
-            background: rgba(102, 126, 234, 0.1);
-            transform: translateY(-1px);
-            color: $primary-purple;
-          }
-        }
-        
-        &.mat-raised-button {
-          background: linear-gradient(45deg, $primary-gold 0%, #ffed4e 100%);
-          color: $text-dark;
-          box-shadow: 0 3px 8px rgba(255, 215, 0, 0.3);
-          
-          &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(255, 215, 0, 0.5);
-          }
-          
-          mat-icon {
-            margin-right: 0.4rem;
-          }
+        mat-icon {
+          font-size: 1.125rem;
+          width: 1.125rem;
+          height: 1.125rem;
         }
       }
     }
   }
+}
 
-  // No Reviews State
-  .no-reviews {
-    text-align: center;
-    padding: 4rem 2rem;
-    background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
-    border-radius: 16px;
-    margin: 2rem 0;
+// Elegant Rating Overview
+.rating-overview {
+  margin-bottom: 48px;
+  
+  .overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
     
-    .no-reviews-icon {
+    @media (max-width: 768px) {
+      flex-direction: column;
+      gap: 24px;
+    }
+    
+    .rating-stats {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+      
+      .overall-score {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        
+        .score-number {
+          font-size: 2rem;
+          font-weight: 700;
+          color: #111827;
+        }
+        
+        .score-stars {
+          display: flex;
+          gap: 4px;
+          
+          .star-icon {
+            font-size: 1.25rem;
+            width: 1.25rem;
+            height: 1.25rem;
+            color: #d1d5db;
+            
+            &.filled {
+              color: #f59e0b;
+            }
+          }
+        }
+      }
+      
+      .score-details {
+        .reviews-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #111827;
+          margin: 0;
+        }
+      }
+    }
+    
+    .write-review-action {
+      .write-review-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        border: 2px solid #e5e7eb;
+        color: #374151;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          border-color: #d1d5db;
+          background: #f9fafb;
+        }
+        
+        &.active {
+          border-color: #6366f1;
+          background: #f0f9ff;
+          color: #6366f1;
+        }
+        
+        mat-icon {
+          font-size: 1.125rem;
+          width: 1.125rem;
+          height: 1.125rem;
+        }
+      }
+    }
+  }
+  
+  .rating-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 400px;
+    
+    .breakdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.875rem;
+      
+      .rating-number {
+        font-weight: 600;
+        color: #374151;
+        width: 8px;
+      }
+      
+      .rating-star {
+        font-size: 0.875rem;
+        width: 0.875rem;
+        height: 0.875rem;
+        color: #f59e0b;
+      }
+      
+      .progress-track {
+        flex: 1;
+        height: 8px;
+        background: #f3f4f6;
+        border-radius: 4px;
+        overflow: hidden;
+        
+        .progress-bar {
+          height: 100%;
+          background: #111827;
+          border-radius: 4px;
+          transition: width 0.3s ease;
+        }
+      }
+      
+      .count-text {
+        color: #6b7280;
+        font-weight: 500;
+        min-width: 20px;
+        text-align: right;
+      }
+    }
+  }
+}
+
+// Modern Write Review Form
+.write-review-form {
+  margin-bottom: 48px;
+  
+  .form-container {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f3f4f6;
+    
+    .form-header {
+      margin-bottom: 32px;
+      
+      h3 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin: 0 0 8px;
+      }
+      
+      p {
+        color: #6b7280;
+        font-size: 1rem;
+        margin: 0;
+      }
+    }
+    
+    .rating-input {
+      margin-bottom: 24px;
+      
+      .input-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 12px;
+      }
+      
+      .star-rating {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+        
+        .star-clickable {
+          font-size: 2rem;
+          width: 2rem;
+          height: 2rem;
+          color: #d1d5db;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          
+          &:hover {
+            color: #f59e0b;
+            transform: scale(1.1);
+          }
+          
+          &.filled {
+            color: #f59e0b;
+          }
+        }
+      }
+      
+      .rating-description {
+        font-size: 0.875rem;
+        color: #6b7280;
+        font-style: italic;
+        margin: 8px 0 0;
+      }
+    }
+    
+    .comment-input {
+      margin-bottom: 32px;
+      
+      .input-label {
+        display: block;
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 12px;
+      }
+      
+      .review-textarea {
+        width: 100%;
+        padding: 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 1rem;
+        line-height: 1.5;
+        font-family: inherit;
+        resize: vertical;
+        transition: border-color 0.2s ease;
+        
+        &:focus {
+          outline: none;
+          border-color: #6366f1;
+        }
+        
+        &::placeholder {
+          color: #9ca3af;
+        }
+      }
+      
+      .char-counter {
+        text-align: right;
+        font-size: 0.75rem;
+        color: #9ca3af;
+        margin-top: 8px;
+      }
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      
+      .cancel-btn {
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        color: #6b7280;
+      }
+      
+      .submit-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        
+        mat-icon {
+          font-size: 1.125rem;
+          width: 1.125rem;
+          height: 1.125rem;
+        }
+      }
+    }
+  }
+}
+
+// No Reviews State
+.no-reviews-state {
+  text-align: center;
+  padding: 80px 32px;
+  
+  .empty-state {
+    max-width: 400px;
+    margin: 0 auto;
+    
+    .empty-icon {
       font-size: 4rem;
-      color: $primary-purple;
-      margin-bottom: 1.5rem;
-      opacity: 0.7;
+      width: 4rem;
+      height: 4rem;
+      color: #d1d5db;
+      margin-bottom: 24px;
     }
     
     h3 {
-      color: $text-dark;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 16px;
     }
     
     p {
-      color: $text-light;
-      font-size: 1.1rem;
+      color: #6b7280;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin: 0 0 32px;
+    }
+    
+    .first-review-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      
+      mat-icon {
+        font-size: 1.125rem;
+        width: 1.125rem;
+        height: 1.125rem;
+      }
     }
   }
+}
 
-  // Reviews List
-  .reviews-list {
-    .review-item {
-      margin-bottom: 2rem;
+// Reviews List
+.reviews-list {
+  .reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #111827;
+      margin: 0;
+    }
+    
+    .review-count {
+      font-size: 0.875rem;
+      color: #6b7280;
+      font-weight: 500;
+    }
+  }
+  
+  .reviews-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    
+    .review-card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+      border: 1px solid #f3f4f6;
+      transition: all 0.2s ease;
       
-      .review-card {
-        background: $white;
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-        border: 1px solid rgba(0, 0, 0, 0.05);
+      &:hover {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      
+      .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
         
-        &:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-        }
-        
-        mat-card-header {
-          padding: 1.5rem 1.5rem 0;
+        .reviewer-info {
+          display: flex;
+          align-items: center;
+          gap: 16px;
           
-          .review-avatar {
-            background: linear-gradient(45deg, $primary-purple 0%, $secondary-purple 100%);
-            color: $white;
-            border-radius: 50%;
+          .avatar {
             width: 48px;
             height: 48px;
+            border-radius: 50%;
+            background: #f3f4f6;
             display: flex;
             align-items: center;
             justify-content: center;
             
             mat-icon {
               font-size: 1.5rem;
+              width: 1.5rem;
+              height: 1.5rem;
+              color: #6b7280;
             }
           }
           
-          mat-card-title {
-            color: $text-dark;
-            font-weight: 600;
-            font-size: 1.1rem;
-          }
-          
-          mat-card-subtitle {
+          .reviewer-details {
+            .reviewer-name {
+              font-size: 1rem;
+              font-weight: 600;
+              color: #111827;
+              margin: 0 0 4px;
+            }
+            
             .review-meta {
               display: flex;
               align-items: center;
-              gap: 1rem;
+              gap: 12px;
               
-              .stars-small {
+              .review-rating {
                 display: flex;
-                gap: 0.2rem;
+                gap: 2px;
+                
+                .star-small {
+                  font-size: 0.875rem;
+                  width: 0.875rem;
+                  height: 0.875rem;
+                  color: #d1d5db;
+                  
+                  &.filled {
+                    color: #f59e0b;
+                  }
+                }
               }
               
               .review-date {
-                color: $text-light;
-                font-size: 0.9rem;
+                font-size: 0.75rem;
+                color: #9ca3af;
+                font-weight: 500;
               }
             }
           }
         }
         
-        mat-card-content {
-          padding: 1rem 1.5rem 1.5rem;
+        .review-actions {
+          display: flex;
+          gap: 4px;
           
-          .review-comment {
-            color: $text-dark;
-            line-height: 1.6;
+          .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            color: #6b7280;
+            transition: all 0.2s ease;
+            
+            &:hover {
+              background: #f3f4f6;
+              color: #374151;
+            }
+            
+            &.delete {
+              &:hover {
+                background: #fef2f2;
+                color: #dc2626;
+              }
+            }
+            
+            mat-icon {
+              font-size: 1rem;
+              width: 1rem;
+              height: 1rem;
+            }
+          }
+        }
+      }
+      
+      .review-content {
+        .review-text {
+          p {
+            color: #374151;
             font-size: 1rem;
-            margin-bottom: 1rem;
+            line-height: 1.6;
+            margin: 0;
+          }
+        }
+        
+        .edit-form {
+          .rating-input {
+            margin-bottom: 16px;
+            
+            .input-label {
+              display: block;
+              font-size: 0.875rem;
+              font-weight: 600;
+              color: #374151;
+              margin-bottom: 8px;
+            }
+            
+            .star-rating {
+              display: flex;
+              gap: 4px;
+              
+              .star-clickable {
+                font-size: 1.5rem;
+                width: 1.5rem;
+                height: 1.5rem;
+                color: #d1d5db;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                
+                &:hover {
+                  color: #f59e0b;
+                  transform: scale(1.1);
+                }
+                
+                &.filled {
+                  color: #f59e0b;
+                }
+              }
+            }
           }
           
-          .user-review-actions {
+          .comment-input {
+            margin-bottom: 16px;
+            
+            .review-textarea {
+              width: 100%;
+              padding: 12px;
+              border: 2px solid #e5e7eb;
+              border-radius: 6px;
+              font-size: 0.875rem;
+              line-height: 1.5;
+              font-family: inherit;
+              resize: vertical;
+              transition: border-color 0.2s ease;
+              
+              &:focus {
+                outline: none;
+                border-color: #6366f1;
+              }
+            }
+            
+            .char-counter {
+              text-align: right;
+              font-size: 0.75rem;
+              color: #9ca3af;
+              margin-top: 4px;
+            }
+          }
+          
+          .edit-actions {
             display: flex;
             justify-content: flex-end;
-            gap: 0.5rem;
+            gap: 8px;
             
-            button {
-              padding: 0.5rem 1rem;
-              border-radius: 20px;
-              font-size: 0.9rem;
+            .cancel-btn {
+              padding: 8px 16px;
+              border-radius: 6px;
+              font-size: 0.875rem;
               font-weight: 500;
-              
-              &.edit-btn {
-                color: $primary-purple;
-                border: 1px solid rgba(102, 126, 234, 0.3);
-                
-                &:hover {
-                  background: rgba(102, 126, 234, 0.1);
-                }
-              }
-              
-              &.delete-btn {
-                color: $error-red;
-                border: 1px solid rgba(244, 67, 54, 0.3);
-                
-                &:hover {
-                  background: rgba(244, 67, 54, 0.1);
-                }
-              }
+              color: #6b7280;
             }
-          }
-          
-          // Owner Reply
-          .owner-reply {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background: linear-gradient(135deg, #f8f9ff 0%, #f0f2ff 100%);
-            border-radius: 12px;
-            border-left: 4px solid $primary-gold;
             
-            .reply-header {
+            .update-btn {
               display: flex;
               align-items: center;
-              gap: 0.8rem;
-              margin-bottom: 1rem;
+              gap: 6px;
+              padding: 8px 16px;
+              border-radius: 6px;
+              font-size: 0.875rem;
+              font-weight: 600;
               
-              .owner-badge {
-                background: linear-gradient(45deg, $primary-gold 0%, #ffed4e 100%);
-                color: $text-dark;
-                padding: 0.3rem 0.8rem;
-                border-radius: 12px;
-                font-size: 0.8rem;
-                font-weight: 600;
+              mat-icon {
+                font-size: 1rem;
+                width: 1rem;
+                height: 1rem;
               }
-              
-              .reply-date {
-                color: $text-light;
-                font-size: 0.9rem;
-              }
-            }
-            
-            .reply-content {
-              color: $text-dark;
-              line-height: 1.6;
-              font-style: italic;
             }
           }
         }
@@ -757,68 +732,219 @@ $border-light: #e0e0e0;
   }
 }
 
-// Animations
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+// Owner Reply Section
+.owner-reply-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #f3f4f6;
+  
+  .reply-prompt {
+    margin-bottom: 16px;
+    
+    .reply-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: 1px solid #e5e7eb;
+      color: #6b7280;
+      
+      &:hover {
+        border-color: #d1d5db;
+        background: #f9fafb;
+      }
+      
+      mat-icon {
+        font-size: 1rem;
+        width: 1rem;
+        height: 1rem;
+      }
+    }
+  }
+  
+  .owner-reply {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    
+    .reply-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      
+      .reply-icon {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
+        mat-icon {
+          font-size: 1rem;
+          width: 1rem;
+          height: 1rem;
+          color: #6366f1;
+        }
+      }
+      
+      .reply-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #374151;
+      }
+      
+      .reply-actions {
+        display: flex;
+        gap: 4px;
+        
+        .action-btn {
+          width: 28px;
+          height: 28px;
+          border-radius: 4px;
+          color: #6b7280;
+          
+          &:hover {
+            background: #f3f4f6;
+            color: #374151;
+          }
+          
+          &.delete {
+            &:hover {
+              background: #fef2f2;
+              color: #dc2626;
+            }
+          }
+          
+          mat-icon {
+            font-size: 0.875rem;
+            width: 0.875rem;
+            height: 0.875rem;
+          }
+        }
+      }
+    }
+    
+    .reply-text {
+      color: #374151;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+  }
+  
+  .reply-form {
+    .reply-input {
+      .reply-textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        font-family: inherit;
+        resize: vertical;
+        transition: border-color 0.2s ease;
+        
+        &:focus {
+          outline: none;
+          border-color: #6366f1;
+        }
+        
+        &::placeholder {
+          color: #9ca3af;
+        }
+      }
+      
+      .reply-form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 12px;
+        
+        .cancel-btn {
+          padding: 8px 16px;
+          border-radius: 6px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          color: #6b7280;
+        }
+        
+        .reply-submit-btn {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          padding: 8px 16px;
+          border-radius: 6px;
+          font-size: 0.875rem;
+          font-weight: 600;
+          
+          mat-icon {
+            font-size: 1rem;
+            width: 1rem;
+            height: 1rem;
+          }
+        }
+      }
+    }
+  }
 }
 
-@keyframes fadeInUp {
+// Animation
+@keyframes spin {
   from {
-    opacity: 0;
-    transform: translateY(10px);
+    transform: rotate(0deg);
   }
   to {
-    opacity: 1;
-    transform: translateY(0);
+    transform: rotate(360deg);
   }
 }
 
 // Responsive Design
 @media (max-width: 768px) {
-  .reviews-content {
-    .rating-summary {
-      padding: 1.5rem;
-      
-      .summary-header {
-        flex-direction: column;
-        align-items: flex-start;
-        
-        h2 {
-          font-size: 1.5rem;
-        }
-        
-        .overall-rating .rating-display .rating-number {
-          font-size: 2.5rem;
-        }
-      }
-      
-      .rating-distribution .distribution-item {
-        gap: 0.5rem;
-      }
-    }
-    
-    .write-review-section .write-review-card {
-      mat-card-header,
-      mat-card-content,
-      mat-card-actions {
-        padding: 1.5rem;
-      }
-      
-      .review-input {
-        flex-direction: column;
-        gap: 0.5rem;
-        
-        .input-icon {
-          align-self: flex-start;
-          margin-top: 0;
-        }
-      }
+  .reviews-section {
+    .loading-container,
+    .error-container {
+      padding: 60px 24px;
     }
   }
   
-  .golden-star,
-  .star-clickable {
-    font-size: 1.5rem !important;
+  .rating-overview {
+    .rating-breakdown {
+      max-width: 100%;
+    }
+  }
+  
+  .write-review-form {
+    .form-container {
+      padding: 24px;
+    }
+  }
+  
+  .reviews-list {
+    .reviews-grid {
+      .review-card {
+        padding: 20px;
+        
+        .review-header {
+          .reviewer-info {
+            gap: 12px;
+            
+            .avatar {
+              width: 40px;
+              height: 40px;
+              
+              mat-icon {
+                font-size: 1.25rem;
+                width: 1.25rem;
+                height: 1.25rem;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

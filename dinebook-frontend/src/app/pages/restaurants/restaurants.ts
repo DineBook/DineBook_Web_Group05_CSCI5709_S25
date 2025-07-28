@@ -50,7 +50,7 @@ export class RestaurantsComponent implements OnInit {
   // Filter and pagination properties
   searchForm: FormGroup
   currentPage = 0
-  pageSize = 2  // Smaller page size for testing with current data
+  pageSize = 6  // Better page size for grid layout
   totalRestaurants = 0
   totalPages = 0
 
@@ -77,7 +77,7 @@ export class RestaurantsComponent implements OnInit {
     private fb: FormBuilder,
     private apiService: ApiService,
     private reviewService: ReviewService
-    
+
   ) {
     this.searchForm = this.fb.group({
       location: [''],
@@ -94,7 +94,7 @@ export class RestaurantsComponent implements OnInit {
     this.setupFormSubscriptions()
   }
 
-   getUserLocation() {
+  getUserLocation() {
     if (!navigator.geolocation) {
       console.warn('Geolocation is not supported by this browser.');
       return;
@@ -107,7 +107,7 @@ export class RestaurantsComponent implements OnInit {
           longitude: position.coords.longitude,
           radius: 5 // Default radius in km
         };
-        this.loadRestaurants(); 
+        this.loadRestaurants();
       },
       (error) => {
         console.warn('Location access denied or unavailable', error);
@@ -153,33 +153,21 @@ export class RestaurantsComponent implements OnInit {
 
     this.bookingService.getRestaurants(params).subscribe({
       next: (response) => {
-        const restaurants = response.restaurants.map(restaurant => this.transformRestaurant(restaurant))
-        if (this.authService.isLoggedIn && this.authService.isCustomer()) {
-          const statusRequests = restaurants.map(r =>
-            this.apiService.checkFavoriteStatus(r._id).toPromise()
-              .then(res => ({ id: r._id, isFavorite: res && typeof res.isFavorite === 'boolean' ? res.isFavorite : false }))
-              .catch(() => ({ id: r._id, isFavorite: false }))
-          )
-          Promise.all(statusRequests).then(statuses => {
-            const statusMap = Object.fromEntries(statuses.map(s => [s.id, s.isFavorite]))
-            this.restaurants = restaurants.map(r => ({ ...r, isFavorite: statusMap[r._id] }))
-            this.totalRestaurants = response.pagination.total
-            this.totalPages = response.pagination.pages
-            this.loading = false
-          })
-        } else {
-          this.restaurants = restaurants.map(r => ({ ...r, isFavorite: false }))
-          this.totalRestaurants = response.pagination.total
-          this.totalPages = response.pagination.pages
-          this.loading = false
-        }
-        this.restaurants = response.restaurants.map(restaurant => this.transformRestaurant(restaurant))
+        // First, load restaurants with basic data and set loading to false
+        this.restaurants = response.restaurants.map(restaurant =>
+          ({ ...this.transformRestaurant(restaurant), isFavorite: false })
+        )
         this.totalRestaurants = response.pagination.total
         this.totalPages = response.pagination.pages
         this.loading = false
-        
+
         // Load review data for each restaurant
         this.loadReviewsForRestaurants();
+
+        // Then asynchronously load favorite status if user is logged in as customer
+        if (this.authService.isLoggedIn && this.authService.isCustomer()) {
+          this.loadFavoriteStatus();
+        }
       },
       error: (error) => {
         console.error('Error loading restaurants:', error)
@@ -289,13 +277,25 @@ export class RestaurantsComponent implements OnInit {
   onToggleFavorite(restaurant: RestaurantDisplay, event: Event) {
     event.stopPropagation()
     if (!this.authService.isLoggedIn || !this.authService.isCustomer()) return
+
+    // Optimistically update the UI
+    const previousState = restaurant.isFavorite
+    restaurant.isFavorite = !restaurant.isFavorite
+
     this.apiService.toggleFavorite(restaurant._id).subscribe({
-      next: (res) => {
-        if (res && typeof res.isFavorite === 'boolean') {
-          restaurant.isFavorite = res.isFavorite
+      next: (res: any) => {
+        // Confirm the state based on server response
+        if (res && typeof res.isFavorited === 'boolean') {
+          restaurant.isFavorite = res.isFavorited
+        } else {
+          // If response doesn't have the expected format, keep the optimistic update
+          console.warn('Unexpected response format from toggleFavorite API:', res);
         }
       },
-      error: () => {
+      error: (error) => {
+        // Revert the optimistic update on error
+        restaurant.isFavorite = previousState
+        console.error('Error toggling favorite:', error)
       }
     })
   }
@@ -347,32 +347,61 @@ export class RestaurantsComponent implements OnInit {
           next: (response) => {
             const reviews = response.reviews || [];
             const reviewCount = reviews.length;
-            const averageRating = reviewCount > 0 
-              ? reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / reviewCount 
+            const averageRating = reviewCount > 0
+              ? reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / reviewCount
               : 0;
 
-            // Update the restaurant with review data
+            // Update the restaurant with review data while preserving favorite status
             this.restaurants[index] = {
               ...this.restaurants[index],
               reviews: reviewCount,
               averageRating: averageRating,
               rating: averageRating,
               stars: this.getStars(averageRating)
+              // isFavorite is preserved from the existing object
             };
           },
           error: (error) => {
             console.error(`Error loading reviews for restaurant ${restaurant._id}:`, error);
-            // Set default values on error
+            // Set default values on error while preserving favorite status
             this.restaurants[index] = {
               ...this.restaurants[index],
               reviews: 0,
               averageRating: 0,
               rating: 0,
               stars: this.getStars(0)
+              // isFavorite is preserved from the existing object
             };
           }
         });
       }
+    });
+  }
+
+  private loadFavoriteStatus(): void {
+    console.log('Loading favorite status for restaurants:', this.restaurants.length);
+    // Load favorite status asynchronously for each restaurant
+    this.restaurants.forEach((restaurant, index) => {
+      console.log(`Checking favorite status for restaurant: ${restaurant.name} (${restaurant._id})`);
+      this.apiService.checkFavoriteStatus(restaurant._id).subscribe({
+        next: (res: any) => {
+          console.log(`Favorite status response for ${restaurant.name}:`, res);
+          if (res && typeof res.isFavorited === 'boolean') {
+            // Update only the favorite status without affecting other properties
+            this.restaurants[index] = {
+              ...this.restaurants[index],
+              isFavorite: res.isFavorited
+            };
+            console.log(`Updated restaurant ${restaurant.name} isFavorite to:`, res.isFavorited);
+          } else {
+            console.warn(`Invalid response format for ${restaurant.name}:`, res);
+          }
+        },
+        error: (error) => {
+          console.error(`Error checking favorite status for restaurant ${restaurant._id}:`, error);
+          // Keep isFavorite as false (default) on error
+        }
+      });
     });
   }
 }

@@ -1,18 +1,23 @@
-  <div class="reviews-section">
+<div class="reviews-section">
   <!-- Loading State -->
   <div *ngIf="loading" class="loading-container">
-    <mat-spinner diameter="40"></mat-spinner>
+    <div class="loading-spinner">
+      <div class="spinner-ring"></div>
+    </div>
     <p>Loading reviews...</p>
   </div>
 
   <!-- Error State -->
   <div *ngIf="error && !loading" class="error-container">
-    <mat-icon class="error-icon">error_outline</mat-icon>
-    <p>{{ error }}</p>
-    <button mat-button color="primary" (click)="loadReviews()">
-      <mat-icon>refresh</mat-icon>
-      Try Again
-    </button>
+    <div class="error-content">
+      <mat-icon class="error-icon">sentiment_dissatisfied</mat-icon>
+      <h3>Unable to load reviews</h3>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="loadReviews()" class="retry-button">
+        <mat-icon>refresh</mat-icon>
+        Try Again
+      </button>
+    </div>
   </div>
 
   <!-- Reviews Content -->
@@ -20,39 +25,28 @@
     
     <!-- Login Prompt for non-authenticated users -->
     <div *ngIf="!isLoggedIn" class="login-prompt">
-      <mat-card class="prompt-card">
-        <mat-card-content>
-          <div class="prompt-content">
-            <mat-icon class="prompt-icon">person</mat-icon>
-            <h3>Sign in to leave a review</h3>
-            <p>Share your experience with other diners</p>
-            <button mat-raised-button color="primary" routerLink="/sign-in">
-              Sign In
-            </button>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
-    <!-- Rating Summary -->
-    <div class="rating-summary">
-      <div class="summary-header">
-        <h2>All Reviews ({{ totalReviews }})</h2>
-        
-        <!-- Write Review Button for customers who haven't reviewed -->
-        <div *ngIf="isLoggedIn && isCustomer && !hasUserReviewed" class="write-review-prompt">
-          <button mat-raised-button 
-                  (click)="showWriteReviewForm = !showWriteReviewForm"
-                  [class.active]="showWriteReviewForm">
-            <mat-icon>{{ showWriteReviewForm ? 'close' : 'rate_review' }}</mat-icon>
-            {{ showWriteReviewForm ? 'Cancel Review' : 'Write a Review' }}
+      <div class="prompt-card">
+        <div class="prompt-icon">
+          <mat-icon>person</mat-icon>
+        </div>
+        <div class="prompt-content">
+          <h3>Share your experience</h3>
+          <p>Sign in to leave a review and help other diners discover great restaurants</p>
+          <button mat-raised-button color="primary" routerLink="/sign-in">
+            <mat-icon>login</mat-icon>
+            Sign In to Review
           </button>
         </div>
-        
-        <div class="overall-rating" *ngIf="totalReviews > 0">
-          <div class="rating-display">
-            <span class="rating-number">{{ averageRating | number:'1.1-1' }}</span>
-            <div class="stars">
+      </div>
+    </div>
+
+    <!-- Elegant Rating Summary -->
+    <div class="rating-overview" *ngIf="totalReviews > 0">
+      <div class="overview-header">
+        <div class="rating-stats">
+          <div class="overall-score">
+            <span class="score-number">{{ averageRating | number:'1.1-1' }}</span>
+            <div class="score-stars">
               <mat-icon *ngFor="let star of getStarArray(averageRating)" 
                        [class.filled]="star.filled" 
                        class="star-icon">
@@ -60,234 +54,244 @@
               </mat-icon>
             </div>
           </div>
-          <p class="review-count">Based on {{ totalReviews }} review{{ totalReviews !== 1 ? 's' : '' }}</p>
+          <div class="score-details">
+            <h2 class="reviews-title">{{ totalReviews }} review{{ totalReviews !== 1 ? 's' : '' }}</h2>
+          </div>
+        </div>
+
+        <!-- Write Review Button for customers who haven't reviewed -->
+        <div *ngIf="isLoggedIn && isCustomer && !hasUserReviewed" class="write-review-action">
+          <button mat-stroked-button 
+                  (click)="showWriteReviewForm = !showWriteReviewForm"
+                  [class.active]="showWriteReviewForm"
+                  class="write-review-btn">
+            <mat-icon>{{ showWriteReviewForm ? 'close' : 'edit' }}</mat-icon>
+            {{ showWriteReviewForm ? 'Cancel' : 'Write a review' }}
+          </button>
         </div>
       </div>
 
-      <!-- Rating Distribution -->
-      <div class="rating-distribution" *ngIf="totalReviews > 0">
-        <div class="distribution-item" *ngFor="let rating of [5, 4, 3, 2, 1]">
-          <span class="rating-label">{{ rating }}</span>
-          <mat-icon class="star-small">star</mat-icon>
-          <div class="progress-bar">
-            <div class="progress-fill" 
+      <!-- Compact Rating Distribution -->
+      <div class="rating-breakdown">
+        <div class="breakdown-item" *ngFor="let rating of [5, 4, 3, 2, 1]">
+          <span class="rating-number">{{ rating }}</span>
+          <mat-icon class="rating-star">star</mat-icon>
+          <div class="progress-track">
+            <div class="progress-bar" 
                  [style.width.%]="getRatingPercentage(rating)"></div>
           </div>
-          <span class="percentage">{{ getRatingPercentage(rating) | number:'1.0-0' }}%</span>
+          <span class="count-text">{{ getRatingCount(rating) }}</span>
         </div>
       </div>
     </div>
 
-    <mat-divider></mat-divider>
-    
-    <!-- Write Review Form (appears when user clicks Write Review button) -->
-    <div *ngIf="isLoggedIn && isCustomer && !hasUserReviewed && showWriteReviewForm" class="write-review-section">
-      <mat-card class="write-review-card">
-        <mat-card-header>
-          <mat-card-title>
-            <mat-icon class="write-icon">rate_review</mat-icon>
-            Write Your Review
-          </mat-card-title>
-          <mat-card-subtitle>Share your experience at {{ restaurantName }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="rating-input">
-            <label>⭐ Your Rating:</label>
-            <div class="star-rating">
-              <mat-icon *ngFor="let i of [1,2,3,4,5]" 
-                       (click)="onStarClick(i)"
-                       [class]="getStarClass(i)"
-                       class="star-clickable golden-star">
-                {{ getStarIcon(i) }}
-              </mat-icon>
-            </div>
-            <p class="rating-text" *ngIf="editReviewData.rating">
-              {{ getRatingText(editReviewData.rating) }}
-            </p>
+    <!-- Write Review Form -->
+    <div *ngIf="isLoggedIn && isCustomer && !hasUserReviewed && showWriteReviewForm" class="write-review-form">
+      <div class="form-container">
+        <div class="form-header">
+          <h3>Share your experience</h3>
+          <p>Tell others about your visit to {{ restaurantName }}</p>
+        </div>
+        
+        <div class="rating-input">
+          <label class="input-label">How would you rate your experience?</label>
+          <div class="star-rating">
+            <mat-icon *ngFor="let i of [1,2,3,4,5]" 
+                     (click)="onStarClick(i)"
+                     [class]="getStarClass(i)"
+                     class="star-clickable">
+              {{ getStarIcon(i) }}
+            </mat-icon>
           </div>
-          
-          <div class="review-input">
-            <mat-icon class="input-icon">edit</mat-icon>
-            <div class="input-container">
-              <textarea 
-                [(ngModel)]="editReviewData.comment"
-                placeholder="Share your experience..."
-                rows="4"
-                class="review-write-textarea"
-                maxlength="500"></textarea>
-              <div class="char-count">{{ editReviewData.comment.length }}/500</div>
-            </div>
-          </div>
-        </mat-card-content>
-        <mat-card-actions>
-          <button mat-button (click)="cancelWriteReview()">
+          <p class="rating-description" *ngIf="editReviewData.rating">
+            {{ getRatingText(editReviewData.rating) }}
+          </p>
+        </div>
+        
+        <div class="comment-input">
+          <label class="input-label">Share your thoughts</label>
+          <textarea 
+            [(ngModel)]="editReviewData.comment"
+            placeholder="What made your experience special? Share the details that other diners would find helpful..."
+            rows="4"
+            class="review-textarea"
+            maxlength="500"></textarea>
+          <div class="char-counter">{{ editReviewData.comment.length }}/500</div>
+        </div>
+        
+        <div class="form-actions">
+          <button mat-button (click)="cancelWriteReview()" class="cancel-btn">
             Cancel
           </button>
           <button mat-raised-button color="primary" 
                   [disabled]="!editReviewData.rating || !editReviewData.comment.trim()"
-                  (click)="submitNewReview()">
+                  (click)="submitNewReview()"
+                  class="submit-btn">
             <mat-icon>send</mat-icon>
-            Submit Review
+            Publish Review
           </button>
-        </mat-card-actions>
-      </mat-card>
+        </div>
+      </div>
     </div>
-
-    <mat-divider></mat-divider>
 
     <!-- No Reviews State -->
-    <div *ngIf="totalReviews === 0" class="no-reviews">
-      <mat-icon class="no-reviews-icon">rate_review</mat-icon>
-      <h3>No reviews yet</h3>
-      <p>Be the first to review {{ restaurantName }}!</p>
+    <div *ngIf="totalReviews === 0" class="no-reviews-state">
+      <div class="empty-state">
+        <mat-icon class="empty-icon">rate_review</mat-icon>
+        <h3>No reviews yet</h3>
+        <p>Be the first to share your experience at {{ restaurantName }}</p>
+        <button *ngIf="isLoggedIn && isCustomer && !hasUserReviewed" 
+                mat-raised-button color="primary" 
+                (click)="showWriteReviewForm = true"
+                class="first-review-btn">
+          <mat-icon>star</mat-icon>
+          Write the first review
+        </button>
+      </div>
     </div>
 
-    <!-- Reviews List (All reviews including user's own review) -->
-    <div *ngIf="totalReviews > 0" class="reviews-list">
-      <div *ngFor="let review of reviews; trackBy: trackByReviewId" class="review-item">
-        <mat-card class="review-card">
-          <mat-card-header>
-            <div class="review-avatar" mat-card-avatar>
-              <mat-icon>account_circle</mat-icon>
-            </div>
-            <mat-card-title>{{ review.customerId.name }}</mat-card-title>
-            <mat-card-subtitle>
-              <div class="review-meta">
-                <div class="stars-small">
-                  <mat-icon *ngFor="let star of getStarArray(review.rating)" 
-                           [class.filled]="star.filled" 
-                           class="star-icon-small">
-                    {{ star.icon }}
-                  </mat-icon>
-                </div>
-                <span class="review-date">{{ formatDate(review.createdAt) }}</span>
+    <!-- Reviews List (Only show reviews with actual comments) -->
+    <div *ngIf="getFilteredReviews().length > 0" class="reviews-list">
+      <div class="reviews-header">
+        <h3>Recent reviews</h3>
+        <span class="review-count">{{ getFilteredReviews().length }} review{{ getFilteredReviews().length !== 1 ? 's' : '' }}</span>
+      </div>
+      
+      <div class="reviews-grid">
+        <div *ngFor="let review of getFilteredReviews(); trackBy: trackByReviewId" class="review-card">
+          <div class="review-header">
+            <div class="reviewer-info">
+              <div class="avatar">
+                <mat-icon>account_circle</mat-icon>
               </div>
-            </mat-card-subtitle>
-          </mat-card-header>
+              <div class="reviewer-details">
+                <h4 class="reviewer-name">{{ review.customerId.name }}</h4>
+                <div class="review-meta">
+                  <div class="review-rating">
+                    <mat-icon *ngFor="let star of getStarArray(review.rating)" 
+                             [class.filled]="star.filled" 
+                             class="star-small">
+                      {{ star.icon }}
+                    </mat-icon>
+                  </div>
+                  <span class="review-date">{{ formatDate(review.createdAt) }}</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Edit/Delete actions for current user's review -->
+            <div *ngIf="isCurrentUserReview(review) && editingReviewId !== review._id" class="review-actions">
+              <button mat-icon-button (click)="editReviewInList(review)" class="action-btn">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteReviewInList(review)" class="action-btn delete">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
 
-          <mat-card-content>
+          <div class="review-content">
             <!-- Display Mode -->
-            <div *ngIf="editingReviewId !== review._id">
-              <p class="review-comment">{{ review.comment }}</p>
+            <div *ngIf="editingReviewId !== review._id" class="review-text">
+              <p>{{ review.comment }}</p>
             </div>
             
             <!-- Edit Mode for User's Own Review -->
-            <div *ngIf="editingReviewId === review._id && isCurrentUserReview(review)" class="inline-edit-form">
-              <div class="edit-header">
-                <mat-icon class="edit-icon">edit</mat-icon>
-                <span class="edit-label">Edit Your Review</span>
-              </div>
-              
+            <div *ngIf="editingReviewId === review._id && isCurrentUserReview(review)" class="edit-form">
               <div class="rating-input">
-                <label>Your Rating:</label>
+                <label class="input-label">Update your rating</label>
                 <div class="star-rating">
                   <mat-icon *ngFor="let i of [1,2,3,4,5]" 
                            (click)="onStarClick(i)"
                            [class]="getStarClass(i)"
-                           class="star-clickable golden-star">
+                           class="star-clickable">
                     {{ getStarIcon(i) }}
                   </mat-icon>
                 </div>
               </div>
               
-              <div class="review-input">
-                <mat-icon class="input-icon">edit</mat-icon>
-                <div class="input-container">
-                  <textarea 
-                    [(ngModel)]="editReviewData.comment"
-                    placeholder="Share your updated experience..."
-                    rows="4"
-                    class="review-write-textarea"
-                    maxlength="500"></textarea>
-                  <div class="char-count">{{ editReviewData.comment.length }}/500</div>
-                  <div class="edit-form-actions">
-                    <button mat-button (click)="cancelEditReviewInList()">
-                      Cancel
-                    </button>
-                    <button mat-raised-button color="primary" 
-                            [disabled]="!editReviewData.rating || !editReviewData.comment.trim()"
-                            (click)="updateReviewInList()">
-                      Update Review
-                    </button>
-                  </div>
-                </div>
+              <div class="comment-input">
+                <textarea 
+                  [(ngModel)]="editReviewData.comment"
+                  placeholder="Update your review..."
+                  rows="4"
+                  class="review-textarea"
+                  maxlength="500"></textarea>
+                <div class="char-counter">{{ editReviewData.comment.length }}/500</div>
               </div>
-            </div>
-            
-            <!-- Edit/Delete actions only for current user's own review -->
-            <div *ngIf="isCurrentUserReview(review) && editingReviewId !== review._id" class="user-review-actions">
-              <button mat-button color="primary" (click)="editReviewInList(review)">
-                <mat-icon>edit</mat-icon>
-                Edit
-              </button>
-              <button mat-button color="warn" (click)="deleteReviewInList(review)">
-                <mat-icon>delete</mat-icon>
-                Delete
-              </button>
+              
+              <div class="edit-actions">
+                <button mat-button (click)="cancelEditReviewInList()" class="cancel-btn">
+                  Cancel
+                </button>
+                <button mat-raised-button color="primary" 
+                        [disabled]="!editReviewData.rating || !editReviewData.comment.trim()"
+                        (click)="updateReviewInList()"
+                        class="update-btn">
+                  <mat-icon>check</mat-icon>
+                  Update Review
+                </button>
+              </div>
             </div>
             
             <!-- Owner Reply Section -->
             <div *ngIf="review.ownerReply || isRestaurantOwner" class="owner-reply-section">
-              <mat-divider></mat-divider>
-              
               <!-- Reply Button for new replies -->
-              <div *ngIf="isRestaurantOwner && !review.ownerReply && editingReply !== review._id" class="reply-button-section">
-                <button mat-raised-button color="primary" (click)="startNewReply(review)">
+              <div *ngIf="isRestaurantOwner && !review.ownerReply && editingReply !== review._id" class="reply-prompt">
+                <button mat-stroked-button (click)="startNewReply(review)" class="reply-btn">
                   <mat-icon>reply</mat-icon>
-                  Reply to Review
+                  Reply to review
                 </button>
               </div>
               
               <!-- Existing Reply Display -->
               <div *ngIf="review.ownerReply" class="owner-reply">
                 <div class="reply-header">
-                  <mat-icon class="reply-icon">reply</mat-icon>
-                  <span class="reply-label">Restaurant Response</span>
+                  <div class="reply-icon">
+                    <mat-icon>store</mat-icon>
+                  </div>
+                  <span class="reply-label">Response from {{ restaurantName }}</span>
+                  
+                  <!-- Owner Actions for Reply -->
+                  <div *ngIf="isRestaurantOwner" class="reply-actions">
+                    <button mat-icon-button (click)="startEditReply(review)" class="action-btn">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="onDeleteReply(review._id!)" class="action-btn delete">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
                 </div>
                 <p class="reply-text">{{ review.ownerReply }}</p>
-                
-                <!-- Owner Actions for Reply -->
-                <div *ngIf="isRestaurantOwner" class="reply-actions">
-                  <button mat-button color="primary" 
-                          (click)="startEditReply(review)">
-                    <mat-icon>edit</mat-icon>
-                    Edit
-                  </button>
-                  <button mat-button color="warn" (click)="onDeleteReply(review._id!)">
-                    <mat-icon>delete</mat-icon>
-                    Delete
-                  </button>
-                </div>
               </div>
 
-              <!-- Reply Form (for new reply or editing) -->
+              <!-- Reply Form -->
               <div *ngIf="isRestaurantOwner && (!review.ownerReply || editingReply === review._id)" 
                    class="reply-form">
                 <div class="reply-input">
-                  <mat-icon class="reply-icon">reply</mat-icon>
-                  <div class="input-container">
-                    <textarea 
-                      #replyInput
-                      [(ngModel)]="newReply"
-                      placeholder="Write a response to this review..."
-                      rows="3"
-                      class="reply-textarea"></textarea>
-                    <div class="reply-form-actions">
-                      <button mat-button (click)="editingReply = ''; newReply = ''">
-                        Cancel
-                      </button>
-                      <button mat-raised-button color="primary" 
-                              [disabled]="!newReply.trim()"
-                              (click)="review.ownerReply ? onUpdateReply(review._id!, newReply) : onReplyToReview(review._id!, newReply)">
-                        {{ review.ownerReply ? 'Update' : 'Reply' }}
-                      </button>
-                    </div>
+                  <textarea 
+                    #replyInput
+                    [(ngModel)]="newReply"
+                    placeholder="Write a thoughtful response to this review..."
+                    rows="3"
+                    class="reply-textarea"></textarea>
+                  <div class="reply-form-actions">
+                    <button mat-button (click)="editingReply = ''; newReply = ''" class="cancel-btn">
+                      Cancel
+                    </button>
+                    <button mat-raised-button color="primary" 
+                            [disabled]="!newReply.trim()"
+                            (click)="review.ownerReply ? onUpdateReply(review._id!, newReply) : onReplyToReview(review._id!, newReply)"
+                            class="reply-submit-btn">
+                      <mat-icon>send</mat-icon>
+                      {{ review.ownerReply ? 'Update Reply' : 'Post Reply' }}
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
-          </mat-card-content>
-        </mat-card>
+          </div>
+        </div>
       </div>
     </div>
   </div>

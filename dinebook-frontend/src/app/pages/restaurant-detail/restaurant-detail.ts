@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 import { Restaurant } from '../../models/booking';
@@ -21,6 +22,7 @@ import { RestaurantReviewsComponent } from '../../components/restaurant-reviews/
         MatCardModule,
         MatChipsModule,
         MatTabsModule,
+        MatSnackBarModule,
         RestaurantReviewsComponent
     ],
     templateUrl: './restaurant-detail.html',
@@ -39,7 +41,8 @@ export class RestaurantDetailComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private apiService: ApiService,
-        public authService: AuthService
+        public authService: AuthService,
+        private snackBar: MatSnackBar
     ) { }
 
     ngOnInit() {
@@ -94,8 +97,8 @@ export class RestaurantDetailComponent implements OnInit {
         this.apiService.checkFavoriteStatus(this.restaurantId).subscribe({
             next: (res) => {
                 this.isFavorite =
-                  res && typeof (res as any).isFavorited === 'boolean' ? (res as any).isFavorited :
-                  (res && typeof res.isFavorite === 'boolean' ? res.isFavorite : false);
+                    res && typeof (res as any).isFavorited === 'boolean' ? (res as any).isFavorited :
+                        (res && typeof res.isFavorite === 'boolean' ? res.isFavorite : false);
             },
             error: () => {
                 this.isFavorite = false;
@@ -109,8 +112,8 @@ export class RestaurantDetailComponent implements OnInit {
         this.apiService.toggleFavorite(this.restaurantId).subscribe({
             next: (res) => {
                 this.isFavorite =
-                  res && typeof (res as any).isFavorited === 'boolean' ? (res as any).isFavorited :
-                  (res && typeof res.isFavorite === 'boolean' ? res.isFavorite : false);
+                    res && typeof (res as any).isFavorited === 'boolean' ? (res as any).isFavorited :
+                        (res && typeof res.isFavorite === 'boolean' ? res.isFavorite : false);
                 this.favoriteLoading = false;
             },
             error: () => {
@@ -202,10 +205,97 @@ export class RestaurantDetailComponent implements OnInit {
         }, 100);
     }
 
-    onReviewsUpdated(reviewStats: {totalReviews: number, averageRating: number}) {
+    onReviewsUpdated(reviewStats: { totalReviews: number, averageRating: number }) {
         if (this.restaurant) {
             this.restaurant.reviews = reviewStats.totalReviews;
             this.restaurant.averageRating = reviewStats.averageRating;
+        }
+    }
+
+    // Helper method to check if a day is today
+    isToday(day: string): boolean {
+        const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+        const today = days[new Date().getDay()];
+        return day.toLowerCase() === today;
+    }
+
+    // Helper method to check if restaurant is currently open
+    isCurrentlyOpen(day: string): boolean {
+        if (!this.restaurant?.openingHours || !this.isToday(day)) return false;
+
+        const dayHours = this.getOpeningHoursForDay(day);
+        if (!dayHours?.open || !dayHours?.close) return false;
+
+        const now = new Date();
+        const currentTime = now.getHours() * 100 + now.getMinutes(); // Convert to HHMM format
+
+        // Convert time strings to numbers (assuming format like "10:00" or "22:30")
+        const openTime = parseInt(dayHours.open.replace(':', ''));
+        const closeTime = parseInt(dayHours.close.replace(':', ''));
+
+        return currentTime >= openTime && currentTime <= closeTime;
+    }
+
+    // Share restaurant functionality
+    async shareRestaurant() {
+        if (!this.restaurant) return;
+
+        const currentUrl = window.location.href;
+        const shareText = `Check out ${this.restaurant.name} - ${this.restaurant.cuisine} restaurant in ${this.restaurant.location}`;
+
+        try {
+            // Try to use the Web Share API first (if available, mainly on mobile)
+            if (navigator.share) {
+                await navigator.share({
+                    title: `${this.restaurant.name} - DineBook`,
+                    text: shareText,
+                    url: currentUrl
+                });
+
+                this.snackBar.open('Restaurant shared successfully!', 'Close', {
+                    duration: 3000,
+                    panelClass: ['success-snackbar']
+                });
+            } else {
+                // Fallback to clipboard
+                await navigator.clipboard.writeText(currentUrl);
+
+                this.snackBar.open('Restaurant link copied to clipboard!', 'Close', {
+                    duration: 3000,
+                    panelClass: ['success-snackbar']
+                });
+            }
+        } catch (error) {
+            // Fallback for older browsers or if clipboard fails
+            try {
+                // Create a temporary textarea element
+                const textArea = document.createElement('textarea');
+                textArea.value = currentUrl;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                const successful = document.execCommand('copy');
+                document.body.removeChild(textArea);
+
+                if (successful) {
+                    this.snackBar.open('Restaurant link copied to clipboard!', 'Close', {
+                        duration: 3000,
+                        panelClass: ['success-snackbar']
+                    });
+                } else {
+                    throw new Error('Copy command failed');
+                }
+            } catch (fallbackError) {
+                console.error('Failed to copy to clipboard:', fallbackError);
+                this.snackBar.open('Unable to copy link. Please copy the URL manually.', 'Close', {
+                    duration: 4000,
+                    panelClass: ['error-snackbar']
+                });
+            }
         }
     }
 }

@@ -1,209 +1,402 @@
 <div class="restaurant-detail-page">
-  <div class="container">
-    <!-- Loading State -->
-    <div *ngIf="loading" class="loading-state">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="loading-container">
       <div class="loading-spinner">
-        <mat-icon class="spinning">refresh</mat-icon>
+        <div class="spinner-ring"></div>
       </div>
+      <h3>Discovering Amazing Dining</h3>
       <p>Loading restaurant details...</p>
     </div>
+  </div>
 
-    <!-- Error State -->
-    <div *ngIf="error && !loading" class="error-state">
-      <div class="error-content">
-        <mat-icon class="error-icon">error_outline</mat-icon>
-        <h3>Restaurant Not Found</h3>
-        <p>{{ error }}</p>
-        <button mat-raised-button color="primary" (click)="goBack()">
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-state">
+    <div class="error-container">
+      <div class="error-icon">
+        <mat-icon>restaurant_menu</mat-icon>
+      </div>
+      <h2>Restaurant Not Found</h2>
+      <p>{{ error }}</p>
+      <button mat-raised-button color="primary" (click)="goBack()" class="cta-button">
+        <mat-icon>arrow_back</mat-icon>
+        Explore Other Restaurants
+      </button>
+    </div>
+  </div>
+
+  <!-- Restaurant Details -->
+  <div *ngIf="restaurant && !loading && !error" class="restaurant-details">
+    <!-- Navigation Header -->
+    <div class="nav-header">
+      <div class="container">
+        <button mat-icon-button (click)="goBack()" class="back-button">
           <mat-icon>arrow_back</mat-icon>
-          Back to Restaurants
         </button>
+        <div class="breadcrumb">
+          <span class="breadcrumb-item">Restaurants</span>
+          <mat-icon class="breadcrumb-separator">chevron_right</mat-icon>
+          <span class="breadcrumb-current">{{ restaurant.name }}</span>
+        </div>
       </div>
     </div>
 
-    <!-- Restaurant Details -->
-    <div *ngIf="restaurant && !loading && !error" class="restaurant-details">
-      <!-- Header Section -->
-      <div class="restaurant-header">
-        <div class="header-actions">
-          <button mat-icon-button (click)="goBack()" class="back-btn">
-            <mat-icon>arrow_back</mat-icon>
-          </button>
-        </div>
-        
-        <div class="restaurant-hero">
-          <div class="restaurant-image">
-            <img src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" 
-                 [alt]="restaurant.name" />
-            <div class="image-overlay">
-              <div class="restaurant-badge featured">
-                Featured
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <!-- Restaurant Gallery -->
+          <div class="restaurant-gallery">
+            <div class="main-image">
+              <img src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" 
+                   [alt]="restaurant.name" />
+              <div class="image-badges">
+                <div class="badge featured">
+                  <mat-icon>star</mat-icon>
+                  Featured
+                </div>
+                <div class="badge rating">
+                  <mat-icon>star</mat-icon>
+                  {{ (restaurant.averageRating || 0) | number:'1.1-1' }}
+                </div>
               </div>
+              <button class="favorite-heart" 
+                      *ngIf="authService.isLoggedIn && authService.isCustomer()"
+                      (click)="onToggleFavorite()" 
+                      [disabled]="favoriteLoading"
+                      [class.active]="isFavorite">
+                <mat-icon *ngIf="!favoriteLoading">{{ isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+                <div *ngIf="favoriteLoading" class="heart-spinner"></div>
+              </button>
             </div>
           </div>
-          
+
+          <!-- Restaurant Information -->
           <div class="restaurant-info">
-            <h1 class="restaurant-name">{{ restaurant.name }}</h1>
-            <p class="restaurant-cuisine">{{ restaurant.cuisine }} Restaurant</p>
-            
-            <div class="restaurant-rating">
-              <div class="stars">
-                <mat-icon *ngFor="let star of getStars(restaurant.averageRating || 0)" class="star-icon">
-                  {{ star }}
-                </mat-icon>
+            <div class="info-header">
+              <div class="title-section">
+                <h1 class="restaurant-title">{{ restaurant.name }}</h1>
+                <p class="restaurant-subtitle">{{ restaurant.cuisine }} • {{ restaurant.location }}</p>
               </div>
-              <span class="rating-text">
-                {{ (restaurant.averageRating || 0) | number:'1.1-1' }} 
-                ({{ restaurant.reviews || 0 }} reviews)
-              </span>
-            </div>
-            
-            <div class="restaurant-meta">
-              <div class="meta-item">
-                <mat-icon>location_on</mat-icon>
-                <span>{{ restaurant.location }}</span>
-              </div>
-              <div class="meta-item">
-                <mat-icon>access_time</mat-icon>
-                <span>{{ formatOpeningHours(restaurant.openingHours) }}</span>
-              </div>
-              <div class="meta-item">
-                <mat-icon>attach_money</mat-icon>
-                <span>{{ formatPriceRange(restaurant.priceRange) }}</span>
-              </div>
-              <div class="meta-item" *ngIf="restaurant.capacity">
-                <mat-icon>people</mat-icon>
-                <span>Capacity: {{ restaurant.capacity }} guests</span>
+              
+              <div class="rating-section">
+                <div class="rating-badge">
+                  <div class="rating-number">{{ (restaurant.averageRating || 0) | number:'1.1-1' }}</div>
+                  <div class="rating-stars">
+                    <mat-icon *ngFor="let star of getStars(restaurant.averageRating || 0)" class="star-icon">
+                      {{ star }}
+                    </mat-icon>
+                  </div>
+                  <div class="rating-count">{{ restaurant.reviews || 0 }} reviews</div>
+                </div>
               </div>
             </div>
-            
-            <div class="restaurant-actions">
-              <button mat-raised-button color="primary" (click)="bookTable()" class="book-btn">
+
+            <!-- Quick Info Cards -->
+            <div class="quick-info">
+              <div class="info-card">
+                <div class="info-icon">
+                  <mat-icon>schedule</mat-icon>
+                </div>
+                <div class="info-content">
+                  <div class="info-label">Hours</div>
+                  <div class="info-value">{{ formatOpeningHours(restaurant.openingHours) }}</div>
+                </div>
+              </div>
+              
+              <div class="info-card">
+                <div class="info-icon">
+                  <mat-icon>attach_money</mat-icon>
+                </div>
+                <div class="info-content">
+                  <div class="info-label">Price Range</div>
+                  <div class="info-value">{{ formatPriceRange(restaurant.priceRange) }}</div>
+                </div>
+              </div>
+              
+              <div class="info-card" *ngIf="restaurant.capacity">
+                <div class="info-icon">
+                  <mat-icon>people</mat-icon>
+                </div>
+                <div class="info-content">
+                  <div class="info-label">Capacity</div>
+                  <div class="info-value">{{ restaurant.capacity }} guests</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+              <button mat-raised-button color="primary" (click)="bookTable()" class="primary-cta">
                 <mat-icon>event_available</mat-icon>
-                Book a Table
+                Reserve Table
               </button>
-              <button mat-button class="favorite-btn"
-                      *ngIf="authService.isLoggedIn && authService.isCustomer()"
-                      (click)="onToggleFavorite()" [disabled]="favoriteLoading">
-                <mat-icon *ngIf="!favoriteLoading">{{ isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
-                <mat-icon *ngIf="favoriteLoading" class="spinning">refresh</mat-icon>
-                {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
+              <button mat-stroked-button (click)="shareRestaurant()" class="secondary-cta">
+                <mat-icon>share</mat-icon>
+                Share
               </button>
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Details Section with Tabs -->
-      <div class="restaurant-content">
-        <mat-tab-group [(selectedIndex)]="selectedTabIndex" class="restaurant-tabs">
+    <!-- Content Sections -->
+    <div class="content-sections">
+      <div class="container">
+        <!-- Navigation Tabs -->
+        <div class="content-navigation">
+          <button class="nav-tab" 
+                  [class.active]="selectedTabIndex === 0"
+                  (click)="selectedTabIndex = 0">
+            <mat-icon>info</mat-icon>
+            Overview
+          </button>
+          <button class="nav-tab" 
+                  [class.active]="selectedTabIndex === 1"
+                  (click)="selectedTabIndex = 1">
+            <mat-icon>rate_review</mat-icon>
+            Reviews & Ratings
+            <span class="tab-count">({{ restaurant.reviews || 0 }})</span>
+          </button>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
           <!-- Overview Tab -->
-          <mat-tab label="Overview">
-            <div class="tab-content">
-              <div class="content-grid">
-                <!-- Description -->
-                <div class="detail-card">
-                  <h3>About This Restaurant</h3>
+          <div *ngIf="selectedTabIndex === 0" class="overview-content">
+            <div class="content-grid">
+              <!-- About Section -->
+              <div class="content-card featured">
+                <div class="card-header">
+                  <div class="card-icon">
+                    <mat-icon>restaurant</mat-icon>
+                  </div>
+                  <h3>About {{ restaurant.name }}</h3>
+                </div>
+                <div class="card-content">
                   <p *ngIf="restaurant.description; else noDescription">
                     {{ restaurant.description }}
                   </p>
                   <ng-template #noDescription>
-                    <p class="no-info">Restaurant description coming soon...</p>
+                    <p class="no-info">
+                      Welcome to {{ restaurant.name }}, where culinary excellence meets exceptional service. 
+                      Our {{ restaurant.cuisine }} cuisine offers an unforgettable dining experience crafted with passion and precision.
+                    </p>
                   </ng-template>
+                  
+                  <!-- Cuisine Highlights -->
+                  <div class="highlights">
+                    <div class="highlight-item">
+                      <mat-icon>restaurant_menu</mat-icon>
+                      <span>{{ restaurant.cuisine }} Cuisine</span>
+                    </div>
+                    <div class="highlight-item">
+                      <mat-icon>star</mat-icon>
+                      <span>{{ (restaurant.averageRating || 0) | number:'1.1-1' }} Star Rating</span>
+                    </div>
+                    <div class="highlight-item">
+                      <mat-icon>verified</mat-icon>
+                      <span>Verified Restaurant</span>
+                    </div>
+                  </div>
                 </div>
+              </div>
 
-                <!-- Contact Information -->
-                <div class="detail-card">
+              <!-- Contact Information -->
+              <div class="content-card">
+                <div class="card-header">
+                  <div class="card-icon">
+                    <mat-icon>contact_phone</mat-icon>
+                  </div>
                   <h3>Contact Information</h3>
-                  <div class="contact-info">
+                </div>
+                <div class="card-content">
+                  <div class="contact-list">
                     <div class="contact-item" *ngIf="restaurant.phoneNumber">
-                      <mat-icon>phone</mat-icon>
-                      <span>{{ restaurant.phoneNumber }}</span>
+                      <div class="contact-icon">
+                        <mat-icon>phone</mat-icon>
+                      </div>
+                      <div class="contact-details">
+                        <span class="contact-label">Phone</span>
+                        <span class="contact-value">{{ restaurant.phoneNumber }}</span>
+                      </div>
                     </div>
+                    
                     <div class="contact-item" *ngIf="restaurant.email">
-                      <mat-icon>email</mat-icon>
-                      <span>{{ restaurant.email }}</span>
+                      <div class="contact-icon">
+                        <mat-icon>email</mat-icon>
+                      </div>
+                      <div class="contact-details">
+                        <span class="contact-label">Email</span>
+                        <span class="contact-value">{{ restaurant.email }}</span>
+                      </div>
                     </div>
+                    
                     <div class="contact-item" *ngIf="restaurant.address">
-                      <mat-icon>location_on</mat-icon>
-                      <div class="address">
-                        <span *ngIf="restaurant.address.street">{{ restaurant.address.street }}</span>
-                        <span *ngIf="restaurant.address.city">{{ restaurant.address.city }}, {{ restaurant.address.province }}</span>
-                        <span *ngIf="restaurant.address.postalCode">{{ restaurant.address.postalCode }}</span>
+                      <div class="contact-icon">
+                        <mat-icon>location_on</mat-icon>
+                      </div>
+                      <div class="contact-details">
+                        <span class="contact-label">Address</span>
+                        <div class="address-details">
+                          <span *ngIf="restaurant.address.street">{{ restaurant.address.street }}</span>
+                          <span *ngIf="restaurant.address.city">{{ restaurant.address.city }}, {{ restaurant.address.province }}</span>
+                          <span *ngIf="restaurant.address.postalCode">{{ restaurant.address.postalCode }}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                <!-- Opening Hours -->
-                <div class="detail-card" *ngIf="restaurant.openingHours">
+              <!-- Opening Hours -->
+              <div class="content-card">
+                <div class="card-header">
+                  <div class="card-icon">
+                    <mat-icon>schedule</mat-icon>
+                  </div>
                   <h3>Opening Hours</h3>
-                  <div class="hours-list">
-                    <div class="hour-item" *ngFor="let day of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']">
-                      <span class="day">{{ day | titlecase }}:</span>
-                      <span class="time" *ngIf="getOpeningHoursForDay(day)?.open && getOpeningHoursForDay(day)?.close">
-                        {{ getOpeningHoursForDay(day)!.open }} - {{ getOpeningHoursForDay(day)!.close }}
-                      </span>
-                      <span class="time closed" *ngIf="!getOpeningHoursForDay(day)?.open">
-                        Closed
-                      </span>
+                </div>
+                <div class="card-content">
+                  <div class="hours-schedule" *ngIf="restaurant.openingHours">
+                    <div class="schedule-item" 
+                         *ngFor="let day of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']"
+                         [class.today]="isToday(day)">
+                      <div class="day-name">{{ day | titlecase }}</div>
+                      <div class="day-hours" *ngIf="getOpeningHoursForDay(day)?.open && getOpeningHoursForDay(day)?.close">
+                        <span class="time-range">
+                          {{ getOpeningHoursForDay(day)!.open }} - {{ getOpeningHoursForDay(day)!.close }}
+                        </span>
+                        <span class="open-status" *ngIf="isToday(day)">
+                          {{ isCurrentlyOpen(day) ? '• Open Now' : '• Closed' }}
+                        </span>
+                      </div>
+                      <div class="day-hours closed" *ngIf="!getOpeningHoursForDay(day)?.open">
+                        <span class="closed-text">Closed</span>
+                      </div>
                     </div>
                   </div>
+                  <div *ngIf="!restaurant.openingHours" class="no-hours">
+                    <p>Hours information will be available soon.</p>
+                  </div>
                 </div>
+              </div>
 
-                <!-- Features/Amenities -->
-                <div class="detail-card">
+              <!-- Amenities & Features -->
+              <div class="content-card">
+                <div class="card-header">
+                  <div class="card-icon">
+                    <mat-icon>stars</mat-icon>
+                  </div>
                   <h3>Features & Amenities</h3>
-                  <div class="features-grid">
-                    <mat-chip-listbox class="features-chips">
-                      <mat-chip-option class="feature-chip">
-                        <mat-icon>restaurant</mat-icon>
-                        {{ restaurant.cuisine }} Cuisine
-                      </mat-chip-option>
-                      <mat-chip-option class="feature-chip" *ngIf="restaurant.capacity">
-                        <mat-icon>people</mat-icon>
-                        {{ restaurant.capacity }} Capacity
-                      </mat-chip-option>
-                      <mat-chip-option class="feature-chip">
-                        <mat-icon>star</mat-icon>
-                        {{ (restaurant.averageRating || 0) | number:'1.1-1' }} Rating
-                      </mat-chip-option>
-                      <mat-chip-option class="feature-chip">
-                        <mat-icon>attach_money</mat-icon>
-                        {{ formatPriceRange(restaurant.priceRange) }}
-                      </mat-chip-option>
-                    </mat-chip-listbox>
+                </div>
+                <div class="card-content">
+                  <div class="amenities-grid">
+                    <div class="amenity-item">
+                      <mat-icon>restaurant_menu</mat-icon>
+                      <span>{{ restaurant.cuisine }} Cuisine</span>
+                    </div>
+                    <div class="amenity-item" *ngIf="restaurant.capacity">
+                      <mat-icon>people</mat-icon>
+                      <span>{{ restaurant.capacity }} Guest Capacity</span>
+                    </div>
+                    <div class="amenity-item">
+                      <mat-icon>attach_money</mat-icon>
+                      <span>{{ formatPriceRange(restaurant.priceRange) }} Price Range</span>
+                    </div>
+                    <div class="amenity-item">
+                      <mat-icon>verified</mat-icon>
+                      <span>Verified Restaurant</span>
+                    </div>
+                    <div class="amenity-item">
+                      <mat-icon>wifi</mat-icon>
+                      <span>Free WiFi</span>
+                    </div>
+                    <div class="amenity-item">
+                      <mat-icon>accessible</mat-icon>
+                      <span>Wheelchair Accessible</span>
+                    </div>
+                    <div class="amenity-item">
+                      <mat-icon>local_parking</mat-icon>
+                      <span>Parking Available</span>
+                    </div>
+                    <div class="amenity-item">
+                      <mat-icon>credit_card</mat-icon>
+                      <span>Card Payments</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </mat-tab>
+          </div>
 
           <!-- Reviews Tab -->
-          <mat-tab label="Reviews & Ratings">
-            <div class="tab-content">
-              <!-- Restaurant Reviews Component (handles both viewing and writing reviews) -->
-              <app-restaurant-reviews
-                [restaurantId]="restaurant._id"
-                [restaurantName]="restaurant.name"
-                [restaurantOwnerId]="restaurant.ownerId"
-                (reviewsUpdated)="onReviewsUpdated($event)">
-              </app-restaurant-reviews>
-            </div>
-          </mat-tab>
-        </mat-tab-group>
+          <div *ngIf="selectedTabIndex === 1" class="reviews-content">
+            <app-restaurant-reviews
+              [restaurantId]="restaurant._id"
+              [restaurantName]="restaurant.name"
+              [restaurantOwnerId]="restaurant.ownerId"
+              (reviewsUpdated)="onReviewsUpdated($event)">
+            </app-restaurant-reviews>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <!-- Book Table CTA -->
-      <div class="cta-section">
-        <div class="cta-card">
+    <!-- Booking CTA Section -->
+    <div class="cta-section">
+      <div class="container">
+        <div class="cta-container">
           <div class="cta-content">
-            <h2>Ready to Dine?</h2>
-            <p>Reserve your table at {{ restaurant.name }} and enjoy an amazing dining experience.</p>
-            <button mat-raised-button color="primary" (click)="bookTable()" class="cta-button">
-              <mat-icon>event_available</mat-icon>
-              Book Your Table Now
-            </button>
+            <div class="cta-text">
+              <h2>Ready for an Exceptional Dining Experience?</h2>
+              <p>Join hundreds of satisfied diners at {{ restaurant.name }}. Reserve your table today and discover why we're one of the highest-rated {{ restaurant.cuisine }} restaurants in {{ restaurant.location }}.</p>
+              
+              <div class="cta-features">
+                <div class="feature">
+                  <mat-icon>check_circle</mat-icon>
+                  <span>Instant Confirmation</span>
+                </div>
+                <div class="feature">
+                  <mat-icon>check_circle</mat-icon>
+                  <span>Free Cancellation</span>
+                </div>
+                <div class="feature">
+                  <mat-icon>check_circle</mat-icon>
+                  <span>Special Occasion Setup</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="cta-action">
+              <div class="booking-summary">
+                <div class="summary-item">
+                  <span class="label">Restaurant</span>
+                  <span class="value">{{ restaurant.name }}</span>
+                </div>
+                <div class="summary-item">
+                  <span class="label">Cuisine</span>
+                  <span class="value">{{ restaurant.cuisine }}</span>
+                </div>
+                <div class="summary-item">
+                  <span class="label">Rating</span>
+                  <span class="value">
+                    <mat-icon class="mini-star">star</mat-icon>
+                    {{ (restaurant.averageRating || 0) | number:'1.1-1' }}
+                  </span>
+                </div>
+                <div class="summary-item">
+                  <span class="label">Price Range</span>
+                  <span class="value">{{ formatPriceRange(restaurant.priceRange) }}</span>
+                </div>
+              </div>
+              
+              <button mat-raised-button color="primary" (click)="bookTable()" class="final-cta">
+                <mat-icon>event_available</mat-icon>
+                Reserve Your Table
+              </button>
+            </div>
           </div>
         </div>
       </div>
