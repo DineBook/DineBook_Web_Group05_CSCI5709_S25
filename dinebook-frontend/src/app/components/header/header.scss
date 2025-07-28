@@ -136,52 +136,94 @@
     align-items: center;
     
     .user-menu {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      
-      .welcome-text {
-        font-size: 0.875rem;
-        color: var(--gray-600);
-        font-weight: 500;
+      .user-menu-trigger {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.5rem 0.75rem 0.5rem 0.5rem;
+        border-radius: 50px;
+        background-color: white;
+        border: 1px solid var(--gray-200);
+        transition: all 0.2s ease;
+        color: var(--gray-700);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        min-height: 48px;
+        
+        &:hover {
+          background-color: var(--gray-50);
+          border-color: var(--gray-300);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+          transform: translateY(-1px);
+        }
+        
+        &:focus {
+          outline: 2px solid var(--primary-500);
+          outline-offset: 2px;
+        }
+        
+        .user-info {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          
+          .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-500), var(--secondary-500));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+          }
+          
+          .user-details {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            text-align: left;
+            min-width: 0;
+            
+            @media (max-width: 768px) {
+              display: none;
+            }
+            
+            .user-name {
+              font-weight: 600;
+              font-size: 0.875rem;
+              color: var(--gray-900);
+              max-width: 120px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              line-height: 1.2;
+            }
+            
+            .user-role {
+              font-size: 0.75rem;
+              color: var(--gray-500);
+              font-weight: 400;
+              line-height: 1.2;
+            }
+          }
+        }
+        
+        .dropdown-icon {
+          font-size: 1.125rem;
+          width: 1.125rem;
+          height: 1.125rem;
+          color: var(--gray-400);
+          transition: transform 0.2s ease;
+          flex-shrink: 0;
+        }
+        
+        &[aria-expanded="true"] .dropdown-icon {
+          transform: rotate(180deg);
+        }
       }
-      
-.logout-btn {
-  display: inline-flex;
-  align-items: center; 
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  font-weight: 600;
-  color: #1d4ed8; 
-  background-color: #e0f2fe; 
-  border: 2px solid #38bdf8; 
-  border-radius: 9999px; 
-  text-transform: none; 
-  line-height: 1;
-  font-size: 0.95rem;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-
-  img {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    vertical-align: middle;
-  }
-
-  &:hover {
-    background-color: #bae6fd;
-    color: #0c4a6e;
-    border-color: #0ea5e9; 
-  }
-
-  &:focus {
-    outline: 2px solid #0ea5e9;
-    outline-offset: 2px;
-  }
-}
-
-
-
     }
     
     .auth-buttons {
@@ -250,6 +292,170 @@
       background-color: var(--gray-600);
       border-radius: 1px;
       transition: var(--transition-fast);
+    }
+  }
+  
+  // End of auth section styles
+}
+
+// Professional dropdown menu styles
+::ng-deep .professional-dropdown {
+  margin-top: 8px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04) !important;
+  border: none !important;
+  overflow: hidden !important;
+  min-width: 280px !important;
+  max-width: 320px !important;
+  
+  .mat-mdc-menu-content {
+    padding: 0 !important;
+    background-color: white !important;
+    
+    .dropdown-header {
+      padding: 16px !important;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%) !important;
+      border-bottom: 1px solid #e2e8f0 !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      
+      .user-avatar-large {
+        width: 48px !important;
+        height: 48px !important;
+        border-radius: 50% !important;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: white !important;
+        font-weight: 600 !important;
+        font-size: 16px !important;
+        flex-shrink: 0 !important;
+        box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2) !important;
+        border: 2px solid white !important;
+      }
+      
+      .user-info-large {
+        flex: 1 !important;
+        min-width: 0 !important;
+        
+        .user-name-large {
+          font-weight: 600 !important;
+          font-size: 15px !important;
+          color: #0f172a !important;
+          margin-bottom: 2px !important;
+          overflow: hidden !important;
+          text-overflow: ellipsis !important;
+          white-space: nowrap !important;
+          line-height: 1.3 !important;
+        }
+        
+        .user-email {
+          font-size: 12px !important;
+          color: #64748b !important;
+          overflow: hidden !important;
+          text-overflow: ellipsis !important;
+          white-space: nowrap !important;
+          font-weight: 400 !important;
+        }
+      }
+    }
+    
+    .dropdown-divider {
+      height: 1px !important;
+      background-color: #e2e8f0 !important;
+      margin: 0 !important;
+    }
+    
+    .menu-item {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      padding: 12px 16px !important;
+      font-size: 14px !important;
+      color: #334155 !important;
+      transition: all 0.2s ease !important;
+      min-height: 44px !important;
+      border: none !important;
+      background: none !important;
+      cursor: pointer !important;
+      text-align: left !important;
+      width: 100% !important;
+      position: relative !important;
+      border-radius: 0 !important;
+      
+      &:hover {
+        background-color: #f8fafc !important;
+        color: #1e293b !important;
+        
+        .menu-item-icon {
+          color: #6366f1 !important;
+          background-color: #eef2ff !important;
+        }
+      }
+      
+      &:focus {
+        outline: none !important;
+        background-color: #f1f5f9 !important;
+        
+        .menu-item-icon {
+          color: #6366f1 !important;
+          background-color: #eef2ff !important;
+        }
+      }
+      
+      .menu-item-icon {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 20px !important;
+        height: 20px !important;
+        font-size: 18px !important;
+        color: #64748b !important;
+        transition: all 0.2s ease !important;
+        flex-shrink: 0 !important;
+      }
+      
+      .menu-item-title {
+        font-weight: 500 !important;
+        font-size: 14px !important;
+        color: inherit !important;
+        line-height: 1.4 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        flex: 1 !important;
+      }
+      
+      &.logout-item {
+        margin-top: 8px !important;
+        border-top: 1px solid #e2e8f0 !important;
+        padding-top: 12px !important;
+        
+        .menu-item-icon {
+          color: #ef4444 !important;
+        }
+        
+        .menu-item-title {
+          color: #ef4444 !important;
+        }
+        
+        &:hover {
+          background-color: #fef2f2 !important;
+          
+          .menu-item-icon {
+            color: #dc2626 !important;
+            background-color: #fee2e2 !important;
+          }
+          
+          .menu-item-title {
+            color: #dc2626 !important;
+          }
+        }
+      }
     }
   }
 }

@@ -9,131 +9,107 @@
       
       <nav class="nav-desktop" role="navigation" aria-label="Main navigation">
         <ul class="nav-list">
-          <!-- Home link - only show for non-owners -->
-          <li class="nav-item" *ngIf="!(isOwner$ | async)">
-            <a routerLink="/landing" 
-               routerLinkActive="active" 
-               [routerLinkActiveOptions]="{exact: true}"
-               class="nav-link">
-              Home
-            </a>
-          </li>
-          
-          <!-- Show for all users when not logged in, or for customers when logged in -->
-          <li class="nav-item" *ngIf="!(isLoggedIn$ | async) || (isCustomer$ | async)">
+          <!-- Core navigation - always visible -->
+          <li class="nav-item">
             <a routerLink="/restaurants" 
-               routerLinkActive="active" 
                class="nav-link">
               Restaurants
             </a>
           </li>
           
-          <!-- Show only for customers -->
-          <li class="nav-item" *ngIf="isCustomer$ | async">
-            <a routerLink="/book-table" 
-               routerLinkActive="active" 
-               class="nav-link">
-              Book Table
-            </a>
-          </li>
-          
-          <!-- Customer Dashboard -->
-          <li class="nav-item" *ngIf="isCustomer$ | async">
-            <a routerLink="/dashboard" 
-               routerLinkActive="active" 
-               class="nav-link">
-              Dashboard
-            </a>
-          </li>
-          
-          <!-- Owner Dashboard -->
-          <li class="nav-item" *ngIf="isOwner$ | async">
-            <a routerLink="/owner/dashboard" 
-               routerLinkActive="active" 
-               class="nav-link">
-              Dashboard
-            </a>
-          </li>
-          
-          <!-- Owner Restaurant Management -->
-          <li class="nav-item" *ngIf="isOwner$ | async">
-            <a routerLink="/owner/restaurant" 
-               routerLinkActive="active" 
-               class="nav-link">
-              Manage Restaurant
-            </a>
-          </li>
-          
-          <!-- Owner Menu Management -->
-          <li class="nav-item" *ngIf="isOwner$ | async">
-            <a routerLink="/owner/menu" 
-               routerLinkActive="active" 
-               class="nav-link">
-              Manage Menu
-            </a>
-          </li>
-          
-          <!-- My Bookings for customers -->
+          <!-- Customer-specific nav -->
           <li class="nav-item" *ngIf="isCustomer$ | async">
             <a routerLink="/my-bookings" 
-               routerLinkActive="active" 
                class="nav-link">
               My Bookings
             </a>
           </li>
           
-          <!-- Restaurant Bookings for owners -->
+          <!-- Owner-specific nav -->
           <li class="nav-item" *ngIf="isOwner$ | async">
-            <a routerLink="/owner/bookings" 
-               routerLinkActive="active" 
+            <a routerLink="/owner/dashboard" 
                class="nav-link">
-              Restaurant Bookings
+              Dashboard
             </a>
           </li>
           
-          <!-- My Reviews - show only for customers -->
-          <li class="nav-item" *ngIf="isCustomer$ | async">
-            <a routerLink="/my-reviews" 
-               routerLinkActive="active" 
-               class="nav-link">
-              My Reviews
-            </a>
-          </li>
-          
-          <!-- About - show only when not logged in -->
-          <li class="nav-item" *ngIf="!(isLoggedIn$ | async)">
-            <a routerLink="/about" 
-               routerLinkActive="active" 
-               class="nav-link">
-              About
-            </a>
-          </li>
-          
-          <!-- Contact - show only when not logged in -->
-          <li class="nav-item" *ngIf="!(isLoggedIn$ | async)">
-            <a routerLink="/contact" 
-               routerLinkActive="active" 
-               class="nav-link">
-              Contact
-            </a>
-          </li>
         </ul>
       </nav>
       
       <div class="auth-section">
         <ng-container *ngIf="isLoggedIn$ | async; else loggedOutTemplate">
           <div class="user-menu">
-            <span class="welcome-text">
-              Welcome back, {{ getUserName() }}!
-            </span>
-            <button 
-              mat-flat-button 
-              class="logout-btn" 
-              (click)="authService.logout()"
-              aria-label="Sign out of your account">
-              <img src="https://cdn-icons-png.flaticon.com/512/17578/17578369.png" alt="logout" />
-              Sign Out
+            <!-- User Menu Trigger -->
+            <button mat-button class="user-menu-trigger" [matMenuTriggerFor]="userMenu">
+              <div class="user-info">
+                <div class="user-avatar">
+                  {{ getInitials() }}
+                </div>
+                <div class="user-details">
+                  <span class="user-name">{{ getUserName() }}</span>
+                  <span class="user-role">{{ getUserRole() }}</span>
+                </div>
+              </div>
+              <mat-icon class="dropdown-icon">expand_more</mat-icon>
             </button>
+            
+            <!-- Professional Dropdown Menu -->
+            <mat-menu #userMenu="matMenu" class="professional-dropdown" xPosition="before" yPosition="below">
+              <div class="dropdown-header">
+                <div class="user-avatar-large">
+                  {{ getInitials() }}
+                </div>
+                <div class="user-info-large">
+                  <div class="user-name-large">{{ getUserName() }}</div>
+                  <div class="user-email">{{ getUserEmail() }}</div>
+                </div>
+              </div>
+              
+              <div class="dropdown-divider"></div>
+              
+              <!-- Customer Menu Items -->
+              <ng-container *ngIf="isCustomer$ | async">
+                <button mat-menu-item routerLink="/account" class="menu-item">
+                  <mat-icon class="menu-item-icon">grid_view</mat-icon>
+                  <span class="menu-item-title">Dashboard</span>
+                </button>
+                
+                <button mat-menu-item routerLink="/my-reviews" class="menu-item">
+                  <mat-icon class="menu-item-icon">star_outline</mat-icon>
+                  <span class="menu-item-title">My Reviews</span>
+                </button>
+                
+                <button mat-menu-item routerLink="/favorites" class="menu-item">
+                  <mat-icon class="menu-item-icon">bookmark_border</mat-icon>
+                  <span class="menu-item-title">Saved Places</span>
+                </button>
+              </ng-container>
+              
+              <!-- Owner Menu Items -->
+              <ng-container *ngIf="isOwner$ | async">
+                <button mat-menu-item routerLink="/owner/restaurant" class="menu-item">
+                  <mat-icon class="menu-item-icon">store</mat-icon>
+                  <span class="menu-item-title">Restaurant</span>
+                </button>
+                
+                <button mat-menu-item routerLink="/owner/menu" class="menu-item">
+                  <mat-icon class="menu-item-icon">restaurant_menu</mat-icon>
+                  <span class="menu-item-title">Menu</span>
+                </button>
+                
+                <button mat-menu-item routerLink="/owner/bookings" class="menu-item">
+                  <mat-icon class="menu-item-icon">event_note</mat-icon>
+                  <span class="menu-item-title">Bookings</span>
+                </button>
+              </ng-container>
+              
+              <div class="dropdown-divider"></div>
+              
+              <button mat-menu-item (click)="authService.logout()" class="menu-item logout-item">
+                <mat-icon class="menu-item-icon">logout</mat-icon>
+                <span class="menu-item-title">Sign Out</span>
+              </button>
+            </mat-menu>
           </div>
         </ng-container>
         
