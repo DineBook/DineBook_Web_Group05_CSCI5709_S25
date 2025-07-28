@@ -26,31 +26,53 @@ export const createReview = async (
   res: Response
 ): Promise<void> => {
   try {
+    // Check if user exists and has proper authentication
+    if (!req.user || !req.user.id) {
+      res.status(401).json({ error: "Authentication required" });
+      return;
+    }
+
     if (req.user.role !== 'customer') {
       res.status(403).json({ error: "Only customers can create reviews" });
       return;
     }
+    
     const { restaurantId, rating, comment } = req.body;
     const customerId = req.user.id;
 
-    // Input validation
+    // Enhanced input validation
     if (!restaurantId || !rating || !comment) {
       res.status(400).json({ error: "Restaurant ID, rating, and comment are required" });
       return;
     }
-    if (rating < 1 || rating > 5) {
-      res.status(400).json({ error: "Rating must be between 1 and 5" });
+    
+    // Validate rating is a number
+    const numRating = Number(rating);
+    if (isNaN(numRating) || numRating < 1 || numRating > 5) {
+      res.status(400).json({ error: "Rating must be a number between 1 and 5" });
       return;
     }
-    if (comment.trim() === "") {
-      res.status(400).json({ error: "Comment cannot be empty" });
+    
+    // Validate comment
+    if (typeof comment !== 'string' || comment.trim() === "") {
+      res.status(400).json({ error: "Comment must be a non-empty string" });
+      return;
+    }
+    
+    // Validate restaurantId format
+    if (!restaurantId.match(/^[0-9a-fA-F]{24}$/)) {
+      res.status(400).json({ error: "Invalid restaurant ID format" });
       return;
     }
 
     // Check if restaurant exists and is active
     const restaurant = await Restaurant.findById(restaurantId);
-    if (!restaurant || !restaurant.isActive) {
-      res.status(404).json({ error: "Restaurant not found or not active" });
+    if (!restaurant) {
+      res.status(404).json({ error: "Restaurant not found" });
+      return;
+    }
+    if (!restaurant.isActive) {
+      res.status(400).json({ error: "Restaurant is not currently accepting reviews" });
       return;
     }
 
@@ -64,8 +86,8 @@ export const createReview = async (
     const review = new Review({
       customerId,
       restaurantId,
-      rating,
-      comment,
+      rating: numRating,
+      comment: comment.trim(),
     });
 
     await review.save();
@@ -79,11 +101,24 @@ export const createReview = async (
     });
   } catch (error) {
     console.error("Review creation error:", error);
-    if (error instanceof Error && error.name === "MongoServerError" && (error as any).code === 11000) {
-      res.status(400).json({ error: "You have already reviewed this restaurant" });
-    } else {
-      res.status(500).json({ error: "Failed to create review" });
+    
+    // Handle specific MongoDB errors
+    if (error instanceof Error) {
+      if (error.name === "MongoServerError" && (error as any).code === 11000) {
+        res.status(400).json({ error: "You have already reviewed this restaurant" });
+        return;
+      }
+      if (error.name === "ValidationError") {
+        res.status(400).json({ error: "Invalid data provided" });
+        return;
+      }
+      if (error.name === "CastError") {
+        res.status(400).json({ error: "Invalid restaurant ID format" });
+        return;
+      }
     }
+    
+    res.status(500).json({ error: "Failed to create review" });
   }
 };
 

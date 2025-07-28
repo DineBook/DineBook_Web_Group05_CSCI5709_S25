@@ -30,16 +30,39 @@ export const geocodeAddress = async (
 ): Promise<GeocodeResult | null> => {
   console.log(`Mock geocoding for address: ${address}`);
 
-  // For development, return Halifax coordinates as default
-  // Remove this in production and implement real geocoding
-  if (address && address.length > 0) {
-    return {
-      latitude: 44.6488, // Halifax latitude
-      longitude: -63.5752, // Halifax longitude
-    };
+  // Basic validation
+  if (!address || typeof address !== 'string' || address.trim().length < 3) {
+    console.log("Address validation failed: too short or invalid");
+    return null;
   }
 
-  return null;
+  const trimmedAddress = address.trim();
+
+  // For development, return Halifax coordinates as default
+  // Remove this in production and implement real geocoding
+  try {
+    // Mock different coordinates based on address content for testing
+    if (trimmedAddress.toLowerCase().includes('toronto')) {
+      return {
+        latitude: 43.6532,
+        longitude: -79.3832,
+      };
+    } else if (trimmedAddress.toLowerCase().includes('vancouver')) {
+      return {
+        latitude: 49.2827,
+        longitude: -123.1207,
+      };
+    } else {
+      // Default to Halifax for any other valid address
+      return {
+        latitude: 44.6488, // Halifax latitude
+        longitude: -63.5752, // Halifax longitude
+      };
+    }
+  } catch (error) {
+    console.error("Error in mock geocoding:", error);
+    return null;
+  }
 };
 
 /**

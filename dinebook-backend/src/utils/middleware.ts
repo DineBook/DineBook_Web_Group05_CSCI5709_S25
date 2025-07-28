@@ -28,7 +28,18 @@ export const authenticate = async (req: AuthenticatedRequest, res: Response, nex
             return res.status(401).json({ error: 'Access denied. No token provided.' });
         }
 
-        const decoded = jwt.verify(token, JWT_SECRET) as userPayload;
+        let decoded;
+        try {
+            decoded = jwt.verify(token, JWT_SECRET) as userPayload;
+        } catch (jwtError) {
+            console.error('JWT verification failed:', jwtError);
+            return res.status(401).json({ error: 'Invalid token.' });
+        }
+
+        if (!decoded || !decoded.id) {
+            return res.status(401).json({ error: 'Invalid token payload.' });
+        }
+
         const user = await User.findById(decoded.id);
 
         if (!user) {
@@ -43,7 +54,7 @@ export const authenticate = async (req: AuthenticatedRequest, res: Response, nex
         next();
     } catch (error) {
         console.error('Authentication error:', error);
-        res.status(401).json({ error: 'Invalid token.' });
+        res.status(401).json({ error: 'Authentication failed.' });
     }
 };
 

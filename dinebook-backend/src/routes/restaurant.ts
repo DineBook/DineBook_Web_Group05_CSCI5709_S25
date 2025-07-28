@@ -13,7 +13,7 @@ import {
   createMenuItem,
   updateMenuItem,
   deleteMenuItem,
-} from "../controllers/";
+} from "../controllers/restaurant";
 import { authenticate, checkOwner } from "../utils";
 
 const router = express.Router();

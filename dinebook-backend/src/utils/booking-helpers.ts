@@ -146,10 +146,19 @@ export class TimeHelper {
 // Input validation
 export class BookingInputValidator {
     static validateCreateBookingInput(body: any): string | null {
+        if (!body || typeof body !== 'object') {
+            return "Invalid request body";
+        }
+
         const { restaurantId, date, time, guests } = body;
 
         if (!restaurantId || !date || !time || !guests) {
             return "Restaurant ID, date, time, and number of guests are required";
+        }
+
+        // Validate restaurantId format
+        if (typeof restaurantId !== 'string' || !restaurantId.match(/^[0-9a-fA-F]{24}$/)) {
+            return "Invalid restaurant ID format";
         }
 
         if (!BookingValidators.validateDateFormat(date)) {
@@ -160,7 +169,9 @@ export class BookingInputValidator {
             return "Time must be in HH:MM format (24-hour)";
         }
 
-        if (!BookingValidators.validateGuestCount(guests)) {
+        // Enhanced guests validation
+        const guestCount = parseInt(guests);
+        if (isNaN(guestCount) || !BookingValidators.validateGuestCount(guestCount)) {
             return "Number of guests must be between 1 and 20";
         }
 
@@ -172,10 +183,19 @@ export class BookingInputValidator {
     }
 
     static validateAvailabilityInput(query: any): string | null {
+        if (!query || typeof query !== 'object') {
+            return "Invalid query parameters";
+        }
+
         const { restaurantId, date } = query;
 
         if (!restaurantId || !date) {
             return "Restaurant ID and date are required";
+        }
+
+        // Validate restaurantId format
+        if (typeof restaurantId !== 'string' || !restaurantId.match(/^[0-9a-fA-F]{24}$/)) {
+            return "Invalid restaurant ID format";
         }
 
         if (!BookingValidators.validateDateFormat(date)) {

@@ -1,0 +1,4415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZAP by Checkmarx Scanning Report</title>
+<link
+	href="2025-07-27-ZAP-Report-/normalize/normalize.css" rel="stylesheet">
+<link
+	href="2025-07-27-ZAP-Report-/themes/original/main.css" rel="stylesheet">
+<link
+	href="2025-07-27-ZAP-Report-/themes/original/colors.css" rel="stylesheet">
+</head>
+<body>
+	<header>
+		<h1>ZAP by Checkmarx Scanning Report</h1>
+		<p>
+			<span>Generated with</span> <a href="https://zaproxy.org"><img
+				src="2025-07-27-ZAP-Report-/zap32x32.png" alt="The ZAP logo" class="zap-logo">ZAP</a>
+			<span>on Sun 27 Jul 2025, at 19:22:18</span>
+		</p>
+		<p>ZAP Version: 2.16.1</p>
+		<p>
+			ZAP by <a href="https://checkmarx.com/">Checkmarx</a>
+		</p>
+	</header>
+
+	<main>
+
+		<section id="contents" class="contents">
+			<h2>Contents</h2>
+			<nav>
+				<ol>
+					<li><a
+						href="#about-this-report">About this report</a>
+						<ol>
+							<li><a
+								href="#report-description">Report description</a></li>
+							<li><a
+								href="#report-parameters">Report parameters</a></li>
+						</ol></li>
+					<data-th-block>
+					<li><a
+						href="#summaries">Summaries</a>
+						<ol>
+							<li><a
+								href="#risk-confidence-counts">Alert counts by risk and confidence</a></li>
+							<li><a
+								href="#site-risk-counts">Alert counts by site and risk</a></li>
+							<li><a
+								href="#alert-type-counts">Alert counts by alert type</a></li>
+						</ol></li>
+					<li><a
+						href="#alerts">Alerts</a>
+						<ol>
+							
+							 
+							
+							
+							
+							
+							<li><a
+								href="#alerts--risk-2-confidence-3"><span>Risk</span>=<span
+									class="risk-level">Medium</span>, <span>Confidence</span>=<span
+									class="confidence-level">High</span> <span>(2)</span></a></li>
+							
+							<li><a
+								href="#alerts--risk-2-confidence-2"><span>Risk</span>=<span
+									class="risk-level">Medium</span>, <span>Confidence</span>=<span
+									class="confidence-level">Medium</span> <span>(2)</span></a></li>
+							
+							<li><a
+								href="#alerts--risk-2-confidence-1"><span>Risk</span>=<span
+									class="risk-level">Medium</span>, <span>Confidence</span>=<span
+									class="confidence-level">Low</span> <span>(1)</span></a></li>
+							  
+							
+							
+							
+							
+							
+							
+							<li><a
+								href="#alerts--risk-1-confidence-2"><span>Risk</span>=<span
+									class="risk-level">Low</span>, <span>Confidence</span>=<span
+									class="confidence-level">Medium</span> <span>(1)</span></a></li>
+							
+							
+							  
+							
+							
+							
+							
+							
+							
+							<li><a
+								href="#alerts--risk-0-confidence-2"><span>Risk</span>=<span
+									class="risk-level">Informational</span>, <span>Confidence</span>=<span
+									class="confidence-level">Medium</span> <span>(2)</span></a></li>
+							
+							<li><a
+								href="#alerts--risk-0-confidence-1"><span>Risk</span>=<span
+									class="risk-level">Informational</span>, <span>Confidence</span>=<span
+									class="confidence-level">Low</span> <span>(1)</span></a></li>
+							  
+						</ol></li>
+					<li><a
+						href="#appendix">Appendix</a>
+						<ol>
+							<li><a
+								href="#alert-types">Alert types</a></li>
+						</ol></li>
+					</data-th-block>
+				</ol>
+			</nav>
+		</section>
+
+		<section
+			id="about-this-report" class="about-this-report">
+			<h2>About this report</h2>
+
+			<section
+				id="report-description">
+				<h3>Report description</h3>
+				<div class="report-description--container">
+					
+
+<p>
+	
+	  DineBook backend ZAP report 
+	  
+</p>
+ 
+				</div>
+			</section>
+
+			<section
+				id="report-parameters">
+				<h3>Report parameters</h3>
+				<div class="report-parameters--container">
+					<h4>Contexts</h4>
+					
+					
+					<p>No contexts were selected, so all contexts were included by default.</p>
+					  
+
+					<h4>Sites</h4>
+					
+					<p>The following sites were included:</p>
+					<ul class="sites-list">
+						<li><span class="site">http://localhost:3000</span></li>
+						<li><span class="site">http://localhost:4200</span></li>
+					</ul>
+					
+					<p>(If no sites were selected, all sites were included by default.)</p>
+					<p>An included site must also be within one of the included contexts for its data to be included in the report.</p>
+
+					<h4>Risk levels</h4>
+					<p>
+						<span>Included</span>:
+						 
+						<span class="included-risk-codes"><span class="risk-level">High</span>, <span class="risk-level">Medium</span>, <span class="risk-level">Low</span>, <span class="risk-level">Informational</span></span>
+					</p>
+					<p>
+						<span>Excluded</span>:
+						 <span>None</span>
+						
+					</p>
+
+					<h4>Confidence levels</h4>
+					<p>
+						<span>Included</span>:
+						
+						
+						<span class="included-confidence-codes"><span class="confidence-level">User Confirmed</span>, <span class="confidence-level">High</span>, <span class="confidence-level">Medium</span>, <span class="confidence-level">Low</span></span>
+					</p>
+					<p>
+						<span>Excluded</span>:
+						
+						
+						<span class="included-confidence-codes"> <span class="confidence-level">User Confirmed</span>, <span class="confidence-level">High</span>, <span class="confidence-level">Medium</span>, <span class="confidence-level">Low</span>, <span class="confidence-level">False Positive</span></span>
+					</p>
+				</div>
+			</section>
+		</section>
+
+		
+		<section>
+			
+		</section>
+		
+		<section id="summaries" class="summaries">
+			<h2>Summaries</h2>
+
+			<section
+				id="risk-confidence-counts">
+				<h3>Alert counts by risk and confidence</h3>
+				<table class="risk-confidence-counts-table">
+					<caption>
+						<p>This table shows the number of alerts for each level of risk and confidence included in the report.</p>
+						<p>(The percentages in brackets represent the count as a percentage of the total number of alerts included in the report, rounded to one decimal place.)</p>
+					</caption>
+					<colgroup>
+						<col>
+						<col>
+					</colgroup>
+					<colgroup>
+						<col
+							style="width: 14.0%"><col
+							style="width: 14.0%"><col
+							style="width: 14.0%"><col
+							style="width: 14.0%">
+						<col style="width: 14.0%">
+					</colgroup>
+					<thead>
+						<tr>
+							<td colspan="2" rowspan="2"></td>
+							<th scope="colgroup"
+								colspan="5">Confidence</th>
+						</tr>
+						<tr>
+							<th scope="col">User Confirmed</th>
+							<th scope="col">High</th>
+							<th scope="col">Medium</th>
+							<th scope="col">Low</th>
+							<th scope="col">Total</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="rowgroup"
+								rowspan="5">Risk</th>
+							<th scope="row">High</th>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0.0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0.0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0.0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0.0%)</span></td>
+							<td><span>0</span><br> <span class="additional-info-percentages">(0.0%)</span></td>
+						</tr>
+						<tr>
+							
+							<th scope="row">Medium</th>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0.0%)</span></td>
+							<td><span>2</span><br> <span
+								class="additional-info-percentages">(22.2%)</span></td>
+							<td><span>2</span><br> <span
+								class="additional-info-percentages">(22.2%)</span></td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(11.1%)</span></td>
+							<td><span>5</span><br> <span class="additional-info-percentages">(55.6%)</span></td>
+						</tr>
+						<tr>
+							
+							<th scope="row">Low</th>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0.0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0.0%)</span></td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(11.1%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0.0%)</span></td>
+							<td><span>1</span><br> <span class="additional-info-percentages">(11.1%)</span></td>
+						</tr>
+						<tr>
+							
+							<th scope="row">Informational</th>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0.0%)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0.0%)</span></td>
+							<td><span>2</span><br> <span
+								class="additional-info-percentages">(22.2%)</span></td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(11.1%)</span></td>
+							<td><span>3</span><br> <span class="additional-info-percentages">(33.3%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row">Total</th>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0.0%)</span></td>
+							<td><span>2</span><br> <span
+								class="additional-info-percentages">(22.2%)</span></td>
+							<td><span>5</span><br> <span
+								class="additional-info-percentages">(55.6%)</span></td>
+							<td><span>2</span><br> <span
+								class="additional-info-percentages">(22.2%)</span></td>
+							<td><span>9</span><br> <span
+								class="additional-info-percentages">(100%)</span></td>
+						</tr>
+					</tbody>
+				</table>
+			</section>
+
+			<section
+				id="site-risk-counts">
+				<h3>Alert counts by site and risk</h3>
+				<table class="site-risk-counts-table">
+					<caption>
+						<p>This table shows, for each site for which one or more alerts were raised, the number of alerts raised at each risk level.</p>
+						<p>Alerts with a confidence level of &quot;False Positive&quot; have been excluded from these counts.</p>
+						<p>(The numbers in brackets are the number of alerts raised for the site at or above that risk level.)</p>
+					</caption>
+					<colgroup>
+						<col>
+						<col>
+					</colgroup>
+					<colgroup>
+						<col
+							style="width: 16.25%"><col
+							style="width: 16.25%"><col
+							style="width: 16.25%"><col
+							style="width: 16.25%">
+					</colgroup>
+					<thead>
+						<tr>
+							<td colspan="2" rowspan="2"></td>
+							<th scope="colgroup" colspan="4">Risk</th>
+						</tr>
+						<tr>
+							<th scope="col">
+								<span>High</span><br>  <span
+									class="additional-info-percentages">(= High)</span>  
+							</th>
+							<th scope="col">
+								<span>Medium</span><br>   <span
+									class="additional-info-percentages">(&gt;= Medium)</span> 
+							</th>
+							<th scope="col">
+								<span>Low</span><br>   <span
+									class="additional-info-percentages">(&gt;= Low)</span> 
+							</th>
+							<th scope="col">
+								<span>Informational</span><br>   <span
+									class="additional-info-percentages">(&gt;= Informational)</span> 
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="rowgroup"
+								rowspan="2">Site</th>
+							<th scope="row">http://localhost:3000</th>
+							
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0)</span></td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(1)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(1)</span></td>
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(1)</span></td>
+							
+						</tr>
+						<tr>
+							
+							<th scope="row">http://localhost:4200</th>
+							
+							<td><span>0</span><br> <span
+								class="additional-info-percentages">(0)</span></td>
+							<td><span>4</span><br> <span
+								class="additional-info-percentages">(4)</span></td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(5)</span></td>
+							<td><span>3</span><br> <span
+								class="additional-info-percentages">(8)</span></td>
+							
+						</tr>
+					</tbody>
+				</table>
+			</section>
+
+			<section
+				id="alert-type-counts">
+				<h3>Alert counts by alert type</h3>
+				<table class="alert-type-counts-table">
+					<caption>
+						<p>This table shows the number of alerts of each alert type, together with the alert type&#39;s risk level.</p>
+						<p>(The percentages in brackets represent each count as a percentage, rounded to one decimal place, of the total number of alerts included in this report.)</p>
+					</caption>
+					<thead>
+						<tr>
+							<th scope="col">Alert type</th>
+							<th scope="col">Risk</th>
+							<th scope="col">Count</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-0">CSP: Failure to Define Directive with No Fallback</a></th>
+							<td class="risk-level">Medium</td>
+							<td><span>2</span><br> <span
+								class="additional-info-percentages">(22.2%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-1">Content Security Policy (CSP) Header Not Set</a></th>
+							<td class="risk-level">Medium</td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(11.1%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-2">Cross-Domain Misconfiguration</a></th>
+							<td class="risk-level">Medium</td>
+							<td><span>5</span><br> <span
+								class="additional-info-percentages">(55.6%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-3">Hidden File Found</a></th>
+							<td class="risk-level">Medium</td>
+							<td><span>4</span><br> <span
+								class="additional-info-percentages">(44.4%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-4">Missing Anti-clickjacking Header</a></th>
+							<td class="risk-level">Medium</td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(11.1%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-5">X-Content-Type-Options Header Missing</a></th>
+							<td class="risk-level">Low</td>
+							<td><span>81</span><br> <span
+								class="additional-info-percentages">(900.0%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-6">Information Disclosure - Sensitive Information in URL</a></th>
+							<td class="risk-level">Informational</td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(11.1%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-7">Information Disclosure - Suspicious Comments</a></th>
+							<td class="risk-level">Informational</td>
+							<td><span>39</span><br> <span
+								class="additional-info-percentages">(433.3%)</span></td>
+						</tr>
+						<tr>
+							<th scope="row"><a
+								href="#alert-type-8">Modern Web Application</a></th>
+							<td class="risk-level">Informational</td>
+							<td><span>1</span><br> <span
+								class="additional-info-percentages">(11.1%)</span></td>
+						</tr>
+					</tbody>
+					<tfoot>
+						<tr>
+							<th scope="row">Total</th>
+							<td></td>
+							<td>9</td>
+						</tr>
+					</tfoot>
+				</table>
+			</section>
+		</section>
+
+		<section id="alerts" class="alerts">
+			<h2>Alerts</h2>
+			<ol>
+				
+				 
+				 
+				
+				
+				<li id="alerts--risk-2-confidence-3">
+					<h3>
+						<span>Risk</span>=<span
+							class="risk-level">Medium</span>, <span>Confidence</span>=<span
+							class="confidence-level">High</span> <span>(2)</span>
+					</h3>
+					<ol>
+						
+						
+						
+						<li class="alerts--site-li">
+							<h4>
+								<span class="site">http://localhost:4200</span> <span>(2)</span>
+							</h4>
+							<ol>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-0">CSP: Failure to Define Directive with No Fallback</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:4200/sitemap.xml</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				<li>
+					<span><a href="https://cwe.mitre.org/data/definitions/693.html">CWE-693</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">OWASP_2021_A05</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html">OWASP_2017_A06</a></span> 
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>The Content Security Policy fails to define one of the directives that has no fallback. Missing/excluding them is the same as allowing anything.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Other info</th>
+		<td> 
+<p>The directive(s): frame-ancestors, form-action is/are among the directives that do not fallback to default-src.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (240 bytes)</summary>
+				
+				<pre><code>GET http://localhost:4200/sitemap.xml HTTP/1.1
+host: localhost:4200
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+pragma: no-cache
+cache-control: no-cache
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (263 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 404 Not Found
+Vary: Origin
+Content-Security-Policy: default-src &#39;none&#39;
+X-Content-Type-Options: nosniff
+Content-Type: text/html; charset=utf-8
+Content-Length: 150
+Date: Sun, 27 Jul 2025 21:50:28 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+</code></pre>
+				
+				
+			</details> <details class="response-body" open="open">
+				<summary>Response body (150 bytes)</summary>
+				
+				<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;title&gt;Error&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;pre&gt;Cannot GET /sitemap.xml&lt;/pre&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Parameter</th>
+		<td><pre><code>Content-Security-Policy</code></pre></td>
+	</tr>
+	
+	<tr>
+		<th scope="row">Evidence</th>
+		<td><pre><code>default-src &#39;none&#39;</code></pre></td>
+	</tr>
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-1">Content Security Policy (CSP) Header Not Set</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:4200/</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				<li>
+					<span><a href="https://cwe.mitre.org/data/definitions/693.html">CWE-693</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">OWASP_2021_A05</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html">OWASP_2017_A06</a></span> 
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page — covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.</p>
+ </td>
+	</tr>
+	
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (229 bytes)</summary>
+				
+				<pre><code>GET http://localhost:4200/ HTTP/1.1
+host: localhost:4200
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+pragma: no-cache
+cache-control: no-cache
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (188 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 200 OK
+Vary: Origin
+Content-Type: text/html
+Cache-Control: no-cache
+Date: Sun, 27 Jul 2025 21:50:28 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 735
+
+</code></pre>
+				
+				
+			</details> <details class="response-body" open="open">
+				<summary>Response body (735 bytes)</summary>
+				
+				<pre><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;script type=&quot;module&quot; src=&quot;/@vite/client&quot;&gt;&lt;/script&gt;
+
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;DinebookFrontend&lt;/title&gt;
+  &lt;base href=&quot;/&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;link rel=&quot;icon&quot; type=&quot;image/x-icon&quot; href=&quot;favicon.ico&quot;&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&amp;amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/icon?family=Material+Icons&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;&lt;/head&gt;
+&lt;body class=&quot;mat-typography&quot;&gt;
+  &lt;app-root&gt;&lt;/app-root&gt;
+&lt;script src=&quot;polyfills.js&quot; type=&quot;module&quot;&gt;&lt;/script&gt;&lt;script src=&quot;main.js&quot; type=&quot;module&quot;&gt;&lt;/script&gt;&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+				
+				
+			</details></td>
+	</tr>
+	
+	
+	
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+							</ol>
+						</li>
+						
+					</ol>
+				</li>
+				
+				<li id="alerts--risk-2-confidence-2">
+					<h3>
+						<span>Risk</span>=<span
+							class="risk-level">Medium</span>, <span>Confidence</span>=<span
+							class="confidence-level">Medium</span> <span>(2)</span>
+					</h3>
+					<ol>
+						
+						<li class="alerts--site-li">
+							<h4>
+								<span class="site">http://localhost:3000</span> <span>(1)</span>
+							</h4>
+							<ol>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-2">Cross-Domain Misconfiguration</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:3000/api/restaurants?page=1&amp;limit=2&amp;radius=5</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				<li>
+					<span><a href="https://owasp.org/www-project-top-ten/2017/A5_2017-Broken_Access_Control.html">OWASP_2017_A05</a></span> 
+				</li>
+				<li>
+					<span><a href="https://cwe.mitre.org/data/definitions/264.html">CWE-264</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/">OWASP_2021_A01</a></span> 
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Other info</th>
+		<td> 
+<p>The CORS misconfiguration on the web server permits cross-domain read requests from arbitrary third party domains, using unauthenticated APIs on this domain. Web browser implementations do not permit arbitrary third parties to read the response from authenticated APIs, however. This reduces the risk somewhat. This misconfiguration could be used by an attacker to access data that is available in an unauthenticated manner, but which uses some other form of security, such as IP address white-listing.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (358 bytes)</summary>
+				
+				<pre><code>GET http://localhost:3000/api/restaurants?page=1&amp;limit=2&amp;radius=5 HTTP/1.1
+host: localhost:3000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0
+Accept: application/json, text/plain, */*
+Accept-Language: en-US,en;q=0.5
+Origin: http://localhost:4200
+Connection: keep-alive
+Referer: http://localhost:4200/
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (942 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 200 OK
+Content-Security-Policy: default-src &#39;self&#39;;style-src &#39;self&#39; &#39;unsafe-inline&#39;;script-src &#39;self&#39;;img-src &#39;self&#39; data: https:;base-uri &#39;self&#39;;font-src &#39;self&#39; https: data:;form-action &#39;self&#39;;frame-ancestors &#39;self&#39;;object-src &#39;none&#39;;script-src-attr &#39;none&#39;;upgrade-insecure-requests
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Resource-Policy: same-origin
+Origin-Agent-Cluster: ?1
+Referrer-Policy: no-referrer
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+X-DNS-Prefetch-Control: off
+X-Download-Options: noopen
+X-Frame-Options: SAMEORIGIN
+X-Permitted-Cross-Domain-Policies: none
+X-XSS-Protection: 0
+Access-Control-Allow-Origin: *
+Content-Type: application/json; charset=utf-8
+Content-Length: 3067
+ETag: W/&quot;bfb-yJy+AmEaD/FsLse8qBATwQKEAqA&quot;
+Vary: Accept-Encoding
+Date: Sun, 27 Jul 2025 22:12:27 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+</code></pre>
+				
+				
+			</details> <details class="response-body">
+				<summary>Response body (3067 bytes)</summary>
+				
+				<pre><code>{&quot;restaurants&quot;:[{&quot;coordinates&quot;:{&quot;latitude&quot;:44.6488,&quot;longitude&quot;:-63.5752},&quot;geometry&quot;:{&quot;type&quot;:&quot;Point&quot;,&quot;coordinates&quot;:[-63.5752,44.6488]},&quot;address&quot;:{&quot;street&quot;:&quot;Dresdon street&quot;,&quot;city&quot;:&quot;Halifax&quot;,&quot;province&quot;:&quot;Nova Scotia&quot;,&quot;postalCode&quot;:&quot;B3H 132&quot;},&quot;openingHours&quot;:{&quot;monday&quot;:{&quot;open&quot;:&quot;10:00&quot;,&quot;close&quot;:&quot;22:00&quot;},&quot;tuesday&quot;:{&quot;open&quot;:&quot;11:00&quot;,&quot;close&quot;:&quot;22:00&quot;},&quot;wednesday&quot;:{&quot;open&quot;:&quot;10:00&quot;,&quot;close&quot;:&quot;22:00&quot;},&quot;thursday&quot;:{&quot;open&quot;:&quot;10:00&quot;,&quot;close&quot;:&quot;22:00&quot;},&quot;friday&quot;:{&quot;open&quot;:&quot;10:00&quot;,&quot;close&quot;:&quot;22:00&quot;},&quot;saturday&quot;:{&quot;open&quot;:&quot;10:00&quot;,&quot;close&quot;:&quot;22:00&quot;},&quot;sunday&quot;:{&quot;open&quot;:&quot;10:00&quot;,&quot;close&quot;:&quot;14:01&quot;}},&quot;_id&quot;:&quot;688446364ba2b4978efc4820&quot;,&quot;_averageRating&quot;:0,&quot;name&quot;:&quot;Ilai&quot;,&quot;cuisine&quot;:&quot;Indian&quot;,&quot;location&quot;:&quot;Dresdon street Halifax Nova Scotia B3H 132&quot;,&quot;priceRange&quot;:2,&quot;ownerId&quot;:&quot;688441794ba2b4978efc47ec&quot;,&quot;description&quot;:&quot;All Indian cuisines are available here&quot;,&quot;phoneNumber&quot;:&quot;17228826104&quot;,&quot;email&quot;:&quot;mamidala1358@gmail.com&quot;,&quot;capacity&quot;:50,&quot;isActive&quot;:true,&quot;createdAt&quot;:&quot;2025-07-26T03:06:30.260Z&quot;,&quot;updatedAt&quot;:&quot;2025-07-27T21:21:08.217Z&quot;,&quot;__v&quot;:9,&quot;menuItems&quot;:[{&quot;name&quot;:&quot;APpetizers&quot;,&quot;description&quot;:&quot;Appetizers&quot;,&quot;price&quot;:1,&quot;category&quot;:&quot;Appetizers&quot;,&quot;imageUrl&quot;:&quot;https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.valyastasteofhome.com%2Fwp-content%2Fuploads%2F2015%2F01%2F119.png&amp;f=1&amp;nofb=1&amp;ipt=ddfe52bf76a45978d29582d67be21d111ca4db7540c8a886c08c2372febd312e&quot;,&quot;isVegetarian&quot;:true,&quot;isVegan&quot;:false,&quot;isGlutenFree&quot;:false,&quot;isAvailable&quot;:true,&quot;createdAt&quot;:&quot;2025-07-26T04:39:24.591Z&quot;,&quot;updatedAt&quot;:&quot;2025-07-26T04:39:24.591Z&quot;,&quot;_id&quot;:&quot;68845bfc6da93ce5109eea4f&quot;},{&quot;name&quot;:&quot;Veg Biryani&quot;,&quot;description&quot;:&quot;Veg biryani&quot;,&quot;price&quot;:2,&quot;category&quot;:&quot;Mains&quot;,&quot;imageUrl&quot;:&quot;https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.binjalsvegkitchen.com%2Fwp-content%2Fuploads%2F2015%2F03%2FHyderabadi-Veg-Biryani-L1-WP-WT-S.jpg&amp;f=1&amp;nofb=1&amp;ipt=d3458c5290b87bdd6cb43f9e045ef2fc83f7c9ebe30d783ea736d2196533255a&quot;,&quot;isVegetarian&quot;:true,&quot;isVegan&quot;:false,&quot;isGlutenFree&quot;:false,&quot;isAvailable&quot;:true,&quot;createdAt&quot;:&quot;2025-07-26T04:39:56.954Z&quot;,&quot;updatedAt&quot;:&quot;2025-07-26T04:39:56.954Z&quot;,&quot;_id&quot;:&quot;68845c1c6da93ce5109eea55&quot;},{&quot;name&quot;:&quot;Dessert&quot;,&quot;description&quot;:&quot;Dessert&quot;,&quot;price&quot;:3,&quot;category&quot;:&quot;Desserts&quot;,&quot;imageUrl&quot;:&quot;https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.DQQU0vnQAaG_XM_K8q3P6gHaHa%3Fpid%3DApi&amp;f=1&amp;ipt=d0b6a1511bc3638edb0d1fd88dcbc62dd4ee08fecc387c32a6e130f508c4f493&amp;ipo=images&quot;,&quot;isVegetarian&quot;:true,&quot;isVegan&quot;:false,&quot;isGlutenFree&quot;:false,&quot;isAvailable&quot;:true,&quot;createdAt&quot;:&quot;2025-07-26T04:40:30.705Z&quot;,&quot;updatedAt&quot;:&quot;2025-07-26T04:40:30.705Z&quot;,&quot;_id&quot;:&quot;68845c3e6da93ce5109eea5b&quot;}]},{&quot;geometry&quot;:{&quot;type&quot;:&quot;Point&quot;,&quot;coordinates&quot;:[-63.5752,44.6488]},&quot;_id&quot;:&quot;68862560275cfa71a26b3e1e&quot;,&quot;_averageRating&quot;:0,&quot;name&quot;:&quot;TestRestaurant_1&quot;,&quot;cuisine&quot;:&quot;Mediterranean&quot;,&quot;location&quot;:&quot;900 upper waterfront Street, Halifax, NS&quot;,&quot;priceRange&quot;:3,&quot;ownerId&quot;:&quot;688441794ba2b4978efc47ec&quot;,&quot;description&quot;:&quot;special in Mediterranean food&quot;,&quot;phoneNumber&quot;:&quot;+1-229-363-1410&quot;,&quot;capacity&quot;:28,&quot;isActive&quot;:true,&quot;menuItems&quot;:[],&quot;createdAt&quot;:&quot;2025-07-27T13:10:56.853Z&quot;,&quot;updatedAt&quot;:&quot;2025-07-27T13:10:56.853Z&quot;,&quot;__v&quot;:0}],&quot;pagination&quot;:{&quot;page&quot;:1,&quot;limit&quot;:2,&quot;total&quot;:298,&quot;pages&quot;:149},&quot;filters&quot;:{&quot;radius&quot;:&quot;5&quot;}}</code></pre>
+				
+				
+			</details></td>
+	</tr>
+	
+	
+	<tr>
+		<th scope="row">Evidence</th>
+		<td><pre><code>Access-Control-Allow-Origin: *</code></pre></td>
+	</tr>
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>Ensure that sensitive data is not available in an unauthenticated manner (using IP address white-listing, for instance).</p>
+
+<p>Configure the &quot;Access-Control-Allow-Origin&quot; HTTP header to a more restrictive set of domains, or remove all CORS headers entirely, to allow the web browser to enforce the Same Origin Policy (SOP) in a more restrictive manner.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+							</ol>
+						</li>
+						
+						<li class="alerts--site-li">
+							<h4>
+								<span class="site">http://localhost:4200</span> <span>(1)</span>
+							</h4>
+							<ol>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-4">Missing Anti-clickjacking Header</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:4200/</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				<li>
+					<span><a href="https://owasp.org/www-project-web-security-testing-guide/v42/4-Web_Application_Security_Testing/11-Client-side_Testing/09-Testing_for_Clickjacking">WSTG-v42-CLNT-09</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">OWASP_2021_A05</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html">OWASP_2017_A06</a></span> 
+				</li>
+				<li>
+					<span><a href="https://cwe.mitre.org/data/definitions/1021.html">CWE-1021</a></span> 
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>The response does not protect against &#39;ClickJacking&#39; attacks. It should include either Content-Security-Policy with &#39;frame-ancestors&#39; directive or X-Frame-Options.</p>
+ </td>
+	</tr>
+	
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (229 bytes)</summary>
+				
+				<pre><code>GET http://localhost:4200/ HTTP/1.1
+host: localhost:4200
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+pragma: no-cache
+cache-control: no-cache
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (188 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 200 OK
+Vary: Origin
+Content-Type: text/html
+Cache-Control: no-cache
+Date: Sun, 27 Jul 2025 21:50:28 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 735
+
+</code></pre>
+				
+				
+			</details> <details class="response-body" open="open">
+				<summary>Response body (735 bytes)</summary>
+				
+				<pre><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;script type=&quot;module&quot; src=&quot;/@vite/client&quot;&gt;&lt;/script&gt;
+
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;DinebookFrontend&lt;/title&gt;
+  &lt;base href=&quot;/&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;link rel=&quot;icon&quot; type=&quot;image/x-icon&quot; href=&quot;favicon.ico&quot;&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&amp;amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/icon?family=Material+Icons&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;&lt;/head&gt;
+&lt;body class=&quot;mat-typography&quot;&gt;
+  &lt;app-root&gt;&lt;/app-root&gt;
+&lt;script src=&quot;polyfills.js&quot; type=&quot;module&quot;&gt;&lt;/script&gt;&lt;script src=&quot;main.js&quot; type=&quot;module&quot;&gt;&lt;/script&gt;&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Parameter</th>
+		<td><pre><code>x-frame-options</code></pre></td>
+	</tr>
+	
+	
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>Modern Web browsers support the Content-Security-Policy and X-Frame-Options HTTP headers. Ensure one of them is set on all web pages returned by your site/app.</p>
+
+<p>If you expect the page to be framed only by pages on your server (e.g. it&#39;s part of a FRAMESET) then you&#39;ll want to use SAMEORIGIN, otherwise if you never expect the page to be framed, you should use DENY. Alternatively consider implementing Content Security Policy&#39;s &quot;frame-ancestors&quot; directive.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+							</ol>
+						</li>
+						
+					</ol>
+				</li>
+				
+				<li id="alerts--risk-2-confidence-1">
+					<h3>
+						<span>Risk</span>=<span
+							class="risk-level">Medium</span>, <span>Confidence</span>=<span
+							class="confidence-level">Low</span> <span>(1)</span>
+					</h3>
+					<ol>
+						
+						
+						
+						<li class="alerts--site-li">
+							<h4>
+								<span class="site">http://localhost:4200</span> <span>(1)</span>
+							</h4>
+							<ol>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-3">Hidden File Found</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:4200/.hg</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				<li>
+					<span><a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">OWASP_2021_A05</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html">OWASP_2017_A06</a></span> 
+				</li>
+				<li>
+					 <span>POLICY_QA_FULL = </span>
+				</li>
+				<li>
+					<span><a href="https://cwe.mitre.org/data/definitions/538.html">CWE-538</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/www-project-web-security-testing-guide/v42/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/05-Enumerate_Infrastructure_and_Application_Admin_Interfaces">WSTG-v42-CONF-05</a></span> 
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>A sensitive file was identified as accessible or available. This may leak administrative, configuration, or credential information which can be leveraged by a malicious individual to further attack the system or conduct social engineering efforts.</p>
+ </td>
+	</tr>
+	
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (232 bytes)</summary>
+				
+				<pre><code>GET http://localhost:4200/.hg HTTP/1.1
+host: localhost:4200
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+pragma: no-cache
+cache-control: no-cache
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (188 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 200 OK
+Vary: Origin
+Content-Type: text/html
+Cache-Control: no-cache
+Date: Sun, 27 Jul 2025 21:50:35 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 735
+
+</code></pre>
+				
+				
+			</details> <details class="response-body" open="open">
+				<summary>Response body (735 bytes)</summary>
+				
+				<pre><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;script type=&quot;module&quot; src=&quot;/@vite/client&quot;&gt;&lt;/script&gt;
+
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;DinebookFrontend&lt;/title&gt;
+  &lt;base href=&quot;/&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;link rel=&quot;icon&quot; type=&quot;image/x-icon&quot; href=&quot;favicon.ico&quot;&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&amp;amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/icon?family=Material+Icons&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;&lt;/head&gt;
+&lt;body class=&quot;mat-typography&quot;&gt;
+  &lt;app-root&gt;&lt;/app-root&gt;
+&lt;script src=&quot;polyfills.js&quot; type=&quot;module&quot;&gt;&lt;/script&gt;&lt;script src=&quot;main.js&quot; type=&quot;module&quot;&gt;&lt;/script&gt;&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+				
+				
+			</details></td>
+	</tr>
+	
+	
+	<tr>
+		<th scope="row">Evidence</th>
+		<td><pre><code>HTTP/1.1 200 OK</code></pre></td>
+	</tr>
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>Consider whether or not the component is actually required in production, if it isn&#39;t then disable it. If it is then ensure access to it requires appropriate authentication and authorization, or limit exposure to internal systems or specific source IPs, etc.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+							</ol>
+						</li>
+						
+					</ol>
+				</li>
+				  
+				 
+				
+				
+				
+				
+				<li id="alerts--risk-1-confidence-2">
+					<h3>
+						<span>Risk</span>=<span
+							class="risk-level">Low</span>, <span>Confidence</span>=<span
+							class="confidence-level">Medium</span> <span>(1)</span>
+					</h3>
+					<ol>
+						
+						
+						
+						<li class="alerts--site-li">
+							<h4>
+								<span class="site">http://localhost:4200</span> <span>(1)</span>
+							</h4>
+							<ol>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-5">X-Content-Type-Options Header Missing</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:4200/favicon.ico</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				<li>
+					<span><a href="https://cwe.mitre.org/data/definitions/693.html">CWE-693</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/Top10/A05_2021-Security_Misconfiguration/">OWASP_2021_A05</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration.html">OWASP_2017_A06</a></span> 
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>The Anti-MIME-Sniffing header X-Content-Type-Options was not set to &#39;nosniff&#39;. This allows older versions of Internet Explorer and Chrome to perform MIME-sniffing on the response body, potentially causing the response body to be interpreted and displayed as a content type other than the declared content type. Current (early 2014) and legacy versions of Firefox will use the declared content type (if one is set), rather than performing MIME-sniffing.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Other info</th>
+		<td> 
+<p>This issue still applies to error type pages (401, 403, 500, etc.) as those pages are often still affected by injection issues, in which case there is still concern for browsers sniffing pages away from their actual content type.</p>
+
+<p>At &quot;High&quot; threshold this scan rule will not alert on client or server error responses.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (273 bytes)</summary>
+				
+				<pre><code>GET http://localhost:4200/favicon.ico HTTP/1.1
+host: localhost:4200
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+pragma: no-cache
+cache-control: no-cache
+referer: http://localhost:4200/
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (270 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 200 OK
+Vary: Origin
+Content-Length: 15086
+Content-Type: image/x-icon
+Last-Modified: Sat, 26 Jul 2025 23:11:06 GMT
+ETag: W/&quot;15086-1753571466313&quot;
+Cache-Control: no-cache
+Date: Sun, 27 Jul 2025 21:50:28 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+</code></pre>
+				
+				
+			</details> <details class="response-body">
+				<summary>Response body (15086 bytes)</summary>
+				
+				<pre><code>    00     ¨%  6          ¨  Þ%       h  6  (   0   `           $                                                                                                          Ið&#39;J
+ó²J
+ó²Ið&#39;                                                                                                                                                                        SòEôF	ôþH
+öÿL	õÿMòÿPóSò                                                                                                                                                        Ì ÏKïcDòéF	ôþH
+öÿL	õÿL	õÿQôÿQôÿTòîZðw÷                                                                                                                                            bîFE	ïÒF	ôþF	ôþF	ôþH
+öÿL	õÿL	õÿQôÿQôÿVòÿ\îÿcêØbîF                                                                                                                                Ið&#39;J
+ó²MòÿMòÿF	ôþF	ôþH
+öÿH
+öÿL	õÿQôÿQôÿVòÿYðÿaíÿféÿmæÿsâ»{ä*                                                                                                                SòSíQïùMòÿMòÿMòÿL	õÿL	õÿH
+öÿL	õÿL	õÿQôÿQôÿVòÿ\îÿféÿi	éÿqãÿvàÿ{Þÿ×Õ                                                                                                    KïcZîïVñÿVñÿVñÿVñÿPõÿPõÿPõÿPõÿPõÿQôÿQôÿVòÿYðÿaíÿféÿmæÿqãÿ{ÞÿÙÿ
+ÓÿÎí®ØX                                                                                                Zî\ñÿ\ñÿ\ñÿVñÿVñÿVöÿVöÿVöÿPõÿPõÿQôÿQôÿVòÿ\îÿaíÿi	éÿqãÿvàÿ{ÞÿÙÿ
+ÓÿÌÿÇ                                                                                                ð_ðù\ñÿ\ñÿ\ñÿ\öÿ\öÿVöÿVöÿVöÿVöÿVòÿVòÿYðÿaíÿféÿmæÿqãÿ{ÞÿÙÿ
+ÓÿÌÿÈüÕ                                                                                                    bñ±dñÿdñÿböÿ\öÿ\öÿ\öÿ\öÿ[õÿ[õÿ[õÿ[õÿaíÿaíÿi	éÿqãÿvàÿ{ÞÿÙÿ
+ÓÿÌÿ¡Ä¥                                                                                                        bîFgõÿgõÿe÷ÿböÿböÿböÿböÿaôÿaôÿ_òÿ_òÿaíÿi	éÿmæÿqãÿvàÿÙÿ
+ÓÿÌÿÈü³Ì:                                                                                                            ióØgõÿgõÿgõÿe÷ÿe÷ÿböÿböÿaôÿaôÿdñÿi	éÿmæÿqãÿvàÿ{ÞÿÙÿ
+ÓÿÌÿ ÆÕÌ Ï                                                                                                            hòQh÷h÷h÷h÷h÷h÷hòhòhòhòuæuæuæuæ	Õ	Õ	ÕÇ¦ÀE                                                                                                                                                                                                                                                                    ó7                                                                                                                                                                í&amp;                    Sò ð¿                                                                                                                                                                ðð
+                {ä*%ôýqî-                                                                                                                                                        éïùé                bîF&#39;õÿó¯                                                                                                                                                        òyð	~ÿóy*                {ñY&#39;õÿ%ôýð                                                                                                                                                ðñ	|ðð{ÿñ6                 öj¡)öÿ&#39;õÿñ¡                                                                                                                                                ð|ð	~ÿð{ÿñwK                ó¡)öÿ¡)öÿ&amp;ôó}õ                                        }õ ÷êôôôôôôíóíóçòçòßò¥Øñ¥Øñ®Íæ×¸                                        ð
+íéð{ÿòwÿï[                ó§+øÿ§+øÿ¡)öÿó                                            ó¯!õÿ!õÿ ðÿ ðÿéÿéÿäÿ¥Þÿ¥Þÿ®Õÿº Ð                                            ñlð	~ÿð{ÿòwÿñl                !ô¦¬,ùÿ§+øÿ§+øÿ&amp;ôó÷                                        ó7!õÿ ðÿ ðÿ!îÿéÿéÿäÿ¥Þÿ®Õÿ®Õÿ³Ì:                                        Ì Ïì
+Ûð	~ÿòwÿòwÿór{                !óº¬,ùÿ¬,ùÿ¬,ùÿ§+øÿó                                            ôÕ%ôý!îÿ!îÿéÿäÿ¥Þÿ­!Þÿ®Õÿ½$ØÊ                                            ï[ñÿð{ÿòwÿôrÿòy                %øÈ±-úÿ±-úÿ¬,ùÿ¬,ùÿ&amp;øäÌ Ï                                        ôo#ïÿ#ïÿ#ïÿ¤!èÿ¤!èÿ­!Þÿ­!Þÿµ#Úÿ¶Ël                                            ëÏñÿð	~ÿòwÿôrÿõn                %öØ´.ûÿ´.ûÿ±-úÿ¬,ùÿ¬,ùÿ öj                                        }õ&amp;ôó#ïÿ¦%íÿ¤!èÿ«$èÿ­!Þÿµ#Úÿ¸&quot;Õñ×¸                                        ïIðÿñÿð	~ÿòwÿôrÿõ k«                &amp;øä¸.üÿ´.ûÿ´.ûÿ±-úÿ±-úÿ&amp;øä                                            !ô¦¦%íÿ¦%íÿ«$èÿ±%äÿµ#Úÿµ#Úÿº Ð                                            îÁðÿñÿð	~ÿòwÿôrÿöoÅ                ³)ûë»/üÿ¸.üÿ¸.üÿ´.ûÿ´.ûÿ±-úÿ øS                                        ð)¦%íÿ«$èÿ«$èÿ±%äÿµ#Úÿ½&amp;ÜÿÀ!Õ*                                        ñ6íÿðÿñÿòÿó	|ÿôrÿöoÅ                ´,ùö¿/ýÿ»/üÿ»/üÿ¸.üÿµ.ýÿ´.ûÿ&#39;úÒ                                            ¨#óË±&#39;êÿ±%äÿ¹&#39;ãÿ½&amp;Üÿ½$ØÊ                                            í­íÿðÿðÿòÿó	|ÿòwÿòtÞ                ¼-üûÂ0ýÿ¿/ýÿ¿/ýÿ»/üÿ¸.üÿ¸.üÿµ.ýÿù=                                        §ìe±&#39;êÿ¹&#39;ãÿ¹&#39;ãÿ½&amp;ÜÿÂ!Õ]                                        í&amp;ìþíÿïÿðÿñÿó	|ÿó	|ÿñ	|ð            Ì ÏÆ0þÿÆ0þÿÂ0ýÿÂ0ýÿ¿/ýÿ¿/ýÿ»/üÿ¸.üÿ%øÈ                                        Ì Ï»&#39;ìâ¹&#39;ãÿ¿*äþÂ&#39;Ûí÷                                        í­ìþîÿïÿðÿñÿòÿó	|ÿó	|ÿÌ Ï        ðÌ0þÿÊ0ýÿÆ0þÿÆ0þÿÂ0ýÿ¿/ýÿ¿/ýÿ»/üÿµ.ýÿù*                                        ²#ã¿*äþÃ*áþº Ð                                        éê¡øìþîÿïÿðÿñÿòÿòÿó	|ÿð        ó7Ï0þÿÌ0þÿÊ0ýÿÆ0þÿÆ0þÿÂ0ýÿÂ0ýÿ¿/ýÿ¿/ýÿ¢#úº                                        ¸ Ø ¿*äþÃ*áþ¸ Ø                                         ë¢ì£ÿíÿîÿðÿðÿðÿñÿñÿòÿí&amp;         øSÒ0þÿÏ0þÿÌ0þÿÌ0þÿÈ0þÿÆ0þÿÂ0ýÿÂ0ýÿ¿/ýÿ¼-üûð                                        ½$ØÊ½$ØÊ                                        ×¸é!¬ðì£ÿíÿîÿðÿïÿðÿðÿñÿñÿñ6        ôoÖ1ÿÿÒ0þÿÏ0þÿÏ0þÿÌ0þÿÈ0þÿÆ0þÿÆ0þÿÂ0ýÿÂ0ýÿ!ô¦                                        ®ØXÂ!Õ]                                        é ¨ë ¬ÿì§ÿíÿîÿïÿïÿïÿðÿðÿñÿïI        øÙ1ÿÿÖ1ÿÿÒ0þÿÒ0þÿÏ0þÿÌ0þÿÊ0ýÿÆ0þÿÆ0þÿÂ0ýÿ¼+ûö}õ                                                                                ð
+é!¬ðë ¬ÿì§ÿì£ÿíÿîÿðÿðÿïÿðÿðÿï[        ¡ ÷Ù1ÿÿÙ1ÿÿÖ1ÿÿÔ0þÿÒ0þÿÏ0þÿÌ0þÿÊ0ýÿÊ0ýÿÆ0þÿÆ0þÿ¡ ÷                                                                                è!«zê&quot;²ÿê!¯ÿëªÿì£ÿíÿîÿîÿïÿðÿïÿðÿñl        ¬&quot;ö®Ù1ÿÿÙ1ÿÿÙ1ÿÿÖ1ÿÿÖ1ÿÿÒ0þÿÏ0þÿÌ0þÿÌ0þÿÊ0ýÿÈ0þÿ¼+ûö÷                                                                        Ì Ïæ%µäé#¶ÿê!¯ÿë ¬ÿì§ÿíÿíÿîÿîÿïÿðÿïÿð|        ¢#úºÙ1ÿÿÙ1ÿÿÙ1ÿÿÙ1ÿÿÖ1ÿÿÔ0þÿÒ0þÿÏ0þÿÏ0þÿÌ0þÿÊ0ýÿÊ0ýÿ³!ï                                                                        å ºmè%ºÿé#¶ÿê&quot;²ÿë ¬ÿì§ÿì£ÿíÿíÿîÿîÿïÿðÿð        ¨#óËÙ1ÿÿÙ1ÿÿÙ1ÿÿÙ1ÿÿÙ1ÿÿÖ1ÿÿÖ1ÿÿÒ0þÿÒ0þÿÏ0þÿÏ0þÿÌ0þÿ¼*öí                                                                        å&amp;¼Öç&#39;½ÿè%ºÿê&quot;²ÿê!¯ÿëªÿì§ÿì£ÿíÿíÿîÿîÿïÿð        ÷ø¼+ûöÙ1ÿÿÙ1ÿÿÙ1ÿÿÙ1ÿÿÙ1ÿÿÖ1ÿÿÒ0þÿÒ0þÿÏ0þÿÐ0üþÐ0üþ§ìe                                                                å$²Oæ&#39;Áþç&#39;½ÿè%ºÿé#¶ÿê&quot;²ÿë ¬ÿëªÿì§ÿì£ÿì£ÿíÿîÙñlð
+                    ôo³)ûëÙ1ÿÿÙ1ÿÿÙ1ÿÿÙ1ÿÿÖ1ÿÿÔ0þÿÓ0üÿÒ0þÿÐ0üþ¾(ôã                                                                å&amp;¼Öå)Æÿæ&#39;Áþç&#39;½ÿé#¶ÿê&quot;²ÿê!¯ÿë ¬ÿëªÿì§ÿîÙíaÌ Ï                                     øSµ&amp;üÝÖ1ÿÿÙ1ÿÿÙ1ÿÿ×1þÿÔ0þÿÔ0þÿÓ0üÿÐ0üþ®ØX                                                        ìª:ä+Ìÿå)Æÿæ&#39;Áþç&#39;½ÿè%ºÿé#¶ÿê&quot;²ÿê!¯ÿë¨ÆïI                                                        ù=³%ùÐÔ0þÿÙ1ÿÿ×1þÿ×1þÿÔ0þÿÓ0üÿ»&#39;ìâ                                                        æ&#39;ÁÅä+Ìÿå)Æÿå)Æÿæ&#39;Áþè%ºÿé#¶ÿë¨Æìª:                                                                        ð)µ$öÀÓ0üÿ×1þÿ×1þÿ×1þÿÓ0üÿ³Ì:                                                ã&quot;µ-ã,Òÿä+Ìÿä+Ìÿå)Æÿæ&#39;Áþê®´í&amp;                                                                                        Õ¬&quot;ö®Ð0üþ×1þÿÖ1ûÿÆ&amp;ìÊ                                                å&#39;Ä¹ã,Òÿã,Òÿå)Èõç ¸ é                                                                                                        ÷³!ïÎ+õóÖ1ûÿÀ!Õ*                                        í$¿â-Öûã+Îðç ¸ ×¸                                                                                                                        Ì ÏÆ#â}Ê$ßx                                        å ºmå ºmÌ Ï                                                                ÿÿþÿÿ  ÿÿøÿÿ  ÿÿðÿÿ  ÿÿÀÿÿ  ÿÿ  ÿÿ  ÿü  ?ÿ  ÿø  ÿ  ÿð  ÿ  ÿø  ÿ  ÿø  ÿ  ÿü  ?ÿ  ÿü  ?ÿ  ÿþ  ÿ  ÿÿÿÿÿÿ  ÿÿÿÿÿÿ  ïÿÿÿÿ÷  ïÿÿÿÿ÷  çÿÿÿÿç  çÿÿÿÿç  ãÿÿÿÿç  ÃÿÀÿÇ  ÁÿÀÿÇ  Áÿàÿ  Àÿàÿ  Àÿðÿ  Àÿðÿ  Àðþ  Àøþ  À?øü  À?ü?ü  Àü?ø  Àü?ø  Àþð  Àþð  Àÿÿà  ÿÿà  ÿÿà  ÿÿÀ  ÿÿÀ  ÿÿ  Àÿÿ  ø ÿÿ   þ ÿÿ   ÿþÿ  ÿàþÿ  ÿø?üÿ  ÿþ?üÿ  ÿÿÿÿÿÿ  (       @                                                                                     Jò&#39;I	õµI	õµJò&#39;                                                                                                        \ðDòF	ôøH
+öÿL	õÿQóûUòvó                                                                                        l ÿF
+îjF	ðêDóÿH
+öÿL	õÿOôÿSóÿXðÿbëîk	åwë                                                                            RîKPîÖLñÿLñÿL	õÿH
+öÿL	õÿOôÿSóÿ]îÿféÿpãÿzÞÙ	ÕU                                                                    Xì¢YîÿUñÿUñÿPõÿPõÿPõÿOôÿSóÿXðÿbëÿkæÿtáÿ~Ûÿ
+ÒÿÈ                                                                \í^ñÿ^ñÿZõÿZõÿV÷ÿV÷ÿVóÿVòÿ]îÿféÿpãÿyÞÿ	×ÿÍÿ¢Âq                                                                vófòöaôÿaôÿ]÷ÿ]÷ÿZõÿ]óÿ]óÿbëÿkæÿtáÿ~Ûÿ
+ÒÿÈöÍ¡                                                                    hó¬gõÿgõÿcøÿcøÿbôÿbôÿfïÿlêÿq
+åÿyÞÿ	×ÿÍÿ¢Å                                                                        gñ%h÷ch÷ch÷ceô`g÷^kñ[kñ[xíY~ßW~ßW	ÒUÉU±Ä                                            ñ                                                                                                        Í¡            \ðñ                                                                                                        ï~ì        yò(%ôö\ð                                                                                                ìï
+êõ
+z        zïA(õÿï                                                                                                îlñ	}ÿóv)        xíY£*÷ÿ%öíë                        l ÿøªó®ï­éªéªâ§ ×¦©Ðã «                        ã «ïÞðzÿòr:        ñp¨+øÿ£*÷ÿõ}                             ÷¾ ñÿ ñÿëÿçÿ¡ßÿª×ÿ±Í´                            ñyZñ	}ÿñwÿõsI        ò¯,ùÿ¨+øÿ%öíÝ Á                         úT&quot;ñÿ&quot;ñÿ!êÿ¡åÿ©Ýÿ±Õÿ½ ÍG                            ðÑðzÿótÿñyZ        ó³.úÿ¯,ùÿ«-ùÿ&quot;øi                            $õá#îÿ!êÿ¨!äÿ°&quot;Üÿ·!ÔàÝ Á                        ëKñÿñ	}ÿótÿõ lj         õ®·.ûÿ³.úÿ¯,ùÿ$õá                            î¥$îÿ©$ëü¯$âÿ·%ßÿÀ#Ó                            ëÄðÿñ	}ÿótÿõ mz        #ö¿¼/ýÿ¸/üÿ·.ûÿ³.úÿ úT                        vó©$ëü¯%èÿ·%ßÿ»%Ùù±Ä                        ê;ïÿðÿñ	}ÿótÿôq        ¡%ùÌÂ0ýÿ¿/ýÿ¸/üÿ¸/üÿ)úÕ                            ©!é·´(çÿ·%ßÿ½%Ô³                            í·ïÿðÿñÿózÿôt        ª&amp;øÝÇ0ýÿÂ0ýÿ¿/ýÿ¼/ýÿ¸/üÿ ù&gt;                        ª#äBº*æÿÀ)àÿ½ ÍG                        í¡*ëýïÿðÿñÿñ	}ÿòz°        ±&#39;úéË0þÿÇ0ýÿÂ0ýÿ¿/ýÿ¿/ýÿ¡%ùÌ                            »(âÞÁ(ÛÞ                            ì¡«íÿïÿðÿðÿñÿóÁ        º*ûóÐ/þÿË0þÿÈ1þÿÅ0þÿÂ0ýÿ¼/ýÿ ô+                        »$ÝÀ#Ó                        æªë ¨ùíÿîÿïÿðÿðÿðÑ        Ä-ýûÔ1ÿÿÐ/þÿÎ1þÿË0þÿÇ0ýÿÂ0ýÿ¤%ø¼                        ÝÅ¤ê                        ê ªë«ÿí¢ÿîÿïÿïÿðÿðâ        Ð/þÿÙ1ÿÿÔ1ÿÿÒ1þÿÎ1þÿË0þÿÇ0ýÿÄ-ýûñ                                                á¶è#³õê!¯ÿì§ÿíÿîÿïÿïÿðï        Ö1ÿÿÙ1ÿÿÙ1ÿÿÖ1ÿÿÒ1þÿÎ1þÿË0þÿÊ0üÿ­$õ«                                                è#±è#·ÿê!¯ÿì§ÿí¢ÿíÿîÿïÿïÿÝ Á¤êÃ+ûùÙ1ÿÿÙ1ÿÿÙ1ÿÿ×0ÿÿÒ1þÿÐ/þÿÎ1þÿÃ+ûù¤ê                                        ÝÅæ&amp;½ñè%ºÿé&quot;´ÿë«ÿì§ÿí¢ÿíÿîÿïÝì        &quot;új¸(ýèÙ1ÿÿÙ1ÿÿ×0ÿÿÔ1ÿÿÒ1þÿÎ1þÿ²!ð                                        è$¶å)Åÿç&#39;¾ÿè#·ÿê!¯ÿë«ÿì§ÿíÕì`Ý Á                     ùYµ%üÝ×0ÿÿ×0ÿÿÔ1ÿÿÔ0ýÿÉ-øöl ÿ                                Ý Áå(Åêå)Åÿç&#39;¾ÿè%ºÿé&quot;´ÿë¨ÌîL                                         ù&gt;·%øÐÔ0ýÿÔ1ÿÿÔ0ýÿ¾#è                                å#»tä,Ïýå*Éÿæ&amp;Âüë °Âê;                                                         ô+¼%ò¿Ò/ûýÎ+óñ                                ã)Ìää,Ïýè!¹¹í¡*                                                                        ÂàÈ$é°Ê&#39;ßH                        â%¹&gt;ä$À¢á¶                                        ÿþÿÿøÿÿðÿÿÀÿÿ  ÿÿÿÿÿÿÿÿÿÿÿÿÿÿÿßÿÿÿßÿÿûÏÿÿûÏðóÏðóøãøãøÃü?Áü?þþÿþþ?ü?üàøøøþøÿñÿÿï÷ÿ(                                                            @ì(FõµNô¶Wó)                                        QäJíIóøJ
+öÿQóÿ_ìûsãÎ                                [ïÊXñÿTõÿRôÿVòÿiçÿ|ÝÿÊÂ                                còydõÿa÷ÿ_ôÿeîÿrâÿ
+Ôÿ¥Ài                    +ÿ        ]èg÷&gt;f÷&lt;gò9vè8Ý5
+Í3¿ ¿        ÿ     wîyï|                                                î\ÿ ò($ôé  ÿ          ÿyõgëfåb Ô^ÿ ÿ        ÿ ÿï
+~Òõ póB¨,÷ÿõj             ôÎ íÿ âÿ°ÐÅ            îKñyÿó p)ñ^³.ùÿ&#39;øá            ñj£$ìÿ¯&quot;ßÿ¿#Í`            îÅòwÿö k9ôw¼/ûÿ¶/üÿ#ùX        f ÿ­&amp;éíº%ÜïÛ$¶        ë?ïÿó	{ÿñtK öÇ0ýÿ¿0ýÿ¤(ûØ            ³#â À$Õ            ê¾îÿóÿòz`  ù§Ð0þÿÈ1þÿÂ0ýÿ÷B        º&quot;Ý%Ä&#39;Ë&#39;        ç&quot;¨5ê¦þîÿðÿòu¥&quot;øºÙ1ÿÿÒ0þÿË1þÿ¯&amp;øÎ                        é#±·ê «ÿíÿïÿî÷a½)þðÙ1ÿÿÓ1þÿÍ0üþª ê0                ë!·&#39;è(¾ûê&quot;±ÿì§ÿîÒðD        üZº%ùÝÕ0ýÿÀ&amp;ïÃ                å%¿²æ(Äþé®ÏïP                        °îJÅ&amp;íËÉ(×        á-´å$Áºê«=                þ  ø  ð  ø  ÿÿ  ÿÿ  ¿ý  ¼=  y  y  q  ñ  à  á  ãÇ  ûß  </code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Parameter</th>
+		<td><pre><code>x-content-type-options</code></pre></td>
+	</tr>
+	
+	
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>Ensure that the application/web server sets the Content-Type header appropriately, and that it sets the X-Content-Type-Options header to &#39;nosniff&#39; for all web pages.</p>
+
+<p>If possible, ensure that the end user uses a standards-compliant and modern web browser that does not perform MIME-sniffing at all, or that can be directed by the web application/web server to not perform MIME-sniffing.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+							</ol>
+						</li>
+						
+					</ol>
+				</li>
+				
+				
+				  
+				 
+				
+				
+				
+				
+				<li id="alerts--risk-0-confidence-2">
+					<h3>
+						<span>Risk</span>=<span
+							class="risk-level">Informational</span>, <span>Confidence</span>=<span
+							class="confidence-level">Medium</span> <span>(2)</span>
+					</h3>
+					<ol>
+						
+						
+						
+						<li class="alerts--site-li">
+							<h4>
+								<span class="site">http://localhost:4200</span> <span>(2)</span>
+							</h4>
+							<ol>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-6">Information Disclosure - Sensitive Information in URL</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:4200/?token=jh8fK1D5_jFB</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				<li>
+					<span><a href="https://cwe.mitre.org/data/definitions/598.html">CWE-598</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/">OWASP_2021_A01</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure.html">OWASP_2017_A03</a></span> 
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>The request appeared to contain sensitive information leaked in the URL. This can violate PCI and most organizational compliance policies. You can configure the list of strings for this check to add or remove values specific to your environment.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Other info</th>
+		<td> 
+<p>The URL contains potentially sensitive information. The following string was found via the pattern: token</p>
+
+<p>token</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (453 bytes)</summary>
+				
+				<pre><code>GET http://localhost:4200/?token=jh8fK1D5_jFB HTTP/1.1
+host: localhost:4200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Sec-WebSocket-Version: 13
+Origin: http://localhost:4200
+Sec-WebSocket-Protocol: vite-hmr
+Sec-WebSocket-Key: o12xH950o82fbOzUn5s5eg==
+Connection: keep-alive, Upgrade
+Pragma: no-cache
+Cache-Control: no-cache
+Upgrade: websocket
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (163 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: zXEq3l1rVprZca4XYUoELSZ2EWA=
+Sec-WebSocket-Protocol: vite-hmr
+
+</code></pre>
+				
+				
+			</details> <details class="response-body" open="open">
+				<summary>Response body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Parameter</th>
+		<td><pre><code>token</code></pre></td>
+	</tr>
+	
+	<tr>
+		<th scope="row">Evidence</th>
+		<td><pre><code>token</code></pre></td>
+	</tr>
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>Do not pass sensitive information in URIs.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-8">Modern Web Application</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:4200/</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>The application appears to be a modern web application. If you need to explore it automatically then the Ajax Spider may well be more effective than the standard one.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Other info</th>
+		<td> 
+<p>No links have been found while there are scripts, which is an indication that this is a modern web application.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (229 bytes)</summary>
+				
+				<pre><code>GET http://localhost:4200/ HTTP/1.1
+host: localhost:4200
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36
+pragma: no-cache
+cache-control: no-cache
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (188 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 200 OK
+Vary: Origin
+Content-Type: text/html
+Cache-Control: no-cache
+Date: Sun, 27 Jul 2025 21:50:28 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 735
+
+</code></pre>
+				
+				
+			</details> <details class="response-body" open="open">
+				<summary>Response body (735 bytes)</summary>
+				
+				<pre><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;script type=&quot;module&quot; src=&quot;/@vite/client&quot;&gt;&lt;/script&gt;
+
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;DinebookFrontend&lt;/title&gt;
+  &lt;base href=&quot;/&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+  &lt;link rel=&quot;icon&quot; type=&quot;image/x-icon&quot; href=&quot;favicon.ico&quot;&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&amp;amp;display=swap&quot; rel=&quot;stylesheet&quot;&gt;
+  &lt;link href=&quot;https://fonts.googleapis.com/icon?family=Material+Icons&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;styles.css&quot;&gt;&lt;/head&gt;
+&lt;body class=&quot;mat-typography&quot;&gt;
+  &lt;app-root&gt;&lt;/app-root&gt;
+&lt;script src=&quot;polyfills.js&quot; type=&quot;module&quot;&gt;&lt;/script&gt;&lt;script src=&quot;main.js&quot; type=&quot;module&quot;&gt;&lt;/script&gt;&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+				
+				
+			</details></td>
+	</tr>
+	
+	
+	<tr>
+		<th scope="row">Evidence</th>
+		<td><pre><code>&lt;script type=&quot;module&quot; src=&quot;/@vite/client&quot;&gt;&lt;/script&gt;</code></pre></td>
+	</tr>
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>This is an informational alert and so no changes are required.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+							</ol>
+						</li>
+						
+					</ol>
+				</li>
+				
+				<li id="alerts--risk-0-confidence-1">
+					<h3>
+						<span>Risk</span>=<span
+							class="risk-level">Informational</span>, <span>Confidence</span>=<span
+							class="confidence-level">Low</span> <span>(1)</span>
+					</h3>
+					<ol>
+						
+						
+						
+						<li class="alerts--site-li">
+							<h4>
+								<span class="site">http://localhost:4200</span> <span>(1)</span>
+							</h4>
+							<ol>
+								
+								<li>
+									<h5>
+										<a
+											href="#alert-type-7">Information Disclosure - Suspicious Comments</a> <span>(1)</span>
+									</h5>
+									<ol>
+										<li><details>
+												<summary>
+													<span class="request-method-n-url">GET http://localhost:4200/@fs/C:/Users/saiku/OneDrive/Desktop/MACS_SummerTerm/CSCI5709_AdvTopicsInWebDev/Assignment3/DineBook_Web_Group05_CSCI5709_S25/dinebook-frontend/.angular/cache/20.0.4/dinebook-frontend/vite/deps/zone__js.js?v=5616ab89</span>
+												</summary>
+												
+<table class="alerts-table">
+	<tr>
+		<th scope="row">Alert tags</th>
+		<td>
+			<ul class="alert-tags-list">
+				<li>
+					<span><a href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/">OWASP_2021_A01</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/www-project-web-security-testing-guide/v42/4-Web_Application_Security_Testing/01-Information_Gathering/05-Review_Webpage_Content_for_Information_Leakage">WSTG-v42-INFO-05</a></span> 
+				</li>
+				<li>
+					<span><a href="https://owasp.org/www-project-top-ten/2017/A3_2017-Sensitive_Data_Exposure.html">OWASP_2017_A03</a></span> 
+				</li>
+				<li>
+					<span><a href="https://cwe.mitre.org/data/definitions/615.html">CWE-615</a></span> 
+				</li>
+			</ul>
+		</td>
+	</tr>
+	<tr>
+		<th scope="row">Alert description</th>
+		<td> 
+<p>The response appears to contain suspicious comments which may help an attacker.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Other info</th>
+		<td> 
+<p>The following pattern was used: \bUSER\b and was detected in likely comment: &quot;// `returnValue` attribute represents the message to show the user. When the event&quot;, see evidence field for the suspicious comment/snippet.</p>
+ </td>
+	</tr>
+	<tr>
+		<th scope="row">Request</th>
+		<td><details open="open">
+				<summary>Request line and header section (485 bytes)</summary>
+				
+				<pre><code>GET http://localhost:4200/@fs/C:/Users/saiku/OneDrive/Desktop/MACS_SummerTerm/CSCI5709_AdvTopicsInWebDev/Assignment3/DineBook_Web_Group05_CSCI5709_S25/dinebook-frontend/.angular/cache/20.0.4/dinebook-frontend/vite/deps/zone__js.js?v=5616ab89 HTTP/1.1
+host: localhost:4200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0
+Accept: */*
+Accept-Language: en-US,en;q=0.5
+Connection: keep-alive
+Referer: http://localhost:4200/polyfills.js
+
+</code></pre>
+				
+				
+			</details> <details class="request-body" open="open">
+				<summary>Request body (0 bytes)</summary>
+				
+				<pre><code></code></pre>
+				
+				
+			</details></td>
+	</tr>
+	<tr>
+		<th scope="row">Response</th>
+		<td><details open="open">
+				<summary>Status line and header section (259 bytes)</summary>
+				
+				<pre><code>HTTP/1.1 200 OK
+Vary: Origin
+Content-Type: text/javascript
+Cache-Control: max-age=31536000,immutable
+Etag: W/&quot;15fea-AsFb8sr1klm8R3nTdBJNRPJvM4Y&quot;
+Date: Sun, 27 Jul 2025 22:12:20 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+Content-Length: 90090
+
+</code></pre>
+				
+				
+			</details> <details class="response-body">
+				<summary>Response body (90090 bytes)</summary>
+				
+				<pre><code>import {
+  __spreadProps,
+  __spreadValues
+} from &quot;/@fs/C:/Users/saiku/OneDrive/Desktop/MACS_SummerTerm/CSCI5709_AdvTopicsInWebDev/Assignment3/DineBook_Web_Group05_CSCI5709_S25/dinebook-frontend/.angular/cache/20.0.4/dinebook-frontend/vite/deps/chunk-WDMUDEB6.js?v=5616ab89&quot;;
+
+// node_modules/zone.js/fesm2015/zone.js
+var global = globalThis;
+function __symbol__(name) {
+  const symbolPrefix = global[&quot;__Zone_symbol_prefix&quot;] || &quot;__zone_symbol__&quot;;
+  return symbolPrefix + name;
+}
+function initZone() {
+  const performance = global[&quot;performance&quot;];
+  function mark(name) {
+    performance &amp;&amp; performance[&quot;mark&quot;] &amp;&amp; performance[&quot;mark&quot;](name);
+  }
+  function performanceMeasure(name, label) {
+    performance &amp;&amp; performance[&quot;measure&quot;] &amp;&amp; performance[&quot;measure&quot;](name, label);
+  }
+  mark(&quot;Zone&quot;);
+  class ZoneImpl {
+    static __symbol__ = __symbol__;
+    static assertZonePatched() {
+      if (global[&quot;Promise&quot;] !== patches[&quot;ZoneAwarePromise&quot;]) {
+        throw new Error(&quot;Zone.js has detected that ZoneAwarePromise `(window|global).Promise` has been overwritten.\nMost likely cause is that a Promise polyfill has been loaded after Zone.js (Polyfilling Promise api is not necessary when zone.js is loaded. If you must load one, do so before loading zone.js.)&quot;);
+      }
+    }
+    static get root() {
+      let zone = ZoneImpl.current;
+      while (zone.parent) {
+        zone = zone.parent;
+      }
+      return zone;
+    }
+    static get current() {
+      return _currentZoneFrame.zone;
+    }
+    static get currentTask() {
+      return _currentTask;
+    }
+    static __load_patch(name, fn, ignoreDuplicate = false) {
+      if (patches.hasOwnProperty(name)) {
+        const checkDuplicate = global[__symbol__(&quot;forceDuplicateZoneCheck&quot;)] === true;
+        if (!ignoreDuplicate &amp;&amp; checkDuplicate) {
+          throw Error(&quot;Already loaded patch: &quot; + name);
+        }
+      } else if (!global[&quot;__Zone_disable_&quot; + name]) {
+        const perfName = &quot;Zone:&quot; + name;
+        mark(perfName);
+        patches[name] = fn(global, ZoneImpl, _api);
+        performanceMeasure(perfName, perfName);
+      }
+    }
+    get parent() {
+      return this._parent;
+    }
+    get name() {
+      return this._name;
+    }
+    _parent;
+    _name;
+    _properties;
+    _zoneDelegate;
+    constructor(parent, zoneSpec) {
+      this._parent = parent;
+      this._name = zoneSpec ? zoneSpec.name || &quot;unnamed&quot; : &quot;&lt;root&gt;&quot;;
+      this._properties = zoneSpec &amp;&amp; zoneSpec.properties || {};
+      this._zoneDelegate = new _ZoneDelegate(this, this._parent &amp;&amp; this._parent._zoneDelegate, zoneSpec);
+    }
+    get(key) {
+      const zone = this.getZoneWith(key);
+      if (zone)
+        return zone._properties[key];
+    }
+    getZoneWith(key) {
+      let current = this;
+      while (current) {
+        if (current._properties.hasOwnProperty(key)) {
+          return current;
+        }
+        current = current._parent;
+      }
+      return null;
+    }
+    fork(zoneSpec) {
+      if (!zoneSpec)
+        throw new Error(&quot;ZoneSpec required!&quot;);
+      return this._zoneDelegate.fork(this, zoneSpec);
+    }
+    wrap(callback, source) {
+      if (typeof callback !== &quot;function&quot;) {
+        throw new Error(&quot;Expecting function got: &quot; + callback);
+      }
+      const _callback = this._zoneDelegate.intercept(this, callback, source);
+      const zone = this;
+      return function() {
+        return zone.runGuarded(_callback, this, arguments, source);
+      };
+    }
+    run(callback, applyThis, applyArgs, source) {
+      _currentZoneFrame = { parent: _currentZoneFrame, zone: this };
+      try {
+        return this._zoneDelegate.invoke(this, callback, applyThis, applyArgs, source);
+      } finally {
+        _currentZoneFrame = _currentZoneFrame.parent;
+      }
+    }
+    runGuarded(callback, applyThis = null, applyArgs, source) {
+      _currentZoneFrame = { parent: _currentZoneFrame, zone: this };
+      try {
+        try {
+          return this._zoneDelegate.invoke(this, callback, applyThis, applyArgs, source);
+        } catch (error) {
+          if (this._zoneDelegate.handleError(this, error)) {
+            throw error;
+          }
+        }
+      } finally {
+        _currentZoneFrame = _currentZoneFrame.parent;
+      }
+    }
+    runTask(task, applyThis, applyArgs) {
+      if (task.zone != this) {
+        throw new Error(&quot;A task can only be run in the zone of creation! (Creation: &quot; + (task.zone || NO_ZONE).name + &quot;; Execution: &quot; + this.name + &quot;)&quot;);
+      }
+      const zoneTask = task;
+      const { type, data: { isPeriodic = false, isRefreshable = false } = {} } = task;
+      if (task.state === notScheduled &amp;&amp; (type === eventTask || type === macroTask)) {
+        return;
+      }
+      const reEntryGuard = task.state != running;
+      reEntryGuard &amp;&amp; zoneTask._transitionTo(running, scheduled);
+      const previousTask = _currentTask;
+      _currentTask = zoneTask;
+      _currentZoneFrame = { parent: _currentZoneFrame, zone: this };
+      try {
+        if (type == macroTask &amp;&amp; task.data &amp;&amp; !isPeriodic &amp;&amp; !isRefreshable) {
+          task.cancelFn = void 0;
+        }
+        try {
+          return this._zoneDelegate.invokeTask(this, zoneTask, applyThis, applyArgs);
+        } catch (error) {
+          if (this._zoneDelegate.handleError(this, error)) {
+            throw error;
+          }
+        }
+      } finally {
+        const state = task.state;
+        if (state !== notScheduled &amp;&amp; state !== unknown) {
+          if (type == eventTask || isPeriodic || isRefreshable &amp;&amp; state === scheduling) {
+            reEntryGuard &amp;&amp; zoneTask._transitionTo(scheduled, running, scheduling);
+          } else {
+            const zoneDelegates = zoneTask._zoneDelegates;
+            this._updateTaskCount(zoneTask, -1);
+            reEntryGuard &amp;&amp; zoneTask._transitionTo(notScheduled, running, notScheduled);
+            if (isRefreshable) {
+              zoneTask._zoneDelegates = zoneDelegates;
+            }
+          }
+        }
+        _currentZoneFrame = _currentZoneFrame.parent;
+        _currentTask = previousTask;
+      }
+    }
+    scheduleTask(task) {
+      if (task.zone &amp;&amp; task.zone !== this) {
+        let newZone = this;
+        while (newZone) {
+          if (newZone === task.zone) {
+            throw Error(`can not reschedule task to ${this.name} which is descendants of the original zone ${task.zone.name}`);
+          }
+          newZone = newZone.parent;
+        }
+      }
+      task._transitionTo(scheduling, notScheduled);
+      const zoneDelegates = [];
+      task._zoneDelegates = zoneDelegates;
+      task._zone = this;
+      try {
+        task = this._zoneDelegate.scheduleTask(this, task);
+      } catch (err) {
+        task._transitionTo(unknown, scheduling, notScheduled);
+        this._zoneDelegate.handleError(this, err);
+        throw err;
+      }
+      if (task._zoneDelegates === zoneDelegates) {
+        this._updateTaskCount(task, 1);
+      }
+      if (task.state == scheduling) {
+        task._transitionTo(scheduled, scheduling);
+      }
+      return task;
+    }
+    scheduleMicroTask(source, callback, data, customSchedule) {
+      return this.scheduleTask(new ZoneTask(microTask, source, callback, data, customSchedule, void 0));
+    }
+    scheduleMacroTask(source, callback, data, customSchedule, customCancel) {
+      return this.scheduleTask(new ZoneTask(macroTask, source, callback, data, customSchedule, customCancel));
+    }
+    scheduleEventTask(source, callback, data, customSchedule, customCancel) {
+      return this.scheduleTask(new ZoneTask(eventTask, source, callback, data, customSchedule, customCancel));
+    }
+    cancelTask(task) {
+      if (task.zone != this)
+        throw new Error(&quot;A task can only be cancelled in the zone of creation! (Creation: &quot; + (task.zone || NO_ZONE).name + &quot;; Execution: &quot; + this.name + &quot;)&quot;);
+      if (task.state !== scheduled &amp;&amp; task.state !== running) {
+        return;
+      }
+      task._transitionTo(canceling, scheduled, running);
+      try {
+        this._zoneDelegate.cancelTask(this, task);
+      } catch (err) {
+        task._transitionTo(unknown, canceling);
+        this._zoneDelegate.handleError(this, err);
+        throw err;
+      }
+      this._updateTaskCount(task, -1);
+      task._transitionTo(notScheduled, canceling);
+      task.runCount = -1;
+      return task;
+    }
+    _updateTaskCount(task, count) {
+      const zoneDelegates = task._zoneDelegates;
+      if (count == -1) {
+        task._zoneDelegates = null;
+      }
+      for (let i = 0; i &lt; zoneDelegates.length; i++) {
+        zoneDelegates[i]._updateTaskCount(task.type, count);
+      }
+    }
+  }
+  const DELEGATE_ZS = {
+    name: &quot;&quot;,
+    onHasTask: (delegate, _, target, hasTaskState) =&gt; delegate.hasTask(target, hasTaskState),
+    onScheduleTask: (delegate, _, target, task) =&gt; delegate.scheduleTask(target, task),
+    onInvokeTask: (delegate, _, target, task, applyThis, applyArgs) =&gt; delegate.invokeTask(target, task, applyThis, applyArgs),
+    onCancelTask: (delegate, _, target, task) =&gt; delegate.cancelTask(target, task)
+  };
+  class _ZoneDelegate {
+    get zone() {
+      return this._zone;
+    }
+    _zone;
+    _taskCounts = {
+      &quot;microTask&quot;: 0,
+      &quot;macroTask&quot;: 0,
+      &quot;eventTask&quot;: 0
+    };
+    _parentDelegate;
+    _forkDlgt;
+    _forkZS;
+    _forkCurrZone;
+    _interceptDlgt;
+    _interceptZS;
+    _interceptCurrZone;
+    _invokeDlgt;
+    _invokeZS;
+    _invokeCurrZone;
+    _handleErrorDlgt;
+    _handleErrorZS;
+    _handleErrorCurrZone;
+    _scheduleTaskDlgt;
+    _scheduleTaskZS;
+    _scheduleTaskCurrZone;
+    _invokeTaskDlgt;
+    _invokeTaskZS;
+    _invokeTaskCurrZone;
+    _cancelTaskDlgt;
+    _cancelTaskZS;
+    _cancelTaskCurrZone;
+    _hasTaskDlgt;
+    _hasTaskDlgtOwner;
+    _hasTaskZS;
+    _hasTaskCurrZone;
+    constructor(zone, parentDelegate, zoneSpec) {
+      this._zone = zone;
+      this._parentDelegate = parentDelegate;
+      this._forkZS = zoneSpec &amp;&amp; (zoneSpec &amp;&amp; zoneSpec.onFork ? zoneSpec : parentDelegate._forkZS);
+      this._forkDlgt = zoneSpec &amp;&amp; (zoneSpec.onFork ? parentDelegate : parentDelegate._forkDlgt);
+      this._forkCurrZone = zoneSpec &amp;&amp; (zoneSpec.onFork ? this._zone : parentDelegate._forkCurrZone);
+      this._interceptZS = zoneSpec &amp;&amp; (zoneSpec.onIntercept ? zoneSpec : parentDelegate._interceptZS);
+      this._interceptDlgt = zoneSpec &amp;&amp; (zoneSpec.onIntercept ? parentDelegate : parentDelegate._interceptDlgt);
+      this._interceptCurrZone = zoneSpec &amp;&amp; (zoneSpec.onIntercept ? this._zone : parentDelegate._interceptCurrZone);
+      this._invokeZS = zoneSpec &amp;&amp; (zoneSpec.onInvoke ? zoneSpec : parentDelegate._invokeZS);
+      this._invokeDlgt = zoneSpec &amp;&amp; (zoneSpec.onInvoke ? parentDelegate : parentDelegate._invokeDlgt);
+      this._invokeCurrZone = zoneSpec &amp;&amp; (zoneSpec.onInvoke ? this._zone : parentDelegate._invokeCurrZone);
+      this._handleErrorZS = zoneSpec &amp;&amp; (zoneSpec.onHandleError ? zoneSpec : parentDelegate._handleErrorZS);
+      this._handleErrorDlgt = zoneSpec &amp;&amp; (zoneSpec.onHandleError ? parentDelegate : parentDelegate._handleErrorDlgt);
+      this._handleErrorCurrZone = zoneSpec &amp;&amp; (zoneSpec.onHandleError ? this._zone : parentDelegate._handleErrorCurrZone);
+      this._scheduleTaskZS = zoneSpec &amp;&amp; (zoneSpec.onScheduleTask ? zoneSpec : parentDelegate._scheduleTaskZS);
+      this._scheduleTaskDlgt = zoneSpec &amp;&amp; (zoneSpec.onScheduleTask ? parentDelegate : parentDelegate._scheduleTaskDlgt);
+      this._scheduleTaskCurrZone = zoneSpec &amp;&amp; (zoneSpec.onScheduleTask ? this._zone : parentDelegate._scheduleTaskCurrZone);
+      this._invokeTaskZS = zoneSpec &amp;&amp; (zoneSpec.onInvokeTask ? zoneSpec : parentDelegate._invokeTaskZS);
+      this._invokeTaskDlgt = zoneSpec &amp;&amp; (zoneSpec.onInvokeTask ? parentDelegate : parentDelegate._invokeTaskDlgt);
+      this._invokeTaskCurrZone = zoneSpec &amp;&amp; (zoneSpec.onInvokeTask ? this._zone : parentDelegate._invokeTaskCurrZone);
+      this._cancelTaskZS = zoneSpec &amp;&amp; (zoneSpec.onCancelTask ? zoneSpec : parentDelegate._cancelTaskZS);
+      this._cancelTaskDlgt = zoneSpec &amp;&amp; (zoneSpec.onCancelTask ? parentDelegate : parentDelegate._cancelTaskDlgt);
+      this._cancelTaskCurrZone = zoneSpec &amp;&amp; (zoneSpec.onCancelTask ? this._zone : parentDelegate._cancelTaskCurrZone);
+      this._hasTaskZS = null;
+      this._hasTaskDlgt = null;
+      this._hasTaskDlgtOwner = null;
+      this._hasTaskCurrZone = null;
+      const zoneSpecHasTask = zoneSpec &amp;&amp; zoneSpec.onHasTask;
+      const parentHasTask = parentDelegate &amp;&amp; parentDelegate._hasTaskZS;
+      if (zoneSpecHasTask || parentHasTask) {
+        this._hasTaskZS = zoneSpecHasTask ? zoneSpec : DELEGATE_ZS;
+        this._hasTaskDlgt = parentDelegate;
+        this._hasTaskDlgtOwner = this;
+        this._hasTaskCurrZone = this._zone;
+        if (!zoneSpec.onScheduleTask) {
+          this._scheduleTaskZS = DELEGATE_ZS;
+          this._scheduleTaskDlgt = parentDelegate;
+          this._scheduleTaskCurrZone = this._zone;
+        }
+        if (!zoneSpec.onInvokeTask) {
+          this._invokeTaskZS = DELEGATE_ZS;
+          this._invokeTaskDlgt = parentDelegate;
+          this._invokeTaskCurrZone = this._zone;
+        }
+        if (!zoneSpec.onCancelTask) {
+          this._cancelTaskZS = DELEGATE_ZS;
+          this._cancelTaskDlgt = parentDelegate;
+          this._cancelTaskCurrZone = this._zone;
+        }
+      }
+    }
+    fork(targetZone, zoneSpec) {
+      return this._forkZS ? this._forkZS.onFork(this._forkDlgt, this.zone, targetZone, zoneSpec) : new ZoneImpl(targetZone, zoneSpec);
+    }
+    intercept(targetZone, callback, source) {
+      return this._interceptZS ? this._interceptZS.onIntercept(this._interceptDlgt, this._interceptCurrZone, targetZone, callback, source) : callback;
+    }
+    invoke(targetZone, callback, applyThis, applyArgs, source) {
+      return this._invokeZS ? this._invokeZS.onInvoke(this._invokeDlgt, this._invokeCurrZone, targetZone, callback, applyThis, applyArgs, source) : callback.apply(applyThis, applyArgs);
+    }
+    handleError(targetZone, error) {
+      return this._handleErrorZS ? this._handleErrorZS.onHandleError(this._handleErrorDlgt, this._handleErrorCurrZone, targetZone, error) : true;
+    }
+    scheduleTask(targetZone, task) {
+      let returnTask = task;
+      if (this._scheduleTaskZS) {
+        if (this._hasTaskZS) {
+          returnTask._zoneDelegates.push(this._hasTaskDlgtOwner);
+        }
+        returnTask = this._scheduleTaskZS.onScheduleTask(this._scheduleTaskDlgt, this._scheduleTaskCurrZone, targetZone, task);
+        if (!returnTask)
+          returnTask = task;
+      } else {
+        if (task.scheduleFn) {
+          task.scheduleFn(task);
+        } else if (task.type == microTask) {
+          scheduleMicroTask(task);
+        } else {
+          throw new Error(&quot;Task is missing scheduleFn.&quot;);
+        }
+      }
+      return returnTask;
+    }
+    invokeTask(targetZone, task, applyThis, applyArgs) {
+      return this._invokeTaskZS ? this._invokeTaskZS.onInvokeTask(this._invokeTaskDlgt, this._invokeTaskCurrZone, targetZone, task, applyThis, applyArgs) : task.callback.apply(applyThis, applyArgs);
+    }
+    cancelTask(targetZone, task) {
+      let value;
+      if (this._cancelTaskZS) {
+        value = this._cancelTaskZS.onCancelTask(this._cancelTaskDlgt, this._cancelTaskCurrZone, targetZone, task);
+      } else {
+        if (!task.cancelFn) {
+          throw Error(&quot;Task is not cancelable&quot;);
+        }
+        value = task.cancelFn(task);
+      }
+      return value;
+    }
+    hasTask(targetZone, isEmpty) {
+      try {
+        this._hasTaskZS &amp;&amp; this._hasTaskZS.onHasTask(this._hasTaskDlgt, this._hasTaskCurrZone, targetZone, isEmpty);
+      } catch (err) {
+        this.handleError(targetZone, err);
+      }
+    }
+    _updateTaskCount(type, count) {
+      const counts = this._taskCounts;
+      const prev = counts[type];
+      const next = counts[type] = prev + count;
+      if (next &lt; 0) {
+        throw new Error(&quot;More tasks executed then were scheduled.&quot;);
+      }
+      if (prev == 0 || next == 0) {
+        const isEmpty = {
+          microTask: counts[&quot;microTask&quot;] &gt; 0,
+          macroTask: counts[&quot;macroTask&quot;] &gt; 0,
+          eventTask: counts[&quot;eventTask&quot;] &gt; 0,
+          change: type
+        };
+        this.hasTask(this._zone, isEmpty);
+      }
+    }
+  }
+  class ZoneTask {
+    type;
+    source;
+    invoke;
+    callback;
+    data;
+    scheduleFn;
+    cancelFn;
+    _zone = null;
+    runCount = 0;
+    _zoneDelegates = null;
+    _state = &quot;notScheduled&quot;;
+    constructor(type, source, callback, options, scheduleFn, cancelFn) {
+      this.type = type;
+      this.source = source;
+      this.data = options;
+      this.scheduleFn = scheduleFn;
+      this.cancelFn = cancelFn;
+      if (!callback) {
+        throw new Error(&quot;callback is not defined&quot;);
+      }
+      this.callback = callback;
+      const self2 = this;
+      if (type === eventTask &amp;&amp; options &amp;&amp; options.useG) {
+        this.invoke = ZoneTask.invokeTask;
+      } else {
+        this.invoke = function() {
+          return ZoneTask.invokeTask.call(global, self2, this, arguments);
+        };
+      }
+    }
+    static invokeTask(task, target, args) {
+      if (!task) {
+        task = this;
+      }
+      _numberOfNestedTaskFrames++;
+      try {
+        task.runCount++;
+        return task.zone.runTask(task, target, args);
+      } finally {
+        if (_numberOfNestedTaskFrames == 1) {
+          drainMicroTaskQueue();
+        }
+        _numberOfNestedTaskFrames--;
+      }
+    }
+    get zone() {
+      return this._zone;
+    }
+    get state() {
+      return this._state;
+    }
+    cancelScheduleRequest() {
+      this._transitionTo(notScheduled, scheduling);
+    }
+    _transitionTo(toState, fromState1, fromState2) {
+      if (this._state === fromState1 || this._state === fromState2) {
+        this._state = toState;
+        if (toState == notScheduled) {
+          this._zoneDelegates = null;
+        }
+      } else {
+        throw new Error(`${this.type} &#39;${this.source}&#39;: can not transition to &#39;${toState}&#39;, expecting state &#39;${fromState1}&#39;${fromState2 ? &quot; or &#39;&quot; + fromState2 + &quot;&#39;&quot; : &quot;&quot;}, was &#39;${this._state}&#39;.`);
+      }
+    }
+    toString() {
+      if (this.data &amp;&amp; typeof this.data.handleId !== &quot;undefined&quot;) {
+        return this.data.handleId.toString();
+      } else {
+        return Object.prototype.toString.call(this);
+      }
+    }
+    // add toJSON method to prevent cyclic error when
+    // call JSON.stringify(zoneTask)
+    toJSON() {
+      return {
+        type: this.type,
+        state: this.state,
+        source: this.source,
+        zone: this.zone.name,
+        runCount: this.runCount
+      };
+    }
+  }
+  const symbolSetTimeout = __symbol__(&quot;setTimeout&quot;);
+  const symbolPromise = __symbol__(&quot;Promise&quot;);
+  const symbolThen = __symbol__(&quot;then&quot;);
+  let _microTaskQueue = [];
+  let _isDrainingMicrotaskQueue = false;
+  let nativeMicroTaskQueuePromise;
+  function nativeScheduleMicroTask(func) {
+    if (!nativeMicroTaskQueuePromise) {
+      if (global[symbolPromise]) {
+        nativeMicroTaskQueuePromise = global[symbolPromise].resolve(0);
+      }
+    }
+    if (nativeMicroTaskQueuePromise) {
+      let nativeThen = nativeMicroTaskQueuePromise[symbolThen];
+      if (!nativeThen) {
+        nativeThen = nativeMicroTaskQueuePromise[&quot;then&quot;];
+      }
+      nativeThen.call(nativeMicroTaskQueuePromise, func);
+    } else {
+      global[symbolSetTimeout](func, 0);
+    }
+  }
+  function scheduleMicroTask(task) {
+    if (_numberOfNestedTaskFrames === 0 &amp;&amp; _microTaskQueue.length === 0) {
+      nativeScheduleMicroTask(drainMicroTaskQueue);
+    }
+    task &amp;&amp; _microTaskQueue.push(task);
+  }
+  function drainMicroTaskQueue() {
+    if (!_isDrainingMicrotaskQueue) {
+      _isDrainingMicrotaskQueue = true;
+      while (_microTaskQueue.length) {
+        const queue = _microTaskQueue;
+        _microTaskQueue = [];
+        for (let i = 0; i &lt; queue.length; i++) {
+          const task = queue[i];
+          try {
+            task.zone.runTask(task, null, null);
+          } catch (error) {
+            _api.onUnhandledError(error);
+          }
+        }
+      }
+      _api.microtaskDrainDone();
+      _isDrainingMicrotaskQueue = false;
+    }
+  }
+  const NO_ZONE = { name: &quot;NO ZONE&quot; };
+  const notScheduled = &quot;notScheduled&quot;, scheduling = &quot;scheduling&quot;, scheduled = &quot;scheduled&quot;, running = &quot;running&quot;, canceling = &quot;canceling&quot;, unknown = &quot;unknown&quot;;
+  const microTask = &quot;microTask&quot;, macroTask = &quot;macroTask&quot;, eventTask = &quot;eventTask&quot;;
+  const patches = {};
+  const _api = {
+    symbol: __symbol__,
+    currentZoneFrame: () =&gt; _currentZoneFrame,
+    onUnhandledError: noop,
+    microtaskDrainDone: noop,
+    scheduleMicroTask,
+    showUncaughtError: () =&gt; !ZoneImpl[__symbol__(&quot;ignoreConsoleErrorUncaughtError&quot;)],
+    patchEventTarget: () =&gt; [],
+    patchOnProperties: noop,
+    patchMethod: () =&gt; noop,
+    bindArguments: () =&gt; [],
+    patchThen: () =&gt; noop,
+    patchMacroTask: () =&gt; noop,
+    patchEventPrototype: () =&gt; noop,
+    isIEOrEdge: () =&gt; false,
+    getGlobalObjects: () =&gt; void 0,
+    ObjectDefineProperty: () =&gt; noop,
+    ObjectGetOwnPropertyDescriptor: () =&gt; void 0,
+    ObjectCreate: () =&gt; void 0,
+    ArraySlice: () =&gt; [],
+    patchClass: () =&gt; noop,
+    wrapWithCurrentZone: () =&gt; noop,
+    filterProperties: () =&gt; [],
+    attachOriginToPatched: () =&gt; noop,
+    _redefineProperty: () =&gt; noop,
+    patchCallbacks: () =&gt; noop,
+    nativeScheduleMicroTask
+  };
+  let _currentZoneFrame = { parent: null, zone: new ZoneImpl(null, null) };
+  let _currentTask = null;
+  let _numberOfNestedTaskFrames = 0;
+  function noop() {
+  }
+  performanceMeasure(&quot;Zone&quot;, &quot;Zone&quot;);
+  return ZoneImpl;
+}
+function loadZone() {
+  const global2 = globalThis;
+  const checkDuplicate = global2[__symbol__(&quot;forceDuplicateZoneCheck&quot;)] === true;
+  if (global2[&quot;Zone&quot;] &amp;&amp; (checkDuplicate || typeof global2[&quot;Zone&quot;].__symbol__ !== &quot;function&quot;)) {
+    throw new Error(&quot;Zone already loaded.&quot;);
+  }
+  global2[&quot;Zone&quot;] ??= initZone();
+  return global2[&quot;Zone&quot;];
+}
+var ObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+var ObjectDefineProperty = Object.defineProperty;
+var ObjectGetPrototypeOf = Object.getPrototypeOf;
+var ObjectCreate = Object.create;
+var ArraySlice = Array.prototype.slice;
+var ADD_EVENT_LISTENER_STR = &quot;addEventListener&quot;;
+var REMOVE_EVENT_LISTENER_STR = &quot;removeEventListener&quot;;
+var ZONE_SYMBOL_ADD_EVENT_LISTENER = __symbol__(ADD_EVENT_LISTENER_STR);
+var ZONE_SYMBOL_REMOVE_EVENT_LISTENER = __symbol__(REMOVE_EVENT_LISTENER_STR);
+var TRUE_STR = &quot;true&quot;;
+var FALSE_STR = &quot;false&quot;;
+var ZONE_SYMBOL_PREFIX = __symbol__(&quot;&quot;);
+function wrapWithCurrentZone(callback, source) {
+  return Zone.current.wrap(callback, source);
+}
+function scheduleMacroTaskWithCurrentZone(source, callback, data, customSchedule, customCancel) {
+  return Zone.current.scheduleMacroTask(source, callback, data, customSchedule, customCancel);
+}
+var zoneSymbol = __symbol__;
+var isWindowExists = typeof window !== &quot;undefined&quot;;
+var internalWindow = isWindowExists ? window : void 0;
+var _global = isWindowExists &amp;&amp; internalWindow || globalThis;
+var REMOVE_ATTRIBUTE = &quot;removeAttribute&quot;;
+function bindArguments(args, source) {
+  for (let i = args.length - 1; i &gt;= 0; i--) {
+    if (typeof args[i] === &quot;function&quot;) {
+      args[i] = wrapWithCurrentZone(args[i], source + &quot;_&quot; + i);
+    }
+  }
+  return args;
+}
+function patchPrototype(prototype, fnNames) {
+  const source = prototype.constructor[&quot;name&quot;];
+  for (let i = 0; i &lt; fnNames.length; i++) {
+    const name = fnNames[i];
+    const delegate = prototype[name];
+    if (delegate) {
+      const prototypeDesc = ObjectGetOwnPropertyDescriptor(prototype, name);
+      if (!isPropertyWritable(prototypeDesc)) {
+        continue;
+      }
+      prototype[name] = ((delegate2) =&gt; {
+        const patched = function() {
+          return delegate2.apply(this, bindArguments(arguments, source + &quot;.&quot; + name));
+        };
+        attachOriginToPatched(patched, delegate2);
+        return patched;
+      })(delegate);
+    }
+  }
+}
+function isPropertyWritable(propertyDesc) {
+  if (!propertyDesc) {
+    return true;
+  }
+  if (propertyDesc.writable === false) {
+    return false;
+  }
+  return !(typeof propertyDesc.get === &quot;function&quot; &amp;&amp; typeof propertyDesc.set === &quot;undefined&quot;);
+}
+var isWebWorker = typeof WorkerGlobalScope !== &quot;undefined&quot; &amp;&amp; self instanceof WorkerGlobalScope;
+var isNode = !(&quot;nw&quot; in _global) &amp;&amp; typeof _global.process !== &quot;undefined&quot; &amp;&amp; _global.process.toString() === &quot;[object process]&quot;;
+var isBrowser = !isNode &amp;&amp; !isWebWorker &amp;&amp; !!(isWindowExists &amp;&amp; internalWindow[&quot;HTMLElement&quot;]);
+var isMix = typeof _global.process !== &quot;undefined&quot; &amp;&amp; _global.process.toString() === &quot;[object process]&quot; &amp;&amp; !isWebWorker &amp;&amp; !!(isWindowExists &amp;&amp; internalWindow[&quot;HTMLElement&quot;]);
+var zoneSymbolEventNames$1 = {};
+var enableBeforeunloadSymbol = zoneSymbol(&quot;enable_beforeunload&quot;);
+var wrapFn = function(event) {
+  event = event || _global.event;
+  if (!event) {
+    return;
+  }
+  let eventNameSymbol = zoneSymbolEventNames$1[event.type];
+  if (!eventNameSymbol) {
+    eventNameSymbol = zoneSymbolEventNames$1[event.type] = zoneSymbol(&quot;ON_PROPERTY&quot; + event.type);
+  }
+  const target = this || event.target || _global;
+  const listener = target[eventNameSymbol];
+  let result;
+  if (isBrowser &amp;&amp; target === internalWindow &amp;&amp; event.type === &quot;error&quot;) {
+    const errorEvent = event;
+    result = listener &amp;&amp; listener.call(this, errorEvent.message, errorEvent.filename, errorEvent.lineno, errorEvent.colno, errorEvent.error);
+    if (result === true) {
+      event.preventDefault();
+    }
+  } else {
+    result = listener &amp;&amp; listener.apply(this, arguments);
+    if (
+      // https://github.com/angular/angular/issues/47579
+      // https://www.w3.org/TR/2011/WD-html5-20110525/history.html#beforeunloadevent
+      // This is the only specific case we should check for. The spec defines that the
+      // `returnValue` attribute represents the message to show the user. When the event
+      // is created, this attribute must be set to the empty string.
+      event.type === &quot;beforeunload&quot; &amp;&amp; // To prevent any breaking changes resulting from this change, given that
+      // it was already causing a significant number of failures in G3, we have hidden
+      // that behavior behind a global configuration flag. Consumers can enable this
+      // flag explicitly if they want the `beforeunload` event to be handled as defined
+      // in the specification.
+      _global[enableBeforeunloadSymbol] &amp;&amp; // The IDL event definition is `attribute DOMString returnValue`, so we check whether
+      // `typeof result` is a string.
+      typeof result === &quot;string&quot;
+    ) {
+      event.returnValue = result;
+    } else if (result != void 0 &amp;&amp; !result) {
+      event.preventDefault();
+    }
+  }
+  return result;
+};
+function patchProperty(obj, prop, prototype) {
+  let desc = ObjectGetOwnPropertyDescriptor(obj, prop);
+  if (!desc &amp;&amp; prototype) {
+    const prototypeDesc = ObjectGetOwnPropertyDescriptor(prototype, prop);
+    if (prototypeDesc) {
+      desc = { enumerable: true, configurable: true };
+    }
+  }
+  if (!desc || !desc.configurable) {
+    return;
+  }
+  const onPropPatchedSymbol = zoneSymbol(&quot;on&quot; + prop + &quot;patched&quot;);
+  if (obj.hasOwnProperty(onPropPatchedSymbol) &amp;&amp; obj[onPropPatchedSymbol]) {
+    return;
+  }
+  delete desc.writable;
+  delete desc.value;
+  const originalDescGet = desc.get;
+  const originalDescSet = desc.set;
+  const eventName = prop.slice(2);
+  let eventNameSymbol = zoneSymbolEventNames$1[eventName];
+  if (!eventNameSymbol) {
+    eventNameSymbol = zoneSymbolEventNames$1[eventName] = zoneSymbol(&quot;ON_PROPERTY&quot; + eventName);
+  }
+  desc.set = function(newValue) {
+    let target = this;
+    if (!target &amp;&amp; obj === _global) {
+      target = _global;
+    }
+    if (!target) {
+      return;
+    }
+    const previousValue = target[eventNameSymbol];
+    if (typeof previousValue === &quot;function&quot;) {
+      target.removeEventListener(eventName, wrapFn);
+    }
+    originalDescSet?.call(target, null);
+    target[eventNameSymbol] = newValue;
+    if (typeof newValue === &quot;function&quot;) {
+      target.addEventListener(eventName, wrapFn, false);
+    }
+  };
+  desc.get = function() {
+    let target = this;
+    if (!target &amp;&amp; obj === _global) {
+      target = _global;
+    }
+    if (!target) {
+      return null;
+    }
+    const listener = target[eventNameSymbol];
+    if (listener) {
+      return listener;
+    } else if (originalDescGet) {
+      let value = originalDescGet.call(this);
+      if (value) {
+        desc.set.call(this, value);
+        if (typeof target[REMOVE_ATTRIBUTE] === &quot;function&quot;) {
+          target.removeAttribute(prop);
+        }
+        return value;
+      }
+    }
+    return null;
+  };
+  ObjectDefineProperty(obj, prop, desc);
+  obj[onPropPatchedSymbol] = true;
+}
+function patchOnProperties(obj, properties, prototype) {
+  if (properties) {
+    for (let i = 0; i &lt; properties.length; i++) {
+      patchProperty(obj, &quot;on&quot; + properties[i], prototype);
+    }
+  } else {
+    const onProperties = [];
+    for (const prop in obj) {
+      if (prop.slice(0, 2) == &quot;on&quot;) {
+        onProperties.push(prop);
+      }
+    }
+    for (let j = 0; j &lt; onProperties.length; j++) {
+      patchProperty(obj, onProperties[j], prototype);
+    }
+  }
+}
+var originalInstanceKey = zoneSymbol(&quot;originalInstance&quot;);
+function patchClass(className) {
+  const OriginalClass = _global[className];
+  if (!OriginalClass)
+    return;
+  _global[zoneSymbol(className)] = OriginalClass;
+  _global[className] = function() {
+    const a = bindArguments(arguments, className);
+    switch (a.length) {
+      case 0:
+        this[originalInstanceKey] = new OriginalClass();
+        break;
+      case 1:
+        this[originalInstanceKey] = new OriginalClass(a[0]);
+        break;
+      case 2:
+        this[originalInstanceKey] = new OriginalClass(a[0], a[1]);
+        break;
+      case 3:
+        this[originalInstanceKey] = new OriginalClass(a[0], a[1], a[2]);
+        break;
+      case 4:
+        this[originalInstanceKey] = new OriginalClass(a[0], a[1], a[2], a[3]);
+        break;
+      default:
+        throw new Error(&quot;Arg list too long.&quot;);
+    }
+  };
+  attachOriginToPatched(_global[className], OriginalClass);
+  const instance = new OriginalClass(function() {
+  });
+  let prop;
+  for (prop in instance) {
+    if (className === &quot;XMLHttpRequest&quot; &amp;&amp; prop === &quot;responseBlob&quot;)
+      continue;
+    (function(prop2) {
+      if (typeof instance[prop2] === &quot;function&quot;) {
+        _global[className].prototype[prop2] = function() {
+          return this[originalInstanceKey][prop2].apply(this[originalInstanceKey], arguments);
+        };
+      } else {
+        ObjectDefineProperty(_global[className].prototype, prop2, {
+          set: function(fn) {
+            if (typeof fn === &quot;function&quot;) {
+              this[originalInstanceKey][prop2] = wrapWithCurrentZone(fn, className + &quot;.&quot; + prop2);
+              attachOriginToPatched(this[originalInstanceKey][prop2], fn);
+            } else {
+              this[originalInstanceKey][prop2] = fn;
+            }
+          },
+          get: function() {
+            return this[originalInstanceKey][prop2];
+          }
+        });
+      }
+    })(prop);
+  }
+  for (prop in OriginalClass) {
+    if (prop !== &quot;prototype&quot; &amp;&amp; OriginalClass.hasOwnProperty(prop)) {
+      _global[className][prop] = OriginalClass[prop];
+    }
+  }
+}
+function patchMethod(target, name, patchFn) {
+  let proto = target;
+  while (proto &amp;&amp; !proto.hasOwnProperty(name)) {
+    proto = ObjectGetPrototypeOf(proto);
+  }
+  if (!proto &amp;&amp; target[name]) {
+    proto = target;
+  }
+  const delegateName = zoneSymbol(name);
+  let delegate = null;
+  if (proto &amp;&amp; (!(delegate = proto[delegateName]) || !proto.hasOwnProperty(delegateName))) {
+    delegate = proto[delegateName] = proto[name];
+    const desc = proto &amp;&amp; ObjectGetOwnPropertyDescriptor(proto, name);
+    if (isPropertyWritable(desc)) {
+      const patchDelegate = patchFn(delegate, delegateName, name);
+      proto[name] = function() {
+        return patchDelegate(this, arguments);
+      };
+      attachOriginToPatched(proto[name], delegate);
+    }
+  }
+  return delegate;
+}
+function patchMacroTask(obj, funcName, metaCreator) {
+  let setNative = null;
+  function scheduleTask(task) {
+    const data = task.data;
+    data.args[data.cbIdx] = function() {
+      task.invoke.apply(this, arguments);
+    };
+    setNative.apply(data.target, data.args);
+    return task;
+  }
+  setNative = patchMethod(obj, funcName, (delegate) =&gt; function(self2, args) {
+    const meta = metaCreator(self2, args);
+    if (meta.cbIdx &gt;= 0 &amp;&amp; typeof args[meta.cbIdx] === &quot;function&quot;) {
+      return scheduleMacroTaskWithCurrentZone(meta.name, args[meta.cbIdx], meta, scheduleTask);
+    } else {
+      return delegate.apply(self2, args);
+    }
+  });
+}
+function attachOriginToPatched(patched, original) {
+  patched[zoneSymbol(&quot;OriginalDelegate&quot;)] = original;
+}
+var isDetectedIEOrEdge = false;
+var ieOrEdge = false;
+function isIEOrEdge() {
+  if (isDetectedIEOrEdge) {
+    return ieOrEdge;
+  }
+  isDetectedIEOrEdge = true;
+  try {
+    const ua = internalWindow.navigator.userAgent;
+    if (ua.indexOf(&quot;MSIE &quot;) !== -1 || ua.indexOf(&quot;Trident/&quot;) !== -1 || ua.indexOf(&quot;Edge/&quot;) !== -1) {
+      ieOrEdge = true;
+    }
+  } catch (error) {
+  }
+  return ieOrEdge;
+}
+function isFunction(value) {
+  return typeof value === &quot;function&quot;;
+}
+function isNumber(value) {
+  return typeof value === &quot;number&quot;;
+}
+var OPTIMIZED_ZONE_EVENT_TASK_DATA = {
+  useG: true
+};
+var zoneSymbolEventNames = {};
+var globalSources = {};
+var EVENT_NAME_SYMBOL_REGX = new RegExp(&quot;^&quot; + ZONE_SYMBOL_PREFIX + &quot;(\\w+)(true|false)$&quot;);
+var IMMEDIATE_PROPAGATION_SYMBOL = zoneSymbol(&quot;propagationStopped&quot;);
+function prepareEventNames(eventName, eventNameToString) {
+  const falseEventName = (eventNameToString ? eventNameToString(eventName) : eventName) + FALSE_STR;
+  const trueEventName = (eventNameToString ? eventNameToString(eventName) : eventName) + TRUE_STR;
+  const symbol = ZONE_SYMBOL_PREFIX + falseEventName;
+  const symbolCapture = ZONE_SYMBOL_PREFIX + trueEventName;
+  zoneSymbolEventNames[eventName] = {};
+  zoneSymbolEventNames[eventName][FALSE_STR] = symbol;
+  zoneSymbolEventNames[eventName][TRUE_STR] = symbolCapture;
+}
+function patchEventTarget(_global2, api, apis, patchOptions) {
+  const ADD_EVENT_LISTENER = patchOptions &amp;&amp; patchOptions.add || ADD_EVENT_LISTENER_STR;
+  const REMOVE_EVENT_LISTENER = patchOptions &amp;&amp; patchOptions.rm || REMOVE_EVENT_LISTENER_STR;
+  const LISTENERS_EVENT_LISTENER = patchOptions &amp;&amp; patchOptions.listeners || &quot;eventListeners&quot;;
+  const REMOVE_ALL_LISTENERS_EVENT_LISTENER = patchOptions &amp;&amp; patchOptions.rmAll || &quot;removeAllListeners&quot;;
+  const zoneSymbolAddEventListener = zoneSymbol(ADD_EVENT_LISTENER);
+  const ADD_EVENT_LISTENER_SOURCE = &quot;.&quot; + ADD_EVENT_LISTENER + &quot;:&quot;;
+  const PREPEND_EVENT_LISTENER = &quot;prependListener&quot;;
+  const PREPEND_EVENT_LISTENER_SOURCE = &quot;.&quot; + PREPEND_EVENT_LISTENER + &quot;:&quot;;
+  const invokeTask = function(task, target, event) {
+    if (task.isRemoved) {
+      return;
+    }
+    const delegate = task.callback;
+    if (typeof delegate === &quot;object&quot; &amp;&amp; delegate.handleEvent) {
+      task.callback = (event2) =&gt; delegate.handleEvent(event2);
+      task.originalDelegate = delegate;
+    }
+    let error;
+    try {
+      task.invoke(task, target, [event]);
+    } catch (err) {
+      error = err;
+    }
+    const options = task.options;
+    if (options &amp;&amp; typeof options === &quot;object&quot; &amp;&amp; options.once) {
+      const delegate2 = task.originalDelegate ? task.originalDelegate : task.callback;
+      target[REMOVE_EVENT_LISTENER].call(target, event.type, delegate2, options);
+    }
+    return error;
+  };
+  function globalCallback(context, event, isCapture) {
+    event = event || _global2.event;
+    if (!event) {
+      return;
+    }
+    const target = context || event.target || _global2;
+    const tasks = target[zoneSymbolEventNames[event.type][isCapture ? TRUE_STR : FALSE_STR]];
+    if (tasks) {
+      const errors = [];
+      if (tasks.length === 1) {
+        const err = invokeTask(tasks[0], target, event);
+        err &amp;&amp; errors.push(err);
+      } else {
+        const copyTasks = tasks.slice();
+        for (let i = 0; i &lt; copyTasks.length; i++) {
+          if (event &amp;&amp; event[IMMEDIATE_PROPAGATION_SYMBOL] === true) {
+            break;
+          }
+          const err = invokeTask(copyTasks[i], target, event);
+          err &amp;&amp; errors.push(err);
+        }
+      }
+      if (errors.length === 1) {
+        throw errors[0];
+      } else {
+        for (let i = 0; i &lt; errors.length; i++) {
+          const err = errors[i];
+          api.nativeScheduleMicroTask(() =&gt; {
+            throw err;
+          });
+        }
+      }
+    }
+  }
+  const globalZoneAwareCallback = function(event) {
+    return globalCallback(this, event, false);
+  };
+  const globalZoneAwareCaptureCallback = function(event) {
+    return globalCallback(this, event, true);
+  };
+  function patchEventTargetMethods(obj, patchOptions2) {
+    if (!obj) {
+      return false;
+    }
+    let useGlobalCallback = true;
+    if (patchOptions2 &amp;&amp; patchOptions2.useG !== void 0) {
+      useGlobalCallback = patchOptions2.useG;
+    }
+    const validateHandler = patchOptions2 &amp;&amp; patchOptions2.vh;
+    let checkDuplicate = true;
+    if (patchOptions2 &amp;&amp; patchOptions2.chkDup !== void 0) {
+      checkDuplicate = patchOptions2.chkDup;
+    }
+    let returnTarget = false;
+    if (patchOptions2 &amp;&amp; patchOptions2.rt !== void 0) {
+      returnTarget = patchOptions2.rt;
+    }
+    let proto = obj;
+    while (proto &amp;&amp; !proto.hasOwnProperty(ADD_EVENT_LISTENER)) {
+      proto = ObjectGetPrototypeOf(proto);
+    }
+    if (!proto &amp;&amp; obj[ADD_EVENT_LISTENER]) {
+      proto = obj;
+    }
+    if (!proto) {
+      return false;
+    }
+    if (proto[zoneSymbolAddEventListener]) {
+      return false;
+    }
+    const eventNameToString = patchOptions2 &amp;&amp; patchOptions2.eventNameToString;
+    const taskData = {};
+    const nativeAddEventListener = proto[zoneSymbolAddEventListener] = proto[ADD_EVENT_LISTENER];
+    const nativeRemoveEventListener = proto[zoneSymbol(REMOVE_EVENT_LISTENER)] = proto[REMOVE_EVENT_LISTENER];
+    const nativeListeners = proto[zoneSymbol(LISTENERS_EVENT_LISTENER)] = proto[LISTENERS_EVENT_LISTENER];
+    const nativeRemoveAllListeners = proto[zoneSymbol(REMOVE_ALL_LISTENERS_EVENT_LISTENER)] = proto[REMOVE_ALL_LISTENERS_EVENT_LISTENER];
+    let nativePrependEventListener;
+    if (patchOptions2 &amp;&amp; patchOptions2.prepend) {
+      nativePrependEventListener = proto[zoneSymbol(patchOptions2.prepend)] = proto[patchOptions2.prepend];
+    }
+    function buildEventListenerOptions(options, passive) {
+      if (!passive) {
+        return options;
+      }
+      if (typeof options === &quot;boolean&quot;) {
+        return { capture: options, passive: true };
+      }
+      if (!options) {
+        return { passive: true };
+      }
+      if (typeof options === &quot;object&quot; &amp;&amp; options.passive !== false) {
+        return __spreadProps(__spreadValues({}, options), { passive: true });
+      }
+      return options;
+    }
+    const customScheduleGlobal = function(task) {
+      if (taskData.isExisting) {
+        return;
+      }
+      return nativeAddEventListener.call(taskData.target, taskData.eventName, taskData.capture ? globalZoneAwareCaptureCallback : globalZoneAwareCallback, taskData.options);
+    };
+    const customCancelGlobal = function(task) {
+      if (!task.isRemoved) {
+        const symbolEventNames = zoneSymbolEventNames[task.eventName];
+        let symbolEventName;
+        if (symbolEventNames) {
+          symbolEventName = symbolEventNames[task.capture ? TRUE_STR : FALSE_STR];
+        }
+        const existingTasks = symbolEventName &amp;&amp; task.target[symbolEventName];
+        if (existingTasks) {
+          for (let i = 0; i &lt; existingTasks.length; i++) {
+            const existingTask = existingTasks[i];
+            if (existingTask === task) {
+              existingTasks.splice(i, 1);
+              task.isRemoved = true;
+              if (task.removeAbortListener) {
+                task.removeAbortListener();
+                task.removeAbortListener = null;
+              }
+              if (existingTasks.length === 0) {
+                task.allRemoved = true;
+                task.target[symbolEventName] = null;
+              }
+              break;
+            }
+          }
+        }
+      }
+      if (!task.allRemoved) {
+        return;
+      }
+      return nativeRemoveEventListener.call(task.target, task.eventName, task.capture ? globalZoneAwareCaptureCallback : globalZoneAwareCallback, task.options);
+    };
+    const customScheduleNonGlobal = function(task) {
+      return nativeAddEventListener.call(taskData.target, taskData.eventName, task.invoke, taskData.options);
+    };
+    const customSchedulePrepend = function(task) {
+      return nativePrependEventListener.call(taskData.target, taskData.eventName, task.invoke, taskData.options);
+    };
+    const customCancelNonGlobal = function(task) {
+      return nativeRemoveEventListener.call(task.target, task.eventName, task.invoke, task.options);
+    };
+    const customSchedule = useGlobalCallback ? customScheduleGlobal : customScheduleNonGlobal;
+    const customCancel = useGlobalCallback ? customCancelGlobal : customCancelNonGlobal;
+    const compareTaskCallbackVsDelegate = function(task, delegate) {
+      const typeOfDelegate = typeof delegate;
+      return typeOfDelegate === &quot;function&quot; &amp;&amp; task.callback === delegate || typeOfDelegate === &quot;object&quot; &amp;&amp; task.originalDelegate === delegate;
+    };
+    const compare = patchOptions2?.diff || compareTaskCallbackVsDelegate;
+    const unpatchedEvents = Zone[zoneSymbol(&quot;UNPATCHED_EVENTS&quot;)];
+    const passiveEvents = _global2[zoneSymbol(&quot;PASSIVE_EVENTS&quot;)];
+    function copyEventListenerOptions(options) {
+      if (typeof options === &quot;object&quot; &amp;&amp; options !== null) {
+        const newOptions = __spreadValues({}, options);
+        if (options.signal) {
+          newOptions.signal = options.signal;
+        }
+        return newOptions;
+      }
+      return options;
+    }
+    const makeAddListener = function(nativeListener, addSource, customScheduleFn, customCancelFn, returnTarget2 = false, prepend = false) {
+      return function() {
+        const target = this || _global2;
+        let eventName = arguments[0];
+        if (patchOptions2 &amp;&amp; patchOptions2.transferEventName) {
+          eventName = patchOptions2.transferEventName(eventName);
+        }
+        let delegate = arguments[1];
+        if (!delegate) {
+          return nativeListener.apply(this, arguments);
+        }
+        if (isNode &amp;&amp; eventName === &quot;uncaughtException&quot;) {
+          return nativeListener.apply(this, arguments);
+        }
+        let isEventListenerObject = false;
+        if (typeof delegate !== &quot;function&quot;) {
+          if (!delegate.handleEvent) {
+            return nativeListener.apply(this, arguments);
+          }
+          isEventListenerObject = true;
+        }
+        if (validateHandler &amp;&amp; !validateHandler(nativeListener, delegate, target, arguments)) {
+          return;
+        }
+        const passive = !!passiveEvents &amp;&amp; passiveEvents.indexOf(eventName) !== -1;
+        const options = copyEventListenerOptions(buildEventListenerOptions(arguments[2], passive));
+        const signal = options?.signal;
+        if (signal?.aborted) {
+          return;
+        }
+        if (unpatchedEvents) {
+          for (let i = 0; i &lt; unpatchedEvents.length; i++) {
+            if (eventName === unpatchedEvents[i]) {
+              if (passive) {
+                return nativeListener.call(target, eventName, delegate, options);
+              } else {
+                return nativeListener.apply(this, arguments);
+              }
+            }
+          }
+        }
+        const capture = !options ? false : typeof options === &quot;boolean&quot; ? true : options.capture;
+        const once = options &amp;&amp; typeof options === &quot;object&quot; ? options.once : false;
+        const zone = Zone.current;
+        let symbolEventNames = zoneSymbolEventNames[eventName];
+        if (!symbolEventNames) {
+          prepareEventNames(eventName, eventNameToString);
+          symbolEventNames = zoneSymbolEventNames[eventName];
+        }
+        const symbolEventName = symbolEventNames[capture ? TRUE_STR : FALSE_STR];
+        let existingTasks = target[symbolEventName];
+        let isExisting = false;
+        if (existingTasks) {
+          isExisting = true;
+          if (checkDuplicate) {
+            for (let i = 0; i &lt; existingTasks.length; i++) {
+              if (compare(existingTasks[i], delegate)) {
+                return;
+              }
+            }
+          }
+        } else {
+          existingTasks = target[symbolEventName] = [];
+        }
+        let source;
+        const constructorName = target.constructor[&quot;name&quot;];
+        const targetSource = globalSources[constructorName];
+        if (targetSource) {
+          source = targetSource[eventName];
+        }
+        if (!source) {
+          source = constructorName + addSource + (eventNameToString ? eventNameToString(eventName) : eventName);
+        }
+        taskData.options = options;
+        if (once) {
+          taskData.options.once = false;
+        }
+        taskData.target = target;
+        taskData.capture = capture;
+        taskData.eventName = eventName;
+        taskData.isExisting = isExisting;
+        const data = useGlobalCallback ? OPTIMIZED_ZONE_EVENT_TASK_DATA : void 0;
+        if (data) {
+          data.taskData = taskData;
+        }
+        if (signal) {
+          taskData.options.signal = void 0;
+        }
+        const task = zone.scheduleEventTask(source, delegate, data, customScheduleFn, customCancelFn);
+        if (signal) {
+          taskData.options.signal = signal;
+          const onAbort = () =&gt; task.zone.cancelTask(task);
+          nativeListener.call(signal, &quot;abort&quot;, onAbort, { once: true });
+          task.removeAbortListener = () =&gt; signal.removeEventListener(&quot;abort&quot;, onAbort);
+        }
+        taskData.target = null;
+        if (data) {
+          data.taskData = null;
+        }
+        if (once) {
+          taskData.options.once = true;
+        }
+        if (typeof task.options !== &quot;boolean&quot;) {
+          task.options = options;
+        }
+        task.target = target;
+        task.capture = capture;
+        task.eventName = eventName;
+        if (isEventListenerObject) {
+          task.originalDelegate = delegate;
+        }
+        if (!prepend) {
+          existingTasks.push(task);
+        } else {
+          existingTasks.unshift(task);
+        }
+        if (returnTarget2) {
+          return target;
+        }
+      };
+    };
+    proto[ADD_EVENT_LISTENER] = makeAddListener(nativeAddEventListener, ADD_EVENT_LISTENER_SOURCE, customSchedule, customCancel, returnTarget);
+    if (nativePrependEventListener) {
+      proto[PREPEND_EVENT_LISTENER] = makeAddListener(nativePrependEventListener, PREPEND_EVENT_LISTENER_SOURCE, customSchedulePrepend, customCancel, returnTarget, true);
+    }
+    proto[REMOVE_EVENT_LISTENER] = function() {
+      const target = this || _global2;
+      let eventName = arguments[0];
+      if (patchOptions2 &amp;&amp; patchOptions2.transferEventName) {
+        eventName = patchOptions2.transferEventName(eventName);
+      }
+      const options = arguments[2];
+      const capture = !options ? false : typeof options === &quot;boolean&quot; ? true : options.capture;
+      const delegate = arguments[1];
+      if (!delegate) {
+        return nativeRemoveEventListener.apply(this, arguments);
+      }
+      if (validateHandler &amp;&amp; !validateHandler(nativeRemoveEventListener, delegate, target, arguments)) {
+        return;
+      }
+      const symbolEventNames = zoneSymbolEventNames[eventName];
+      let symbolEventName;
+      if (symbolEventNames) {
+        symbolEventName = symbolEventNames[capture ? TRUE_STR : FALSE_STR];
+      }
+      const existingTasks = symbolEventName &amp;&amp; target[symbolEventName];
+      if (existingTasks) {
+        for (let i = 0; i &lt; existingTasks.length; i++) {
+          const existingTask = existingTasks[i];
+          if (compare(existingTask, delegate)) {
+            existingTasks.splice(i, 1);
+            existingTask.isRemoved = true;
+            if (existingTasks.length === 0) {
+              existingTask.allRemoved = true;
+              target[symbolEventName] = null;
+              if (!capture &amp;&amp; typeof eventName === &quot;string&quot;) {
+                const onPropertySymbol = ZONE_SYMBOL_PREFIX + &quot;ON_PROPERTY&quot; + eventName;
+                target[onPropertySymbol] = null;
+              }
+            }
+            existingTask.zone.cancelTask(existingTask);
+            if (returnTarget) {
+              return target;
+            }
+            return;
+          }
+        }
+      }
+      return nativeRemoveEventListener.apply(this, arguments);
+    };
+    proto[LISTENERS_EVENT_LISTENER] = function() {
+      const target = this || _global2;
+      let eventName = arguments[0];
+      if (patchOptions2 &amp;&amp; patchOptions2.transferEventName) {
+        eventName = patchOptions2.transferEventName(eventName);
+      }
+      const listeners = [];
+      const tasks = findEventTasks(target, eventNameToString ? eventNameToString(eventName) : eventName);
+      for (let i = 0; i &lt; tasks.length; i++) {
+        const task = tasks[i];
+        let delegate = task.originalDelegate ? task.originalDelegate : task.callback;
+        listeners.push(delegate);
+      }
+      return listeners;
+    };
+    proto[REMOVE_ALL_LISTENERS_EVENT_LISTENER] = function() {
+      const target = this || _global2;
+      let eventName = arguments[0];
+      if (!eventName) {
+        const keys = Object.keys(target);
+        for (let i = 0; i &lt; keys.length; i++) {
+          const prop = keys[i];
+          const match = EVENT_NAME_SYMBOL_REGX.exec(prop);
+          let evtName = match &amp;&amp; match[1];
+          if (evtName &amp;&amp; evtName !== &quot;removeListener&quot;) {
+            this[REMOVE_ALL_LISTENERS_EVENT_LISTENER].call(this, evtName);
+          }
+        }
+        this[REMOVE_ALL_LISTENERS_EVENT_LISTENER].call(this, &quot;removeListener&quot;);
+      } else {
+        if (patchOptions2 &amp;&amp; patchOptions2.transferEventName) {
+          eventName = patchOptions2.transferEventName(eventName);
+        }
+        const symbolEventNames = zoneSymbolEventNames[eventName];
+        if (symbolEventNames) {
+          const symbolEventName = symbolEventNames[FALSE_STR];
+          const symbolCaptureEventName = symbolEventNames[TRUE_STR];
+          const tasks = target[symbolEventName];
+          const captureTasks = target[symbolCaptureEventName];
+          if (tasks) {
+            const removeTasks = tasks.slice();
+            for (let i = 0; i &lt; removeTasks.length; i++) {
+              const task = removeTasks[i];
+              let delegate = task.originalDelegate ? task.originalDelegate : task.callback;
+              this[REMOVE_EVENT_LISTENER].call(this, eventName, delegate, task.options);
+            }
+          }
+          if (captureTasks) {
+            const removeTasks = captureTasks.slice();
+            for (let i = 0; i &lt; removeTasks.length; i++) {
+              const task = removeTasks[i];
+              let delegate = task.originalDelegate ? task.originalDelegate : task.callback;
+              this[REMOVE_EVENT_LISTENER].call(this, eventName, delegate, task.options);
+            }
+          }
+        }
+      }
+      if (returnTarget) {
+        return this;
+      }
+    };
+    attachOriginToPatched(proto[ADD_EVENT_LISTENER], nativeAddEventListener);
+    attachOriginToPatched(proto[REMOVE_EVENT_LISTENER], nativeRemoveEventListener);
+    if (nativeRemoveAllListeners) {
+      attachOriginToPatched(proto[REMOVE_ALL_LISTENERS_EVENT_LISTENER], nativeRemoveAllListeners);
+    }
+    if (nativeListeners) {
+      attachOriginToPatched(proto[LISTENERS_EVENT_LISTENER], nativeListeners);
+    }
+    return true;
+  }
+  let results = [];
+  for (let i = 0; i &lt; apis.length; i++) {
+    results[i] = patchEventTargetMethods(apis[i], patchOptions);
+  }
+  return results;
+}
+function findEventTasks(target, eventName) {
+  if (!eventName) {
+    const foundTasks = [];
+    for (let prop in target) {
+      const match = EVENT_NAME_SYMBOL_REGX.exec(prop);
+      let evtName = match &amp;&amp; match[1];
+      if (evtName &amp;&amp; (!eventName || evtName === eventName)) {
+        const tasks = target[prop];
+        if (tasks) {
+          for (let i = 0; i &lt; tasks.length; i++) {
+            foundTasks.push(tasks[i]);
+          }
+        }
+      }
+    }
+    return foundTasks;
+  }
+  let symbolEventName = zoneSymbolEventNames[eventName];
+  if (!symbolEventName) {
+    prepareEventNames(eventName);
+    symbolEventName = zoneSymbolEventNames[eventName];
+  }
+  const captureFalseTasks = target[symbolEventName[FALSE_STR]];
+  const captureTrueTasks = target[symbolEventName[TRUE_STR]];
+  if (!captureFalseTasks) {
+    return captureTrueTasks ? captureTrueTasks.slice() : [];
+  } else {
+    return captureTrueTasks ? captureFalseTasks.concat(captureTrueTasks) : captureFalseTasks.slice();
+  }
+}
+function patchEventPrototype(global2, api) {
+  const Event = global2[&quot;Event&quot;];
+  if (Event &amp;&amp; Event.prototype) {
+    api.patchMethod(Event.prototype, &quot;stopImmediatePropagation&quot;, (delegate) =&gt; function(self2, args) {
+      self2[IMMEDIATE_PROPAGATION_SYMBOL] = true;
+      delegate &amp;&amp; delegate.apply(self2, args);
+    });
+  }
+}
+function patchQueueMicrotask(global2, api) {
+  api.patchMethod(global2, &quot;queueMicrotask&quot;, (delegate) =&gt; {
+    return function(self2, args) {
+      Zone.current.scheduleMicroTask(&quot;queueMicrotask&quot;, args[0]);
+    };
+  });
+}
+var taskSymbol = zoneSymbol(&quot;zoneTask&quot;);
+function patchTimer(window2, setName, cancelName, nameSuffix) {
+  let setNative = null;
+  let clearNative = null;
+  setName += nameSuffix;
+  cancelName += nameSuffix;
+  const tasksByHandleId = {};
+  function scheduleTask(task) {
+    const data = task.data;
+    data.args[0] = function() {
+      return task.invoke.apply(this, arguments);
+    };
+    const handleOrId = setNative.apply(window2, data.args);
+    if (isNumber(handleOrId)) {
+      data.handleId = handleOrId;
+    } else {
+      data.handle = handleOrId;
+      data.isRefreshable = isFunction(handleOrId.refresh);
+    }
+    return task;
+  }
+  function clearTask(task) {
+    const { handle, handleId } = task.data;
+    return clearNative.call(window2, handle ?? handleId);
+  }
+  setNative = patchMethod(window2, setName, (delegate) =&gt; function(self2, args) {
+    if (isFunction(args[0])) {
+      const options = {
+        isRefreshable: false,
+        isPeriodic: nameSuffix === &quot;Interval&quot;,
+        delay: nameSuffix === &quot;Timeout&quot; || nameSuffix === &quot;Interval&quot; ? args[1] || 0 : void 0,
+        args
+      };
+      const callback = args[0];
+      args[0] = function timer() {
+        try {
+          return callback.apply(this, arguments);
+        } finally {
+          const { handle: handle2, handleId: handleId2, isPeriodic: isPeriodic2, isRefreshable: isRefreshable2 } = options;
+          if (!isPeriodic2 &amp;&amp; !isRefreshable2) {
+            if (handleId2) {
+              delete tasksByHandleId[handleId2];
+            } else if (handle2) {
+              handle2[taskSymbol] = null;
+            }
+          }
+        }
+      };
+      const task = scheduleMacroTaskWithCurrentZone(setName, args[0], options, scheduleTask, clearTask);
+      if (!task) {
+        return task;
+      }
+      const { handleId, handle, isRefreshable, isPeriodic } = task.data;
+      if (handleId) {
+        tasksByHandleId[handleId] = task;
+      } else if (handle) {
+        handle[taskSymbol] = task;
+        if (isRefreshable &amp;&amp; !isPeriodic) {
+          const originalRefresh = handle.refresh;
+          handle.refresh = function() {
+            const { zone, state } = task;
+            if (state === &quot;notScheduled&quot;) {
+              task._state = &quot;scheduled&quot;;
+              zone._updateTaskCount(task, 1);
+            } else if (state === &quot;running&quot;) {
+              task._state = &quot;scheduling&quot;;
+            }
+            return originalRefresh.call(this);
+          };
+        }
+      }
+      return handle ?? handleId ?? task;
+    } else {
+      return delegate.apply(window2, args);
+    }
+  });
+  clearNative = patchMethod(window2, cancelName, (delegate) =&gt; function(self2, args) {
+    const id = args[0];
+    let task;
+    if (isNumber(id)) {
+      task = tasksByHandleId[id];
+      delete tasksByHandleId[id];
+    } else {
+      task = id?.[taskSymbol];
+      if (task) {
+        id[taskSymbol] = null;
+      } else {
+        task = id;
+      }
+    }
+    if (task?.type) {
+      if (task.cancelFn) {
+        task.zone.cancelTask(task);
+      }
+    } else {
+      delegate.apply(window2, args);
+    }
+  });
+}
+function patchCustomElements(_global2, api) {
+  const { isBrowser: isBrowser2, isMix: isMix2 } = api.getGlobalObjects();
+  if (!isBrowser2 &amp;&amp; !isMix2 || !_global2[&quot;customElements&quot;] || !(&quot;customElements&quot; in _global2)) {
+    return;
+  }
+  const callbacks = [
+    &quot;connectedCallback&quot;,
+    &quot;disconnectedCallback&quot;,
+    &quot;adoptedCallback&quot;,
+    &quot;attributeChangedCallback&quot;,
+    &quot;formAssociatedCallback&quot;,
+    &quot;formDisabledCallback&quot;,
+    &quot;formResetCallback&quot;,
+    &quot;formStateRestoreCallback&quot;
+  ];
+  api.patchCallbacks(api, _global2.customElements, &quot;customElements&quot;, &quot;define&quot;, callbacks);
+}
+function eventTargetPatch(_global2, api) {
+  if (Zone[api.symbol(&quot;patchEventTarget&quot;)]) {
+    return;
+  }
+  const { eventNames, zoneSymbolEventNames: zoneSymbolEventNames2, TRUE_STR: TRUE_STR2, FALSE_STR: FALSE_STR2, ZONE_SYMBOL_PREFIX: ZONE_SYMBOL_PREFIX2 } = api.getGlobalObjects();
+  for (let i = 0; i &lt; eventNames.length; i++) {
+    const eventName = eventNames[i];
+    const falseEventName = eventName + FALSE_STR2;
+    const trueEventName = eventName + TRUE_STR2;
+    const symbol = ZONE_SYMBOL_PREFIX2 + falseEventName;
+    const symbolCapture = ZONE_SYMBOL_PREFIX2 + trueEventName;
+    zoneSymbolEventNames2[eventName] = {};
+    zoneSymbolEventNames2[eventName][FALSE_STR2] = symbol;
+    zoneSymbolEventNames2[eventName][TRUE_STR2] = symbolCapture;
+  }
+  const EVENT_TARGET = _global2[&quot;EventTarget&quot;];
+  if (!EVENT_TARGET || !EVENT_TARGET.prototype) {
+    return;
+  }
+  api.patchEventTarget(_global2, api, [EVENT_TARGET &amp;&amp; EVENT_TARGET.prototype]);
+  return true;
+}
+function patchEvent(global2, api) {
+  api.patchEventPrototype(global2, api);
+}
+function filterProperties(target, onProperties, ignoreProperties) {
+  if (!ignoreProperties || ignoreProperties.length === 0) {
+    return onProperties;
+  }
+  const tip = ignoreProperties.filter((ip) =&gt; ip.target === target);
+  if (tip.length === 0) {
+    return onProperties;
+  }
+  const targetIgnoreProperties = tip[0].ignoreProperties;
+  return onProperties.filter((op) =&gt; targetIgnoreProperties.indexOf(op) === -1);
+}
+function patchFilteredProperties(target, onProperties, ignoreProperties, prototype) {
+  if (!target) {
+    return;
+  }
+  const filteredProperties = filterProperties(target, onProperties, ignoreProperties);
+  patchOnProperties(target, filteredProperties, prototype);
+}
+function getOnEventNames(target) {
+  return Object.getOwnPropertyNames(target).filter((name) =&gt; name.startsWith(&quot;on&quot;) &amp;&amp; name.length &gt; 2).map((name) =&gt; name.substring(2));
+}
+function propertyDescriptorPatch(api, _global2) {
+  if (isNode &amp;&amp; !isMix) {
+    return;
+  }
+  if (Zone[api.symbol(&quot;patchEvents&quot;)]) {
+    return;
+  }
+  const ignoreProperties = _global2[&quot;__Zone_ignore_on_properties&quot;];
+  let patchTargets = [];
+  if (isBrowser) {
+    const internalWindow2 = window;
+    patchTargets = patchTargets.concat([
+      &quot;Document&quot;,
+      &quot;SVGElement&quot;,
+      &quot;Element&quot;,
+      &quot;HTMLElement&quot;,
+      &quot;HTMLBodyElement&quot;,
+      &quot;HTMLMediaElement&quot;,
+      &quot;HTMLFrameSetElement&quot;,
+      &quot;HTMLFrameElement&quot;,
+      &quot;HTMLIFrameElement&quot;,
+      &quot;HTMLMarqueeElement&quot;,
+      &quot;Worker&quot;
+    ]);
+    const ignoreErrorProperties = [];
+    patchFilteredProperties(internalWindow2, getOnEventNames(internalWindow2), ignoreProperties ? ignoreProperties.concat(ignoreErrorProperties) : ignoreProperties, ObjectGetPrototypeOf(internalWindow2));
+  }
+  patchTargets = patchTargets.concat([
+    &quot;XMLHttpRequest&quot;,
+    &quot;XMLHttpRequestEventTarget&quot;,
+    &quot;IDBIndex&quot;,
+    &quot;IDBRequest&quot;,
+    &quot;IDBOpenDBRequest&quot;,
+    &quot;IDBDatabase&quot;,
+    &quot;IDBTransaction&quot;,
+    &quot;IDBCursor&quot;,
+    &quot;WebSocket&quot;
+  ]);
+  for (let i = 0; i &lt; patchTargets.length; i++) {
+    const target = _global2[patchTargets[i]];
+    target?.prototype &amp;&amp; patchFilteredProperties(target.prototype, getOnEventNames(target.prototype), ignoreProperties);
+  }
+}
+function patchBrowser(Zone2) {
+  Zone2.__load_patch(&quot;legacy&quot;, (global2) =&gt; {
+    const legacyPatch = global2[Zone2.__symbol__(&quot;legacyPatch&quot;)];
+    if (legacyPatch) {
+      legacyPatch();
+    }
+  });
+  Zone2.__load_patch(&quot;timers&quot;, (global2) =&gt; {
+    const set = &quot;set&quot;;
+    const clear = &quot;clear&quot;;
+    patchTimer(global2, set, clear, &quot;Timeout&quot;);
+    patchTimer(global2, set, clear, &quot;Interval&quot;);
+    patchTimer(global2, set, clear, &quot;Immediate&quot;);
+  });
+  Zone2.__load_patch(&quot;requestAnimationFrame&quot;, (global2) =&gt; {
+    patchTimer(global2, &quot;request&quot;, &quot;cancel&quot;, &quot;AnimationFrame&quot;);
+    patchTimer(global2, &quot;mozRequest&quot;, &quot;mozCancel&quot;, &quot;AnimationFrame&quot;);
+    patchTimer(global2, &quot;webkitRequest&quot;, &quot;webkitCancel&quot;, &quot;AnimationFrame&quot;);
+  });
+  Zone2.__load_patch(&quot;blocking&quot;, (global2, Zone3) =&gt; {
+    const blockingMethods = [&quot;alert&quot;, &quot;prompt&quot;, &quot;confirm&quot;];
+    for (let i = 0; i &lt; blockingMethods.length; i++) {
+      const name = blockingMethods[i];
+      patchMethod(global2, name, (delegate, symbol, name2) =&gt; {
+        return function(s, args) {
+          return Zone3.current.run(delegate, global2, args, name2);
+        };
+      });
+    }
+  });
+  Zone2.__load_patch(&quot;EventTarget&quot;, (global2, Zone3, api) =&gt; {
+    patchEvent(global2, api);
+    eventTargetPatch(global2, api);
+    const XMLHttpRequestEventTarget = global2[&quot;XMLHttpRequestEventTarget&quot;];
+    if (XMLHttpRequestEventTarget &amp;&amp; XMLHttpRequestEventTarget.prototype) {
+      api.patchEventTarget(global2, api, [XMLHttpRequestEventTarget.prototype]);
+    }
+  });
+  Zone2.__load_patch(&quot;MutationObserver&quot;, (global2, Zone3, api) =&gt; {
+    patchClass(&quot;MutationObserver&quot;);
+    patchClass(&quot;WebKitMutationObserver&quot;);
+  });
+  Zone2.__load_patch(&quot;IntersectionObserver&quot;, (global2, Zone3, api) =&gt; {
+    patchClass(&quot;IntersectionObserver&quot;);
+  });
+  Zone2.__load_patch(&quot;FileReader&quot;, (global2, Zone3, api) =&gt; {
+    patchClass(&quot;FileReader&quot;);
+  });
+  Zone2.__load_patch(&quot;on_property&quot;, (global2, Zone3, api) =&gt; {
+    propertyDescriptorPatch(api, global2);
+  });
+  Zone2.__load_patch(&quot;customElements&quot;, (global2, Zone3, api) =&gt; {
+    patchCustomElements(global2, api);
+  });
+  Zone2.__load_patch(&quot;XHR&quot;, (global2, Zone3) =&gt; {
+    patchXHR(global2);
+    const XHR_TASK = zoneSymbol(&quot;xhrTask&quot;);
+    const XHR_SYNC = zoneSymbol(&quot;xhrSync&quot;);
+    const XHR_LISTENER = zoneSymbol(&quot;xhrListener&quot;);
+    const XHR_SCHEDULED = zoneSymbol(&quot;xhrScheduled&quot;);
+    const XHR_URL = zoneSymbol(&quot;xhrURL&quot;);
+    const XHR_ERROR_BEFORE_SCHEDULED = zoneSymbol(&quot;xhrErrorBeforeScheduled&quot;);
+    function patchXHR(window2) {
+      const XMLHttpRequest = window2[&quot;XMLHttpRequest&quot;];
+      if (!XMLHttpRequest) {
+        return;
+      }
+      const XMLHttpRequestPrototype = XMLHttpRequest.prototype;
+      function findPendingTask(target) {
+        return target[XHR_TASK];
+      }
+      let oriAddListener = XMLHttpRequestPrototype[ZONE_SYMBOL_ADD_EVENT_LISTENER];
+      let oriRemoveListener = XMLHttpRequestPrototype[ZONE_SYMBOL_REMOVE_EVENT_LISTENER];
+      if (!oriAddListener) {
+        const XMLHttpRequestEventTarget = window2[&quot;XMLHttpRequestEventTarget&quot;];
+        if (XMLHttpRequestEventTarget) {
+          const XMLHttpRequestEventTargetPrototype = XMLHttpRequestEventTarget.prototype;
+          oriAddListener = XMLHttpRequestEventTargetPrototype[ZONE_SYMBOL_ADD_EVENT_LISTENER];
+          oriRemoveListener = XMLHttpRequestEventTargetPrototype[ZONE_SYMBOL_REMOVE_EVENT_LISTENER];
+        }
+      }
+      const READY_STATE_CHANGE = &quot;readystatechange&quot;;
+      const SCHEDULED = &quot;scheduled&quot;;
+      function scheduleTask(task) {
+        const data = task.data;
+        const target = data.target;
+        target[XHR_SCHEDULED] = false;
+        target[XHR_ERROR_BEFORE_SCHEDULED] = false;
+        const listener = target[XHR_LISTENER];
+        if (!oriAddListener) {
+          oriAddListener = target[ZONE_SYMBOL_ADD_EVENT_LISTENER];
+          oriRemoveListener = target[ZONE_SYMBOL_REMOVE_EVENT_LISTENER];
+        }
+        if (listener) {
+          oriRemoveListener.call(target, READY_STATE_CHANGE, listener);
+        }
+        const newListener = target[XHR_LISTENER] = () =&gt; {
+          if (target.readyState === target.DONE) {
+            if (!data.aborted &amp;&amp; target[XHR_SCHEDULED] &amp;&amp; task.state === SCHEDULED) {
+              const loadTasks = target[Zone3.__symbol__(&quot;loadfalse&quot;)];
+              if (target.status !== 0 &amp;&amp; loadTasks &amp;&amp; loadTasks.length &gt; 0) {
+                const oriInvoke = task.invoke;
+                task.invoke = function() {
+                  const loadTasks2 = target[Zone3.__symbol__(&quot;loadfalse&quot;)];
+                  for (let i = 0; i &lt; loadTasks2.length; i++) {
+                    if (loadTasks2[i] === task) {
+                      loadTasks2.splice(i, 1);
+                    }
+                  }
+                  if (!data.aborted &amp;&amp; task.state === SCHEDULED) {
+                    oriInvoke.call(task);
+                  }
+                };
+                loadTasks.push(task);
+              } else {
+                task.invoke();
+              }
+            } else if (!data.aborted &amp;&amp; target[XHR_SCHEDULED] === false) {
+              target[XHR_ERROR_BEFORE_SCHEDULED] = true;
+            }
+          }
+        };
+        oriAddListener.call(target, READY_STATE_CHANGE, newListener);
+        const storedTask = target[XHR_TASK];
+        if (!storedTask) {
+          target[XHR_TASK] = task;
+        }
+        sendNative.apply(target, data.args);
+        target[XHR_SCHEDULED] = true;
+        return task;
+      }
+      function placeholderCallback() {
+      }
+      function clearTask(task) {
+        const data = task.data;
+        data.aborted = true;
+        return abortNative.apply(data.target, data.args);
+      }
+      const openNative = patchMethod(XMLHttpRequestPrototype, &quot;open&quot;, () =&gt; function(self2, args) {
+        self2[XHR_SYNC] = args[2] == false;
+        self2[XHR_URL] = args[1];
+        return openNative.apply(self2, args);
+      });
+      const XMLHTTPREQUEST_SOURCE = &quot;XMLHttpRequest.send&quot;;
+      const fetchTaskAborting = zoneSymbol(&quot;fetchTaskAborting&quot;);
+      const fetchTaskScheduling = zoneSymbol(&quot;fetchTaskScheduling&quot;);
+      const sendNative = patchMethod(XMLHttpRequestPrototype, &quot;send&quot;, () =&gt; function(self2, args) {
+        if (Zone3.current[fetchTaskScheduling] === true) {
+          return sendNative.apply(self2, args);
+        }
+        if (self2[XHR_SYNC]) {
+          return sendNative.apply(self2, args);
+        } else {
+          const options = {
+            target: self2,
+            url: self2[XHR_URL],
+            isPeriodic: false,
+            args,
+            aborted: false
+          };
+          const task = scheduleMacroTaskWithCurrentZone(XMLHTTPREQUEST_SOURCE, placeholderCallback, options, scheduleTask, clearTask);
+          if (self2 &amp;&amp; self2[XHR_ERROR_BEFORE_SCHEDULED] === true &amp;&amp; !options.aborted &amp;&amp; task.state === SCHEDULED) {
+            task.invoke();
+          }
+        }
+      });
+      const abortNative = patchMethod(XMLHttpRequestPrototype, &quot;abort&quot;, () =&gt; function(self2, args) {
+        const task = findPendingTask(self2);
+        if (task &amp;&amp; typeof task.type == &quot;string&quot;) {
+          if (task.cancelFn == null || task.data &amp;&amp; task.data.aborted) {
+            return;
+          }
+          task.zone.cancelTask(task);
+        } else if (Zone3.current[fetchTaskAborting] === true) {
+          return abortNative.apply(self2, args);
+        }
+      });
+    }
+  });
+  Zone2.__load_patch(&quot;geolocation&quot;, (global2) =&gt; {
+    if (global2[&quot;navigator&quot;] &amp;&amp; global2[&quot;navigator&quot;].geolocation) {
+      patchPrototype(global2[&quot;navigator&quot;].geolocation, [&quot;getCurrentPosition&quot;, &quot;watchPosition&quot;]);
+    }
+  });
+  Zone2.__load_patch(&quot;PromiseRejectionEvent&quot;, (global2, Zone3) =&gt; {
+    function findPromiseRejectionHandler(evtName) {
+      return function(e) {
+        const eventTasks = findEventTasks(global2, evtName);
+        eventTasks.forEach((eventTask) =&gt; {
+          const PromiseRejectionEvent = global2[&quot;PromiseRejectionEvent&quot;];
+          if (PromiseRejectionEvent) {
+            const evt = new PromiseRejectionEvent(evtName, {
+              promise: e.promise,
+              reason: e.rejection
+            });
+            eventTask.invoke(evt);
+          }
+        });
+      };
+    }
+    if (global2[&quot;PromiseRejectionEvent&quot;]) {
+      Zone3[zoneSymbol(&quot;unhandledPromiseRejectionHandler&quot;)] = findPromiseRejectionHandler(&quot;unhandledrejection&quot;);
+      Zone3[zoneSymbol(&quot;rejectionHandledHandler&quot;)] = findPromiseRejectionHandler(&quot;rejectionhandled&quot;);
+    }
+  });
+  Zone2.__load_patch(&quot;queueMicrotask&quot;, (global2, Zone3, api) =&gt; {
+    patchQueueMicrotask(global2, api);
+  });
+}
+function patchPromise(Zone2) {
+  Zone2.__load_patch(&quot;ZoneAwarePromise&quot;, (global2, Zone3, api) =&gt; {
+    const ObjectGetOwnPropertyDescriptor2 = Object.getOwnPropertyDescriptor;
+    const ObjectDefineProperty2 = Object.defineProperty;
+    function readableObjectToString(obj) {
+      if (obj &amp;&amp; obj.toString === Object.prototype.toString) {
+        const className = obj.constructor &amp;&amp; obj.constructor.name;
+        return (className ? className : &quot;&quot;) + &quot;: &quot; + JSON.stringify(obj);
+      }
+      return obj ? obj.toString() : Object.prototype.toString.call(obj);
+    }
+    const __symbol__2 = api.symbol;
+    const _uncaughtPromiseErrors = [];
+    const isDisableWrappingUncaughtPromiseRejection = global2[__symbol__2(&quot;DISABLE_WRAPPING_UNCAUGHT_PROMISE_REJECTION&quot;)] !== false;
+    const symbolPromise = __symbol__2(&quot;Promise&quot;);
+    const symbolThen = __symbol__2(&quot;then&quot;);
+    const creationTrace = &quot;__creationTrace__&quot;;
+    api.onUnhandledError = (e) =&gt; {
+      if (api.showUncaughtError()) {
+        const rejection = e &amp;&amp; e.rejection;
+        if (rejection) {
+          console.error(&quot;Unhandled Promise rejection:&quot;, rejection instanceof Error ? rejection.message : rejection, &quot;; Zone:&quot;, e.zone.name, &quot;; Task:&quot;, e.task &amp;&amp; e.task.source, &quot;; Value:&quot;, rejection, rejection instanceof Error ? rejection.stack : void 0);
+        } else {
+          console.error(e);
+        }
+      }
+    };
+    api.microtaskDrainDone = () =&gt; {
+      while (_uncaughtPromiseErrors.length) {
+        const uncaughtPromiseError = _uncaughtPromiseErrors.shift();
+        try {
+          uncaughtPromiseError.zone.runGuarded(() =&gt; {
+            if (uncaughtPromiseError.throwOriginal) {
+              throw uncaughtPromiseError.rejection;
+            }
+            throw uncaughtPromiseError;
+          });
+        } catch (error) {
+          handleUnhandledRejection(error);
+        }
+      }
+    };
+    const UNHANDLED_PROMISE_REJECTION_HANDLER_SYMBOL = __symbol__2(&quot;unhandledPromiseRejectionHandler&quot;);
+    function handleUnhandledRejection(e) {
+      api.onUnhandledError(e);
+      try {
+        const handler = Zone3[UNHANDLED_PROMISE_REJECTION_HANDLER_SYMBOL];
+        if (typeof handler === &quot;function&quot;) {
+          handler.call(this, e);
+        }
+      } catch (err) {
+      }
+    }
+    function isThenable(value) {
+      return value &amp;&amp; typeof value.then === &quot;function&quot;;
+    }
+    function forwardResolution(value) {
+      return value;
+    }
+    function forwardRejection(rejection) {
+      return ZoneAwarePromise.reject(rejection);
+    }
+    const symbolState = __symbol__2(&quot;state&quot;);
+    const symbolValue = __symbol__2(&quot;value&quot;);
+    const symbolFinally = __symbol__2(&quot;finally&quot;);
+    const symbolParentPromiseValue = __symbol__2(&quot;parentPromiseValue&quot;);
+    const symbolParentPromiseState = __symbol__2(&quot;parentPromiseState&quot;);
+    const source = &quot;Promise.then&quot;;
+    const UNRESOLVED = null;
+    const RESOLVED = true;
+    const REJECTED = false;
+    const REJECTED_NO_CATCH = 0;
+    function makeResolver(promise, state) {
+      return (v) =&gt; {
+        try {
+          resolvePromise(promise, state, v);
+        } catch (err) {
+          resolvePromise(promise, false, err);
+        }
+      };
+    }
+    const once = function() {
+      let wasCalled = false;
+      return function wrapper(wrappedFunction) {
+        return function() {
+          if (wasCalled) {
+            return;
+          }
+          wasCalled = true;
+          wrappedFunction.apply(null, arguments);
+        };
+      };
+    };
+    const TYPE_ERROR = &quot;Promise resolved with itself&quot;;
+    const CURRENT_TASK_TRACE_SYMBOL = __symbol__2(&quot;currentTaskTrace&quot;);
+    function resolvePromise(promise, state, value) {
+      const onceWrapper = once();
+      if (promise === value) {
+        throw new TypeError(TYPE_ERROR);
+      }
+      if (promise[symbolState] === UNRESOLVED) {
+        let then = null;
+        try {
+          if (typeof value === &quot;object&quot; || typeof value === &quot;function&quot;) {
+            then = value &amp;&amp; value.then;
+          }
+        } catch (err) {
+          onceWrapper(() =&gt; {
+            resolvePromise(promise, false, err);
+          })();
+          return promise;
+        }
+        if (state !== REJECTED &amp;&amp; value instanceof ZoneAwarePromise &amp;&amp; value.hasOwnProperty(symbolState) &amp;&amp; value.hasOwnProperty(symbolValue) &amp;&amp; value[symbolState] !== UNRESOLVED) {
+          clearRejectedNoCatch(value);
+          resolvePromise(promise, value[symbolState], value[symbolValue]);
+        } else if (state !== REJECTED &amp;&amp; typeof then === &quot;function&quot;) {
+          try {
+            then.call(value, onceWrapper(makeResolver(promise, state)), onceWrapper(makeResolver(promise, false)));
+          } catch (err) {
+            onceWrapper(() =&gt; {
+              resolvePromise(promise, false, err);
+            })();
+          }
+        } else {
+          promise[symbolState] = state;
+          const queue = promise[symbolValue];
+          promise[symbolValue] = value;
+          if (promise[symbolFinally] === symbolFinally) {
+            if (state === RESOLVED) {
+              promise[symbolState] = promise[symbolParentPromiseState];
+              promise[symbolValue] = promise[symbolParentPromiseValue];
+            }
+          }
+          if (state === REJECTED &amp;&amp; value instanceof Error) {
+            const trace = Zone3.currentTask &amp;&amp; Zone3.currentTask.data &amp;&amp; Zone3.currentTask.data[creationTrace];
+            if (trace) {
+              ObjectDefineProperty2(value, CURRENT_TASK_TRACE_SYMBOL, {
+                configurable: true,
+                enumerable: false,
+                writable: true,
+                value: trace
+              });
+            }
+          }
+          for (let i = 0; i &lt; queue.length; ) {
+            scheduleResolveOrReject(promise, queue[i++], queue[i++], queue[i++], queue[i++]);
+          }
+          if (queue.length == 0 &amp;&amp; state == REJECTED) {
+            promise[symbolState] = REJECTED_NO_CATCH;
+            let uncaughtPromiseError = value;
+            try {
+              throw new Error(&quot;Uncaught (in promise): &quot; + readableObjectToString(value) + (value &amp;&amp; value.stack ? &quot;\n&quot; + value.stack : &quot;&quot;));
+            } catch (err) {
+              uncaughtPromiseError = err;
+            }
+            if (isDisableWrappingUncaughtPromiseRejection) {
+              uncaughtPromiseError.throwOriginal = true;
+            }
+            uncaughtPromiseError.rejection = value;
+            uncaughtPromiseError.promise = promise;
+            uncaughtPromiseError.zone = Zone3.current;
+            uncaughtPromiseError.task = Zone3.currentTask;
+            _uncaughtPromiseErrors.push(uncaughtPromiseError);
+            api.scheduleMicroTask();
+          }
+        }
+      }
+      return promise;
+    }
+    const REJECTION_HANDLED_HANDLER = __symbol__2(&quot;rejectionHandledHandler&quot;);
+    function clearRejectedNoCatch(promise) {
+      if (promise[symbolState] === REJECTED_NO_CATCH) {
+        try {
+          const handler = Zone3[REJECTION_HANDLED_HANDLER];
+          if (handler &amp;&amp; typeof handler === &quot;function&quot;) {
+            handler.call(this, { rejection: promise[symbolValue], promise });
+          }
+        } catch (err) {
+        }
+        promise[symbolState] = REJECTED;
+        for (let i = 0; i &lt; _uncaughtPromiseErrors.length; i++) {
+          if (promise === _uncaughtPromiseErrors[i].promise) {
+            _uncaughtPromiseErrors.splice(i, 1);
+          }
+        }
+      }
+    }
+    function scheduleResolveOrReject(promise, zone, chainPromise, onFulfilled, onRejected) {
+      clearRejectedNoCatch(promise);
+      const promiseState = promise[symbolState];
+      const delegate = promiseState ? typeof onFulfilled === &quot;function&quot; ? onFulfilled : forwardResolution : typeof onRejected === &quot;function&quot; ? onRejected : forwardRejection;
+      zone.scheduleMicroTask(source, () =&gt; {
+        try {
+          const parentPromiseValue = promise[symbolValue];
+          const isFinallyPromise = !!chainPromise &amp;&amp; symbolFinally === chainPromise[symbolFinally];
+          if (isFinallyPromise) {
+            chainPromise[symbolParentPromiseValue] = parentPromiseValue;
+            chainPromise[symbolParentPromiseState] = promiseState;
+          }
+          const value = zone.run(delegate, void 0, isFinallyPromise &amp;&amp; delegate !== forwardRejection &amp;&amp; delegate !== forwardResolution ? [] : [parentPromiseValue]);
+          resolvePromise(chainPromise, true, value);
+        } catch (error) {
+          resolvePromise(chainPromise, false, error);
+        }
+      }, chainPromise);
+    }
+    const ZONE_AWARE_PROMISE_TO_STRING = &quot;function ZoneAwarePromise() { [native code] }&quot;;
+    const noop = function() {
+    };
+    const AggregateError = global2.AggregateError;
+    class ZoneAwarePromise {
+      static toString() {
+        return ZONE_AWARE_PROMISE_TO_STRING;
+      }
+      static resolve(value) {
+        if (value instanceof ZoneAwarePromise) {
+          return value;
+        }
+        return resolvePromise(new this(null), RESOLVED, value);
+      }
+      static reject(error) {
+        return resolvePromise(new this(null), REJECTED, error);
+      }
+      static withResolvers() {
+        const result = {};
+        result.promise = new ZoneAwarePromise((res, rej) =&gt; {
+          result.resolve = res;
+          result.reject = rej;
+        });
+        return result;
+      }
+      static any(values) {
+        if (!values || typeof values[Symbol.iterator] !== &quot;function&quot;) {
+          return Promise.reject(new AggregateError([], &quot;All promises were rejected&quot;));
+        }
+        const promises = [];
+        let count = 0;
+        try {
+          for (let v of values) {
+            count++;
+            promises.push(ZoneAwarePromise.resolve(v));
+          }
+        } catch (err) {
+          return Promise.reject(new AggregateError([], &quot;All promises were rejected&quot;));
+        }
+        if (count === 0) {
+          return Promise.reject(new AggregateError([], &quot;All promises were rejected&quot;));
+        }
+        let finished = false;
+        const errors = [];
+        return new ZoneAwarePromise((resolve, reject) =&gt; {
+          for (let i = 0; i &lt; promises.length; i++) {
+            promises[i].then((v) =&gt; {
+              if (finished) {
+                return;
+              }
+              finished = true;
+              resolve(v);
+            }, (err) =&gt; {
+              errors.push(err);
+              count--;
+              if (count === 0) {
+                finished = true;
+                reject(new AggregateError(errors, &quot;All promises were rejected&quot;));
+              }
+            });
+          }
+        });
+      }
+      static race(values) {
+        let resolve;
+        let reject;
+        let promise = new this((res, rej) =&gt; {
+          resolve = res;
+          reject = rej;
+        });
+        function onResolve(value) {
+          resolve(value);
+        }
+        function onReject(error) {
+          reject(error);
+        }
+        for (let value of values) {
+          if (!isThenable(value)) {
+            value = this.resolve(value);
+          }
+          value.then(onResolve, onReject);
+        }
+        return promise;
+      }
+      static all(values) {
+        return ZoneAwarePromise.allWithCallback(values);
+      }
+      static allSettled(values) {
+        const P = this &amp;&amp; this.prototype instanceof ZoneAwarePromise ? this : ZoneAwarePromise;
+        return P.allWithCallback(values, {
+          thenCallback: (value) =&gt; ({ status: &quot;fulfilled&quot;, value }),
+          errorCallback: (err) =&gt; ({ status: &quot;rejected&quot;, reason: err })
+        });
+      }
+      static allWithCallback(values, callback) {
+        let resolve;
+        let reject;
+        let promise = new this((res, rej) =&gt; {
+          resolve = res;
+          reject = rej;
+        });
+        let unresolvedCount = 2;
+        let valueIndex = 0;
+        const resolvedValues = [];
+        for (let value of values) {
+          if (!isThenable(value)) {
+            value = this.resolve(value);
+          }
+          const curValueIndex = valueIndex;
+          try {
+            value.then((value2) =&gt; {
+              resolvedValues[curValueIndex] = callback ? callback.thenCallback(value2) : value2;
+              unresolvedCount--;
+              if (unresolvedCount === 0) {
+                resolve(resolvedValues);
+              }
+            }, (err) =&gt; {
+              if (!callback) {
+                reject(err);
+              } else {
+                resolvedValues[curValueIndex] = callback.errorCallback(err);
+                unresolvedCount--;
+                if (unresolvedCount === 0) {
+                  resolve(resolvedValues);
+                }
+              }
+            });
+          } catch (thenErr) {
+            reject(thenErr);
+          }
+          unresolvedCount++;
+          valueIndex++;
+        }
+        unresolvedCount -= 2;
+        if (unresolvedCount === 0) {
+          resolve(resolvedValues);
+        }
+        return promise;
+      }
+      constructor(executor) {
+        const promise = this;
+        if (!(promise instanceof ZoneAwarePromise)) {
+          throw new Error(&quot;Must be an instanceof Promise.&quot;);
+        }
+        promise[symbolState] = UNRESOLVED;
+        promise[symbolValue] = [];
+        try {
+          const onceWrapper = once();
+          executor &amp;&amp; executor(onceWrapper(makeResolver(promise, RESOLVED)), onceWrapper(makeResolver(promise, REJECTED)));
+        } catch (error) {
+          resolvePromise(promise, false, error);
+        }
+      }
+      get [Symbol.toStringTag]() {
+        return &quot;Promise&quot;;
+      }
+      get [Symbol.species]() {
+        return ZoneAwarePromise;
+      }
+      then(onFulfilled, onRejected) {
+        let C = this.constructor?.[Symbol.species];
+        if (!C || typeof C !== &quot;function&quot;) {
+          C = this.constructor || ZoneAwarePromise;
+        }
+        const chainPromise = new C(noop);
+        const zone = Zone3.current;
+        if (this[symbolState] == UNRESOLVED) {
+          this[symbolValue].push(zone, chainPromise, onFulfilled, onRejected);
+        } else {
+          scheduleResolveOrReject(this, zone, chainPromise, onFulfilled, onRejected);
+        }
+        return chainPromise;
+      }
+      catch(onRejected) {
+        return this.then(null, onRejected);
+      }
+      finally(onFinally) {
+        let C = this.constructor?.[Symbol.species];
+        if (!C || typeof C !== &quot;function&quot;) {
+          C = ZoneAwarePromise;
+        }
+        const chainPromise = new C(noop);
+        chainPromise[symbolFinally] = symbolFinally;
+        const zone = Zone3.current;
+        if (this[symbolState] == UNRESOLVED) {
+          this[symbolValue].push(zone, chainPromise, onFinally, onFinally);
+        } else {
+          scheduleResolveOrReject(this, zone, chainPromise, onFinally, onFinally);
+        }
+        return chainPromise;
+      }
+    }
+    ZoneAwarePromise[&quot;resolve&quot;] = ZoneAwarePromise.resolve;
+    ZoneAwarePromise[&quot;reject&quot;] = ZoneAwarePromise.reject;
+    ZoneAwarePromise[&quot;race&quot;] = ZoneAwarePromise.race;
+    ZoneAwarePromise[&quot;all&quot;] = ZoneAwarePromise.all;
+    const NativePromise = global2[symbolPromise] = global2[&quot;Promise&quot;];
+    global2[&quot;Promise&quot;] = ZoneAwarePromise;
+    const symbolThenPatched = __symbol__2(&quot;thenPatched&quot;);
+    function patchThen(Ctor) {
+      const proto = Ctor.prototype;
+      const prop = ObjectGetOwnPropertyDescriptor2(proto, &quot;then&quot;);
+      if (prop &amp;&amp; (prop.writable === false || !prop.configurable)) {
+        return;
+      }
+      const originalThen = proto.then;
+      proto[symbolThen] = originalThen;
+      Ctor.prototype.then = function(onResolve, onReject) {
+        const wrapped = new ZoneAwarePromise((resolve, reject) =&gt; {
+          originalThen.call(this, resolve, reject);
+        });
+        return wrapped.then(onResolve, onReject);
+      };
+      Ctor[symbolThenPatched] = true;
+    }
+    api.patchThen = patchThen;
+    function zoneify(fn) {
+      return function(self2, args) {
+        let resultPromise = fn.apply(self2, args);
+        if (resultPromise instanceof ZoneAwarePromise) {
+          return resultPromise;
+        }
+        let ctor = resultPromise.constructor;
+        if (!ctor[symbolThenPatched]) {
+          patchThen(ctor);
+        }
+        return resultPromise;
+      };
+    }
+    if (NativePromise) {
+      patchThen(NativePromise);
+      patchMethod(global2, &quot;fetch&quot;, (delegate) =&gt; zoneify(delegate));
+    }
+    Promise[Zone3.__symbol__(&quot;uncaughtPromiseErrors&quot;)] = _uncaughtPromiseErrors;
+    return ZoneAwarePromise;
+  });
+}
+function patchToString(Zone2) {
+  Zone2.__load_patch(&quot;toString&quot;, (global2) =&gt; {
+    const originalFunctionToString = Function.prototype.toString;
+    const ORIGINAL_DELEGATE_SYMBOL = zoneSymbol(&quot;OriginalDelegate&quot;);
+    const PROMISE_SYMBOL = zoneSymbol(&quot;Promise&quot;);
+    const ERROR_SYMBOL = zoneSymbol(&quot;Error&quot;);
+    const newFunctionToString = function toString() {
+      if (typeof this === &quot;function&quot;) {
+        const originalDelegate = this[ORIGINAL_DELEGATE_SYMBOL];
+        if (originalDelegate) {
+          if (typeof originalDelegate === &quot;function&quot;) {
+            return originalFunctionToString.call(originalDelegate);
+          } else {
+            return Object.prototype.toString.call(originalDelegate);
+          }
+        }
+        if (this === Promise) {
+          const nativePromise = global2[PROMISE_SYMBOL];
+          if (nativePromise) {
+            return originalFunctionToString.call(nativePromise);
+          }
+        }
+        if (this === Error) {
+          const nativeError = global2[ERROR_SYMBOL];
+          if (nativeError) {
+            return originalFunctionToString.call(nativeError);
+          }
+        }
+      }
+      return originalFunctionToString.call(this);
+    };
+    newFunctionToString[ORIGINAL_DELEGATE_SYMBOL] = originalFunctionToString;
+    Function.prototype.toString = newFunctionToString;
+    const originalObjectToString = Object.prototype.toString;
+    const PROMISE_OBJECT_TO_STRING = &quot;[object Promise]&quot;;
+    Object.prototype.toString = function() {
+      if (typeof Promise === &quot;function&quot; &amp;&amp; this instanceof Promise) {
+        return PROMISE_OBJECT_TO_STRING;
+      }
+      return originalObjectToString.call(this);
+    };
+  });
+}
+function patchCallbacks(api, target, targetName, method, callbacks) {
+  const symbol = Zone.__symbol__(method);
+  if (target[symbol]) {
+    return;
+  }
+  const nativeDelegate = target[symbol] = target[method];
+  target[method] = function(name, opts, options) {
+    if (opts &amp;&amp; opts.prototype) {
+      callbacks.forEach(function(callback) {
+        const source = `${targetName}.${method}::` + callback;
+        const prototype = opts.prototype;
+        try {
+          if (prototype.hasOwnProperty(callback)) {
+            const descriptor = api.ObjectGetOwnPropertyDescriptor(prototype, callback);
+            if (descriptor &amp;&amp; descriptor.value) {
+              descriptor.value = api.wrapWithCurrentZone(descriptor.value, source);
+              api._redefineProperty(opts.prototype, callback, descriptor);
+            } else if (prototype[callback]) {
+              prototype[callback] = api.wrapWithCurrentZone(prototype[callback], source);
+            }
+          } else if (prototype[callback]) {
+            prototype[callback] = api.wrapWithCurrentZone(prototype[callback], source);
+          }
+        } catch {
+        }
+      });
+    }
+    return nativeDelegate.call(target, name, opts, options);
+  };
+  api.attachOriginToPatched(target[method], nativeDelegate);
+}
+function patchUtil(Zone2) {
+  Zone2.__load_patch(&quot;util&quot;, (global2, Zone3, api) =&gt; {
+    const eventNames = getOnEventNames(global2);
+    api.patchOnProperties = patchOnProperties;
+    api.patchMethod = patchMethod;
+    api.bindArguments = bindArguments;
+    api.patchMacroTask = patchMacroTask;
+    const SYMBOL_BLACK_LISTED_EVENTS = Zone3.__symbol__(&quot;BLACK_LISTED_EVENTS&quot;);
+    const SYMBOL_UNPATCHED_EVENTS = Zone3.__symbol__(&quot;UNPATCHED_EVENTS&quot;);
+    if (global2[SYMBOL_UNPATCHED_EVENTS]) {
+      global2[SYMBOL_BLACK_LISTED_EVENTS] = global2[SYMBOL_UNPATCHED_EVENTS];
+    }
+    if (global2[SYMBOL_BLACK_LISTED_EVENTS]) {
+      Zone3[SYMBOL_BLACK_LISTED_EVENTS] = Zone3[SYMBOL_UNPATCHED_EVENTS] = global2[SYMBOL_BLACK_LISTED_EVENTS];
+    }
+    api.patchEventPrototype = patchEventPrototype;
+    api.patchEventTarget = patchEventTarget;
+    api.isIEOrEdge = isIEOrEdge;
+    api.ObjectDefineProperty = ObjectDefineProperty;
+    api.ObjectGetOwnPropertyDescriptor = ObjectGetOwnPropertyDescriptor;
+    api.ObjectCreate = ObjectCreate;
+    api.ArraySlice = ArraySlice;
+    api.patchClass = patchClass;
+    api.wrapWithCurrentZone = wrapWithCurrentZone;
+    api.filterProperties = filterProperties;
+    api.attachOriginToPatched = attachOriginToPatched;
+    api._redefineProperty = Object.defineProperty;
+    api.patchCallbacks = patchCallbacks;
+    api.getGlobalObjects = () =&gt; ({
+      globalSources,
+      zoneSymbolEventNames,
+      eventNames,
+      isBrowser,
+      isMix,
+      isNode,
+      TRUE_STR,
+      FALSE_STR,
+      ZONE_SYMBOL_PREFIX,
+      ADD_EVENT_LISTENER_STR,
+      REMOVE_EVENT_LISTENER_STR
+    });
+  });
+}
+function patchCommon(Zone2) {
+  patchPromise(Zone2);
+  patchToString(Zone2);
+  patchUtil(Zone2);
+}
+var Zone$1 = loadZone();
+patchCommon(Zone$1);
+patchBrowser(Zone$1);
+/*! Bundled license information:
+
+zone.js/fesm2015/zone.js:
+  (**
+   * @license Angular v&lt;unknown&gt;
+   * (c) 2010-2025 Google LLC. https://angular.io/
+   * License: MIT
+   *)
+*/
+//# sourceMappingURL=zone__js.js.map
+</code></pre>
+				
+				
+			</details></td>
+	</tr>
+	
+	
+	<tr>
+		<th scope="row">Evidence</th>
+		<td><pre><code>user</code></pre></td>
+	</tr>
+	<tr>
+		<th scope="row">Solution</th>
+		<td> 
+<p>Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.</p>
+ </td>
+	</tr>
+</table>
+
+											</details></li>
+									</ol>
+								</li>
+								
+							</ol>
+						</li>
+						
+					</ol>
+				</li>
+				  
+			</ol>
+		</section>
+
+		<section id="appendix" class="appendix">
+			<h2>Appendix</h2>
+
+			<section id="alert-types" class="alert-types">
+				<h3>Alert types</h3>
+				<p class="alert-types-intro">This section contains additional information on the types of alerts in the report.</p>
+				<ol>
+					<li
+						id="alert-type-0">
+						<h4>CSP: Failure to Define Directive with No Fallback</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by a passive scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/10055/">CSP</a>)
+									</span>   
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">CWE ID</th>
+								<td><a
+									href="https://cwe.mitre.org/data/definitions/693.html">693</a></td>
+							</tr>
+							<tr>
+								<th scope="row">WASC ID</th>
+								<td>15</td>
+							</tr>
+							<tr>
+								<th scope="row">Reference</th>
+								<td>
+									<ol>
+										<li><a
+											href="https://www.w3.org/TR/CSP/">https://www.w3.org/TR/CSP/</a></li>
+										<li><a
+											href="https://caniuse.com/#search=content+security+policy">https://caniuse.com/#search=content+security+policy</a></li>
+										<li><a
+											href="https://content-security-policy.com/">https://content-security-policy.com/</a></li>
+										<li><a
+											href="https://github.com/HtmlUnit/htmlunit-csp">https://github.com/HtmlUnit/htmlunit-csp</a></li>
+										<li><a
+											href="https://developers.google.com/web/fundamentals/security/csp#policy_applies_to_a_wide_variety_of_resources">https://developers.google.com/web/fundamentals/security/csp#policy_applies_to_a_wide_variety_of_resources</a></li>
+									</ol>
+								</td>
+							</tr>
+						</table>
+					</li>
+					<li
+						id="alert-type-1">
+						<h4>Content Security Policy (CSP) Header Not Set</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by a passive scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/10038/">Content Security Policy (CSP) Header Not Set</a>)
+									</span>   
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">CWE ID</th>
+								<td><a
+									href="https://cwe.mitre.org/data/definitions/693.html">693</a></td>
+							</tr>
+							<tr>
+								<th scope="row">WASC ID</th>
+								<td>15</td>
+							</tr>
+							<tr>
+								<th scope="row">Reference</th>
+								<td>
+									<ol>
+										<li><a
+											href="https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Introducing_Content_Security_Policy">https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Introducing_Content_Security_Policy</a></li>
+										<li><a
+											href="https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/Content_Security_Policy_Cheat_Sheet.html</a></li>
+										<li><a
+											href="https://www.w3.org/TR/CSP/">https://www.w3.org/TR/CSP/</a></li>
+										<li><a
+											href="https://w3c.github.io/webappsec-csp/">https://w3c.github.io/webappsec-csp/</a></li>
+										<li><a
+											href="https://web.dev/articles/csp">https://web.dev/articles/csp</a></li>
+										<li><a
+											href="https://caniuse.com/#feat=contentsecuritypolicy">https://caniuse.com/#feat=contentsecuritypolicy</a></li>
+										<li><a
+											href="https://content-security-policy.com/">https://content-security-policy.com/</a></li>
+									</ol>
+								</td>
+							</tr>
+						</table>
+					</li>
+					<li
+						id="alert-type-2">
+						<h4>Cross-Domain Misconfiguration</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by a passive scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/10098/">Cross-Domain Misconfiguration</a>)
+									</span>   
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">CWE ID</th>
+								<td><a
+									href="https://cwe.mitre.org/data/definitions/264.html">264</a></td>
+							</tr>
+							<tr>
+								<th scope="row">WASC ID</th>
+								<td>14</td>
+							</tr>
+							<tr>
+								<th scope="row">Reference</th>
+								<td>
+									<ol>
+										<li><a
+											href="https://vulncat.fortify.com/en/detail?id=desc.config.dotnet.html5_overly_permissive_cors_policy">https://vulncat.fortify.com/en/detail?id=desc.config.dotnet.html5_overly_permissive_cors_policy</a></li>
+									</ol>
+								</td>
+							</tr>
+						</table>
+					</li>
+					<li
+						id="alert-type-3">
+						<h4>Hidden File Found</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by an active scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/40035/">Hidden File Finder</a>)
+									</span>   
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">CWE ID</th>
+								<td><a
+									href="https://cwe.mitre.org/data/definitions/538.html">538</a></td>
+							</tr>
+							<tr>
+								<th scope="row">WASC ID</th>
+								<td>13</td>
+							</tr>
+							<tr>
+								<th scope="row">Reference</th>
+								<td>
+									<ol>
+										<li><a
+											href="https://blog.hboeck.de/archives/892-Introducing-Snallygaster-a-Tool-to-Scan-for-Secrets-on-Web-Servers.html">https://blog.hboeck.de/archives/892-Introducing-Snallygaster-a-Tool-to-Scan-for-Secrets-on-Web-Servers.html</a></li>
+									</ol>
+								</td>
+							</tr>
+						</table>
+					</li>
+					<li
+						id="alert-type-4">
+						<h4>Missing Anti-clickjacking Header</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by a passive scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/10020/">Anti-clickjacking Header</a>)
+									</span>   
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">CWE ID</th>
+								<td><a
+									href="https://cwe.mitre.org/data/definitions/1021.html">1021</a></td>
+							</tr>
+							<tr>
+								<th scope="row">WASC ID</th>
+								<td>15</td>
+							</tr>
+							<tr>
+								<th scope="row">Reference</th>
+								<td>
+									<ol>
+										<li><a
+											href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options</a></li>
+									</ol>
+								</td>
+							</tr>
+						</table>
+					</li>
+					<li
+						id="alert-type-5">
+						<h4>X-Content-Type-Options Header Missing</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by a passive scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/10021/">X-Content-Type-Options Header Missing</a>)
+									</span>   
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">CWE ID</th>
+								<td><a
+									href="https://cwe.mitre.org/data/definitions/693.html">693</a></td>
+							</tr>
+							<tr>
+								<th scope="row">WASC ID</th>
+								<td>15</td>
+							</tr>
+							<tr>
+								<th scope="row">Reference</th>
+								<td>
+									<ol>
+										<li><a
+											href="https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/compatibility/gg622941(v=vs.85)">https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/compatibility/gg622941(v=vs.85)</a></li>
+										<li><a
+											href="https://owasp.org/www-community/Security_Headers">https://owasp.org/www-community/Security_Headers</a></li>
+									</ol>
+								</td>
+							</tr>
+						</table>
+					</li>
+					<li
+						id="alert-type-6">
+						<h4>Information Disclosure - Sensitive Information in URL</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by a passive scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/10024/">Information Disclosure - Sensitive Information in URL</a>)
+									</span>   
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">CWE ID</th>
+								<td><a
+									href="https://cwe.mitre.org/data/definitions/598.html">598</a></td>
+							</tr>
+							<tr>
+								<th scope="row">WASC ID</th>
+								<td>13</td>
+							</tr>
+							
+						</table>
+					</li>
+					<li
+						id="alert-type-7">
+						<h4>Information Disclosure - Suspicious Comments</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by a passive scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/10027/">Information Disclosure - Suspicious Comments</a>)
+									</span>   
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">CWE ID</th>
+								<td><a
+									href="https://cwe.mitre.org/data/definitions/615.html">615</a></td>
+							</tr>
+							<tr>
+								<th scope="row">WASC ID</th>
+								<td>13</td>
+							</tr>
+							
+						</table>
+					</li>
+					<li
+						id="alert-type-8">
+						<h4>Modern Web Application</h4>
+						<table class="alert-types-table">
+							<tr>
+								<th scope="row">Source</th>
+								<td>
+									
+									   <span>raised by a passive scanner</span> <span>(<a
+										href="https://www.zaproxy.org/docs/alerts/10109/">Modern Web Application</a>)
+									</span>   
+								</td>
+							</tr>
+							
+							
+							
+						</table>
+					</li>
+				</ol>
+			</section>
+		</section>
+		 
+	</main>
+</body>
+</html>
+
+
+

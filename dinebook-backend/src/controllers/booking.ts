@@ -18,6 +18,16 @@ export const getAvailability = async (
     try {
         const { restaurantId, date } = req.query as { restaurantId: string; date: string };
 
+        // Enhanced validation
+        if (!restaurantId || !date) {
+            return ResponseHelper.sendValidationError(res, "Restaurant ID and date are required");
+        }
+
+        // Validate restaurantId format
+        if (!restaurantId.match(/^[0-9a-fA-F]{24}$/)) {
+            return ResponseHelper.sendValidationError(res, "Invalid restaurant ID format");
+        }
+
         const validationError = BookingInputValidator.validateAvailabilityInput(req.query);
         if (validationError) {
             return ResponseHelper.sendValidationError(res, validationError);
@@ -96,12 +106,27 @@ export const createBooking = async (
     res: Response
 ): Promise<void> => {
     try {
+        // Check authentication first
+        if (!req.user || !req.user.id) {
+            return ResponseHelper.sendValidationError(res, "Authentication required");
+        }
+
         const { restaurantId, date, time, guests, specialRequests } = req.body;
         const customerId = req.user.id;
 
         const validationError = BookingInputValidator.validateCreateBookingInput(req.body);
         if (validationError) {
             return ResponseHelper.sendValidationError(res, validationError);
+        }
+
+        // Additional validation for required fields
+        if (!restaurantId || !date || !time || !guests) {
+            return ResponseHelper.sendValidationError(res, "Missing required fields: restaurantId, date, time, guests");
+        }
+
+        // Validate restaurantId format
+        if (!restaurantId.match(/^[0-9a-fA-F]{24}$/)) {
+            return ResponseHelper.sendValidationError(res, "Invalid restaurant ID format");
         }
 
         const [restaurant, user] = await Promise.all([
@@ -156,7 +181,12 @@ export const createBooking = async (
 
             await booking.save({ session });
             await session.commitTransaction();
-            await sendConfirmationEmail(user.email, booking, restaurant.name, specialRequests);
+            
+            // Send email confirmation asynchronously to avoid blocking response
+            sendConfirmationEmail(user.email, booking, restaurant.name, specialRequests).catch(emailError => {
+                console.error('Email sending failed:', emailError);
+                // Don't fail the booking creation if email fails
+            });
 
         } catch (transactionError) {
             console.error('Error during booking creation:', transactionError);

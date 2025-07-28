@@ -14,6 +14,41 @@ export const register = async (req: Request, res: Response) => {
 	const { email, password, role = "customer", name } = req.body;
 
 	try {
+		// SECURITY: Enhanced input validation and sanitization
+		if (!email || !password || !name) {
+			return res.status(400).json({ error: 'Email, password, and name are required' });
+		}
+
+		// SECURITY: Email format validation
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(email)) {
+			return res.status(400).json({ error: 'Invalid email format' });
+		}
+
+		// SECURITY: Strong password requirements
+		if (password.length < 8) {
+			return res.status(400).json({ error: 'Password must be at least 8 characters long' });
+		}
+
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
+		if (!passwordRegex.test(password)) {
+			return res.status(400).json({ 
+				error: 'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character' 
+			});
+		}
+
+		// SECURITY: Name validation (prevent script injection)
+		const nameRegex = /^[a-zA-Z\s]+$/;
+		if (!nameRegex.test(name) || name.length > 50) {
+			return res.status(400).json({ error: 'Invalid name format' });
+		}
+
+		// SECURITY: Role validation
+		const allowedRoles = ['customer', 'owner'];
+		if (!allowedRoles.includes(role)) {
+			return res.status(400).json({ error: 'Invalid role specified' });
+		}
+
 		const existingUser = await User.findOne({ email });
 		if (existingUser) {
 			return res.status(400).json({ error: 'User already exists with this email' });
