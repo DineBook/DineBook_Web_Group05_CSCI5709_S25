@@ -39,7 +39,7 @@ export interface ReplyToReviewRequest {
   providedIn: 'root'
 })
 export class ReviewService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = 'https://dinebook-web-group05-csci5709-s25.onrender.com/api';
   private reviewsSubject = new BehaviorSubject<Review[]>([]);
   public reviews$ = this.reviewsSubject.asObservable();
 

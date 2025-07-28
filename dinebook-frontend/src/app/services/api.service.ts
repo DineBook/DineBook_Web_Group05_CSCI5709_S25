@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:3000';
+   private apiUrl = 'https://dinebook-web-group05-csci5709-s25.onrender.com';
 
   constructor(private http: HttpClient) { }
 

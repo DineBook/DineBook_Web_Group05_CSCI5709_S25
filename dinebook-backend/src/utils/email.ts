@@ -34,7 +34,7 @@ export const sendVerificationEmail = async (to: string, token: string) => {
     html: `
       <h2>Welcome to DineBook!</h2>
       <p>Please verify your email by clicking the link below:</p>
-      <a href="http://localhost:4200/verify?token=${token}" style="padding: 10px 20px; background-color: #d32f2f; color: white; text-decoration: none; border-radius: 5px;">Verify Email</a>
+       <a href="https://dinebook-web-group05-csci5709-s25.onrender.com/api/auth/verify?token=${token}" style="padding: 10px 20px; background-color: #d32f2f; color: white; text-decoration: none; border-radius: 5px;">Verify Email</a>
       <p>If you didn't sign up, please ignore this email.</p>
     `,
   };
