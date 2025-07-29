@@ -17,6 +17,7 @@ export interface Review {
       };
   rating: number;
   comment: string;
+  imageUrl?: string; // Optional image URL from S3
   ownerReply?: string;
   createdAt: string;
   updatedAt: string;
@@ -26,13 +27,13 @@ export interface CreateReviewRequest {
   restaurantId: string;
   rating: number;
   comment: string;
-  image?: File; // Optional image file for review creation
+  image?: File; // Optional image file
 }
 
 export interface UpdateReviewRequest {
   rating?: number;
   comment?: string;
-  image?: File; // Optional image file for update
+  image?: File; // Optional image file for updates
 }
 
 export interface ReplyToReviewRequest {
@@ -109,21 +110,26 @@ export class ReviewService {
     reviewId: string,
     reviewData: UpdateReviewRequest
   ): Observable<any> {
-    // If there is an image, use FormData
+    // If an image is present, use FormData for multipart/form-data
     if (reviewData.image) {
       const formData = new FormData();
-      if (reviewData.rating !== undefined)
+      if (reviewData.rating !== undefined) {
         formData.append('rating', reviewData.rating.toString());
-      if (reviewData.comment !== undefined)
+      }
+      if (reviewData.comment !== undefined) {
         formData.append('comment', reviewData.comment);
-      formData.append('image', reviewData.image);
+      }
+      if (reviewData.image) {
+        formData.append('image', reviewData.image);
+      }
 
-      // Remove Content-Type so browser sets it for FormData
+      // For FormData, don't set Content-Type header - let the browser set it
+      const headers = this.getAuthHeaders();
       return this.http.put(`${this.apiUrl}/reviews/${reviewId}`, formData, {
-        headers: this.getHeaders().delete('Content-Type'),
+        headers: headers,
       });
     } else {
-      // No image, send as JSON
+      // No image, send regular JSON
       return this.http.put(`${this.apiUrl}/reviews/${reviewId}`, reviewData, {
         headers: this.getHeaders(),
       });

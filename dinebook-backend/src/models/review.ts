@@ -23,6 +23,11 @@ const reviewSchema = new mongoose.Schema({
     trim: true,
     maxlength: [500, 'Comment cannot exceed 500 characters']
   },
+  imageUrl: {
+    type: String,
+    trim: true,
+    maxlength: [500, 'Image URL cannot exceed 500 characters']
+  },
   ownerReply: {
     type: String,
     trim: true,

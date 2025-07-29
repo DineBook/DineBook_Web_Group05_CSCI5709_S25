@@ -28,7 +28,7 @@
       <div class="prompt-card">
         <div class="prompt-icon">
           <mat-icon>person</mat-icon>
-        </div>
+        <!-- end image-upload-section -->
         <div class="prompt-content">
           <h3>Share your experience</h3>
           <p>Sign in to leave a review and help other diners discover great restaurants</p>
@@ -162,35 +162,9 @@
             </div>
           </div>
 
-          <!-- Image Preview -->
-          <div class="image-preview" *ngIf="selectedImage">
-            <div class="preview-container">
-              <img [src]="selectedImage.preview" [alt]="selectedImage.file.name" class="preview-image">
-              <button 
-                type="button" 
-                class="remove-button"
-                (click)="removeImage()"
-                aria-label="Remove image">
-                <mat-icon>close</mat-icon>
-              </button>
-            </div>
-          </div>
-
-          <!-- Upload Progress -->
-          <div class="upload-progress" *ngIf="uploadProgress > 0 && uploadProgress < 100">
-            <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
-            <div class="progress-text">Uploading image... {{ uploadProgress }}%</div>
-          </div>
-
-          <!-- Error Message -->
-          <div class="upload-error" *ngIf="uploadError">
-            <mat-icon class="error-icon">error</mat-icon>
-            {{ uploadError }}
-          </div>
-        </div>
-        
-        <div class="form-actions">
-          <button mat-button (click)="cancelWriteReview()" class="cancel-btn">
+          <!-- ...existing code... (keep only one image upload section) ... -->
+        <mat-card-actions>
+          <button mat-button (click)="cancelWriteReview()">
             Cancel
           </button>
           <button mat-raised-button color="primary" 
@@ -302,6 +276,111 @@
                     maxlength="500"></textarea>
                   <div class="char-count">{{ editReviewData.comment.length }}/500</div>
                 </div>
+              </div>
+
+              <!-- Image Upload Section for Editing -->
+              <div class="image-upload-section">
+                <div class="section-label">
+                  <mat-icon class="upload-icon">photo_camera</mat-icon>
+                  Update Photo (Optional)
+                </div>
+                
+                <!-- Current Image Display -->
+                <div *ngIf="currentImageUrl && currentImageUrl.trim().length > 0" class="current-image-container">
+                  <div class="current-image-label">Current Image:</div>
+                  <div class="image-preview">
+                    <div class="preview-container">
+                      <img [src]="currentImageUrl" 
+                           alt="Current review image"
+                           class="preview-image"
+                           (error)="onImageError($event)">
+                      <button 
+                        type="button" 
+                        class="remove-button"
+                        (click)="removeCurrentImage()"
+                        aria-label="Remove current image">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Upload Area (only show if no current image OR current image was removed) -->
+                <div class="upload-area" 
+                     [class.drag-over]="isDragOver" 
+                     (dragenter)="onDragEnter($event)"
+                     (dragover)="onDragOver($event)" 
+                     (dragleave)="onDragLeave($event)" 
+                     (drop)="onDrop($event)"
+                     (contextmenu)="$event.preventDefault()"
+                     *ngIf="!currentImageUrl && !selectedImage">
+                  
+                  <input 
+                    type="file" 
+                    #fileInput 
+                    id="fileInputEdit"
+                    accept="image/png,image/jpg,image/jpeg,.png,.jpg,.jpeg" 
+                    (change)="onFileSelected($event)"
+                    class="file-input">
+                  
+                  <div class="upload-content">
+                    <mat-icon class="upload-large-icon">cloud_upload</mat-icon>
+                    <div class="upload-text">
+                      <h4 class="clickable-upload-text" 
+                          (click)="triggerFileInput($event)"
+                          (keydown)="onUploadKeydown($event)"
+                          tabindex="0"
+                          role="button"
+                          aria-label="Click to select an image file">
+                        Click to upload an image
+                      </h4>
+                      <p>or <span class="browse-text">drag and drop</span></p>
+                    </div>
+                    <div class="file-constraints">PNG, JPG up to {{ formatFileSize(maxFileSize) }}</div>
+                  </div>
+                </div>
+
+                <!-- Selected Image Preview -->
+                <div *ngIf="selectedImage" class="selected-image-container">
+                  <div class="selected-image-label">New Image:</div>
+                  <div class="image-preview">
+                    <div class="preview-container">
+                      <img [src]="selectedImage.preview" 
+                           [alt]="selectedImage.file.name" 
+                           class="preview-image">
+                      <button 
+                        type="button" 
+                        class="remove-button"
+                        (click)="removeImage()"
+                        aria-label="Remove selected image">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Upload Progress -->
+                <div class="upload-progress" *ngIf="uploadProgress > 0 && uploadProgress < 100">
+                  <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+                  <div class="progress-text">Uploading image... {{ uploadProgress }}%</div>
+                </div>
+
+                <!-- Error Message -->
+                <div class="upload-error" *ngIf="uploadError">
+                  <mat-icon class="error-icon">error</mat-icon>
+                  {{ uploadError }}
+                </div>
+              </div>
+
+              <div class="edit-form-actions">
+                <button mat-button (click)="cancelEditReviewInList()">
+                  Cancel
+                </button>
+                <button mat-raised-button color="primary" 
+                        [disabled]="!editReviewData.rating || !editReviewData.comment.trim()"
+                        (click)="updateReviewInList()">
+                  Update Review
+                </button>
               </div>
               
               <div class="edit-actions">

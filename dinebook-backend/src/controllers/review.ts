@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Review, Restaurant } from "../models/";
 import type { AuthenticatedRequest } from "../types/";
+import { uploadFileToS3 } from "../services/s3Upload";
 
 // Helper function to calculate and update average rating
 const calculateAverageRating = async (restaurantId: string) => {
@@ -13,7 +14,9 @@ const calculateAverageRating = async (restaurantId: string) => {
     }
     const sum = reviews.reduce((acc, review) => acc + review.rating, 0);
     const average = sum / totalReviews;
-    await Restaurant.findByIdAndUpdate(restaurantId, { _averageRating: average });
+    await Restaurant.findByIdAndUpdate(restaurantId, {
+      _averageRating: average,
+    });
   } catch (error) {
     console.error("Error calculating average rating:", error);
     throw new Error("Failed to update average rating");
@@ -26,7 +29,7 @@ export const createReview = async (
   res: Response
 ): Promise<void> => {
   try {
-    if (req.user.role !== 'customer') {
+    if (req.user.role !== "customer") {
       res.status(403).json({ error: "Only customers can create reviews" });
       return;
     }
@@ -35,7 +38,9 @@ export const createReview = async (
 
     // Input validation
     if (!restaurantId || !rating || !comment) {
-      res.status(400).json({ error: "Restaurant ID, rating, and comment are required" });
+      res
+        .status(400)
+        .json({ error: "Restaurant ID, rating, and comment are required" });
       return;
     }
     if (rating < 1 || rating > 5) {
@@ -57,16 +62,47 @@ export const createReview = async (
     // Check if customer has already reviewed this restaurant
     const existingReview = await Review.findOne({ customerId, restaurantId });
     if (existingReview) {
-      res.status(400).json({ error: "You have already reviewed this restaurant" });
+      res
+        .status(400)
+        .json({ error: "You have already reviewed this restaurant" });
       return;
     }
 
-    const review = new Review({
+    // Handle optional image upload
+    let imageUrl: string | undefined;
+    if (req.file) {
+      try {
+        console.log("Image file detected, uploading to S3...");
+        imageUrl = await uploadFileToS3(
+          req.file.buffer,
+          req.file.originalname,
+          req.file.mimetype
+        );
+        console.log("Image uploaded successfully:", imageUrl);
+      } catch (uploadError) {
+        console.error("Image upload error:", uploadError);
+        // Continue with review creation without image if upload fails
+        console.log(
+          "Continuing review creation without image due to upload failure"
+        );
+        imageUrl = undefined;
+      }
+    }
+
+    // Create review with optional image URL
+    const reviewData: any = {
       customerId,
       restaurantId,
       rating,
       comment,
-    });
+    };
+
+    // Only add imageUrl if it exists
+    if (imageUrl) {
+      reviewData.imageUrl = imageUrl;
+    }
+
+    const review = new Review(reviewData);
 
     await review.save();
 
@@ -79,8 +115,14 @@ export const createReview = async (
     });
   } catch (error) {
     console.error("Review creation error:", error);
-    if (error instanceof Error && error.name === "MongoServerError" && (error as any).code === 11000) {
-      res.status(400).json({ error: "You have already reviewed this restaurant" });
+    if (
+      error instanceof Error &&
+      error.name === "MongoServerError" &&
+      (error as any).code === 11000
+    ) {
+      res
+        .status(400)
+        .json({ error: "You have already reviewed this restaurant" });
     } else {
       res.status(500).json({ error: "Failed to create review" });
     }
@@ -93,8 +135,10 @@ export const updateReview = async (
   res: Response
 ): Promise<void> => {
   try {
-    if (req.user.role !== 'customer') {
-      res.status(403).json({ error: "Only customers can update their reviews" });
+    if (req.user.role !== "customer") {
+      res
+        .status(403)
+        .json({ error: "Only customers can update their reviews" });
       return;
     }
     const { id } = req.params;
@@ -114,12 +158,38 @@ export const updateReview = async (
     const review = await Review.findOne({ _id: id, customerId });
 
     if (!review) {
-      res.status(404).json({ error: "Review not found or you don't have permission to update it" });
+      res.status(404).json({
+        error: "Review not found or you don't have permission to update it",
+      });
       return;
     }
 
+    // Update basic fields
     if (rating) review.rating = rating;
     if (comment) review.comment = comment;
+
+    // Handle image upload if present
+    if (req.file) {
+      try {
+        console.log(
+          "Image file detected for review update, uploading to S3..."
+        );
+        const imageUrl = await uploadFileToS3(
+          req.file.buffer,
+          req.file.originalname,
+          req.file.mimetype
+        );
+        review.imageUrl = imageUrl;
+        console.log("Image uploaded successfully:", imageUrl);
+      } catch (uploadError) {
+        console.error("S3 upload failed during review update:", uploadError);
+        res.status(500).json({
+          error: "Failed to upload image. Please try again.",
+        });
+        return;
+      }
+    }
+
     await review.save();
 
     // Update average rating
@@ -141,8 +211,10 @@ export const deleteReview = async (
   res: Response
 ): Promise<void> => {
   try {
-    if (req.user.role !== 'customer') {
-      res.status(403).json({ error: "Only customers can delete their reviews" });
+    if (req.user.role !== "customer") {
+      res
+        .status(403)
+        .json({ error: "Only customers can delete their reviews" });
       return;
     }
     const { id } = req.params;
@@ -151,7 +223,9 @@ export const deleteReview = async (
     const review = await Review.findOneAndDelete({ _id: id, customerId });
 
     if (!review) {
-      res.status(404).json({ error: "Review not found or you don't have permission to delete it" });
+      res.status(404).json({
+        error: "Review not found or you don't have permission to delete it",
+      });
       return;
     }
 
@@ -203,8 +277,10 @@ export const replyToReview = async (
   res: Response
 ): Promise<void> => {
   try {
-    if (req.user.role !== 'owner') {
-      res.status(403).json({ error: "Only restaurant owners can reply to reviews" });
+    if (req.user.role !== "owner") {
+      res
+        .status(403)
+        .json({ error: "Only restaurant owners can reply to reviews" });
       return;
     }
     const { id } = req.params;
@@ -226,7 +302,9 @@ export const replyToReview = async (
 
     const restaurant = review.restaurantId as any;
     if (restaurant.ownerId.toString() !== ownerId) {
-      res.status(403).json({ error: "You don't have permission to reply to this review" });
+      res
+        .status(403)
+        .json({ error: "You don't have permission to reply to this review" });
       return;
     }
 
@@ -249,7 +327,7 @@ export const getMyReviews = async (
   res: Response
 ): Promise<void> => {
   try {
-    if (req.user.role !== 'customer') {
+    if (req.user.role !== "customer") {
       res.status(403).json({ error: "Only customers can view their reviews" });
       return;
     }
@@ -272,8 +350,10 @@ export const updateReply = async (
   res: Response
 ): Promise<void> => {
   try {
-    if (req.user.role !== 'owner') {
-      res.status(403).json({ error: "Only restaurant owners can update replies" });
+    if (req.user.role !== "owner") {
+      res
+        .status(403)
+        .json({ error: "Only restaurant owners can update replies" });
       return;
     }
     const { id } = req.params;
@@ -295,7 +375,9 @@ export const updateReply = async (
 
     const restaurant = review.restaurantId as any;
     if (restaurant.ownerId.toString() !== ownerId) {
-      res.status(403).json({ error: "You don't have permission to update this reply" });
+      res
+        .status(403)
+        .json({ error: "You don't have permission to update this reply" });
       return;
     }
 
@@ -318,8 +400,10 @@ export const deleteReply = async (
   res: Response
 ): Promise<void> => {
   try {
-    if (req.user.role !== 'owner') {
-      res.status(403).json({ error: "Only restaurant owners can delete replies" });
+    if (req.user.role !== "owner") {
+      res
+        .status(403)
+        .json({ error: "Only restaurant owners can delete replies" });
       return;
     }
     const { id } = req.params;
@@ -334,11 +418,13 @@ export const deleteReply = async (
 
     const restaurant = review.restaurantId as any;
     if (restaurant.ownerId.toString() !== ownerId) {
-      res.status(403).json({ error: "You don't have permission to delete this reply" });
+      res
+        .status(403)
+        .json({ error: "You don't have permission to delete this reply" });
       return;
     }
 
-    review.ownerReply = '';
+    review.ownerReply = "";
     await review.save();
 
     res.json({
