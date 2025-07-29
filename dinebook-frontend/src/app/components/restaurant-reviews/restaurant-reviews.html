@@ -28,7 +28,7 @@
       <div class="prompt-card">
         <div class="prompt-icon">
           <mat-icon>person</mat-icon>
-        <!-- end image-upload-section -->
+        </div>
         <div class="prompt-content">
           <h3>Share your experience</h3>
           <p>Sign in to leave a review and help other diners discover great restaurants</p>
@@ -38,6 +38,7 @@
           </button>
         </div>
       </div>
+    </div>
     </div>
 
     <!-- Elegant Rating Summary -->
@@ -161,9 +162,9 @@
               <div class="file-constraints">PNG, JPG up to {{ formatFileSize(maxFileSize) }}</div>
             </div>
           </div>
+        </div>
 
-          <!-- ...existing code... (keep only one image upload section) ... -->
-        <mat-card-actions>
+        <div class="form-actions">
           <button mat-button (click)="cancelWriteReview()">
             Cancel
           </button>
@@ -458,4 +459,3 @@
       </div>
     </div>
   </div>
-</div>

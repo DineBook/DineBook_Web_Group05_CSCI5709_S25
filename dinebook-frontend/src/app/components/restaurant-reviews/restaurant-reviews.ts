@@ -52,8 +52,7 @@ interface ImageFile {
   styleUrl: './restaurant-reviews.scss',
 })
 export class RestaurantReviewsComponent
-  implements OnInit, OnChanges, AfterViewInit, OnDestroy
-{
+  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Input() restaurantId!: string;
   @Input() restaurantName!: string;
   @Input() restaurantOwnerId!: string;
@@ -92,7 +91,7 @@ export class RestaurantReviewsComponent
     private reviewService: ReviewService,
     public authService: AuthService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadReviews();
