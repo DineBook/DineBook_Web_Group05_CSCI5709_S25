@@ -27,9 +27,10 @@
               <input 
                 matInput 
                 formControlName="name" 
-                placeholder="Enter your full name"
+                placeholder="e.g. John Doe"
                 autocomplete="name"
-                [attr.aria-describedby]="getNameErrorId()">
+                [attr.aria-describedby]="getNameErrorId()"
+                (blur)="signUpForm.get('name')?.markAsTouched()">
               <mat-icon matSuffix class="field-icon">person</mat-icon>
             </mat-form-field>
             
@@ -38,12 +39,17 @@
               <div *ngIf="signUpForm.get('name')?.hasError('required') && signUpForm.get('name')?.touched" 
                    class="error-message">
                 <mat-icon class="message-icon">error_outline</mat-icon>
-                <span>Full name is required</span>
+                <span>Full name is required. Please enter your first and last name (e.g. John Doe).</span>
+              </div>
+              <div *ngIf="signUpForm.get('name')?.hasError('minlength') && signUpForm.get('name')?.touched" 
+                   class="error-message">
+                <mat-icon class="message-icon">error_outline</mat-icon>
+                <span>Name must be at least 2 characters long.</span>
               </div>
               <div *ngIf="signUpForm.get('name')?.valid && signUpForm.get('name')?.touched" 
                    class="success-message">
                 <mat-icon class="message-icon">check_circle</mat-icon>
-                <span>Name looks good</span>
+                <span>Name looks good!</span>
               </div>
             </div>
           </div>
@@ -61,9 +67,10 @@
                 matInput 
                 formControlName="email" 
                 type="email" 
-                placeholder="Enter your email address"
+                placeholder="e.g. john.doe&#64;email.com"
                 autocomplete="email"
-                [attr.aria-describedby]="getEmailErrorId()">
+                [attr.aria-describedby]="getEmailErrorId()"
+                (blur)="signUpForm.get('email')?.markAsTouched()">
               <mat-icon matSuffix class="field-icon">alternate_email</mat-icon>
             </mat-form-field>
             
@@ -72,17 +79,17 @@
               <div *ngIf="signUpForm.get('email')?.hasError('required') && signUpForm.get('email')?.touched" 
                    class="error-message">
                 <mat-icon class="message-icon">error_outline</mat-icon>
-                <span>Email address is required</span>
+                <span>Email address is required. Please enter your email (e.g. john.doe&#64;email.com).</span>
               </div>
               <div *ngIf="signUpForm.get('email')?.hasError('email') && signUpForm.get('email')?.touched" 
                    class="error-message">
                 <mat-icon class="message-icon">error_outline</mat-icon>
-                <span>Please enter a valid email address</span>
+                <span>The email address format is invalid. Please use a valid email like john.doe&#64;email.com.</span>
               </div>
               <div *ngIf="signUpForm.get('email')?.valid && signUpForm.get('email')?.touched" 
                    class="success-message">
                 <mat-icon class="message-icon">check_circle</mat-icon>
-                <span>Email looks good</span>
+                <span>Email looks good!</span>
               </div>
             </div>
           </div>
@@ -100,9 +107,10 @@
                 matInput 
                 formControlName="password" 
                 [type]="hidePassword ? 'password' : 'text'"
-                placeholder="Create a secure password"
+                placeholder="At least 8 characters, e.g. Passw0rd"
                 autocomplete="new-password"
-                [attr.aria-describedby]="getPasswordErrorId()">
+                [attr.aria-describedby]="getPasswordErrorId()"
+                (blur)="signUpForm.get('password')?.markAsTouched()">
               <button 
                 mat-icon-button 
                 matSuffix 
@@ -126,17 +134,22 @@
               <div *ngIf="signUpForm.get('password')?.hasError('required') && signUpForm.get('password')?.touched" 
                    class="error-message">
                 <mat-icon class="message-icon">error_outline</mat-icon>
-                <span>Password is required</span>
+                <span>Password is required. Please enter a password.</span>
               </div>
               <div *ngIf="signUpForm.get('password')?.hasError('minlength') && signUpForm.get('password')?.touched" 
                    class="error-message">
                 <mat-icon class="message-icon">error_outline</mat-icon>
-                <span>Password must be at least 6 characters long</span>
+                <span>Password must be at least 8 characters long.</span>
+              </div>
+              <div *ngIf="signUpForm.get('password')?.hasError('pattern') && signUpForm.get('password')?.touched" 
+                   class="error-message">
+                <mat-icon class="message-icon">error_outline</mat-icon>
+                <span>Password must contain at least one letter and one number. Example: Passw0rd</span>
               </div>
               <div *ngIf="signUpForm.get('password')?.valid && signUpForm.get('password')?.touched" 
                    class="success-message">
                 <mat-icon class="message-icon">check_circle</mat-icon>
-                <span>Password meets requirements</span>
+                <span>Password looks good!</span>
               </div>
             </div>
           </div>
@@ -153,7 +166,8 @@
               <mat-select 
                 formControlName="role"
                 class="custom-select"
-                [attr.aria-describedby]="getRoleErrorId()">
+                [attr.aria-describedby]="getRoleErrorId()"
+                (selectionChange)="signUpForm.get('role')?.markAsTouched()">
                 <mat-option value="customer">
                   <div class="role-option">
                     <div class="role-info">
@@ -177,12 +191,12 @@
               <div *ngIf="signUpForm.get('role')?.hasError('required') && signUpForm.get('role')?.touched" 
                    class="error-message">
                 <mat-icon class="message-icon">error_outline</mat-icon>
-                <span>Please select an account type</span>
+                <span>Please select an account type (Customer or Restaurant Owner).</span>
               </div>
               <div *ngIf="signUpForm.get('role')?.valid && signUpForm.get('role')?.touched" 
                    class="success-message">
                 <mat-icon class="message-icon">check_circle</mat-icon>
-                <span>Account type selected</span>
+                <span>Account type selected.</span>
               </div>
             </div>
           </div>
