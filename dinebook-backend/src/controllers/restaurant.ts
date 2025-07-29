@@ -30,7 +30,7 @@ export const getNearbyRestaurants = async (
     // Validate required location parameters
     if (!latitude || !longitude) {
       res.status(400).json({
-        error: "Latitude and longitude are required for location-based search",
+        error: "Latitude and longitude are required for location-based search.",
       });
       return;
     }
@@ -42,28 +42,28 @@ export const getNearbyRestaurants = async (
     // Validate coordinates
     if (isNaN(lat) || isNaN(lng) || isNaN(radiusKm)) {
       res.status(400).json({
-        error: "Invalid coordinate or radius values",
+        error: "Invalid coordinate or radius values.",
       });
       return;
     }
 
     if (lat < -90 || lat > 90) {
       res.status(400).json({
-        error: "Latitude must be between -90 and 90",
+        error: "Latitude must be between -90 and 90.",
       });
       return;
     }
 
     if (lng < -180 || lng > 180) {
       res.status(400).json({
-        error: "Longitude must be between -180 and 180",
+        error: "Longitude must be between -180 and 180.",
       });
       return;
     }
 
     if (radiusKm <= 0) {
       res.status(400).json({
-        error: "Radius must be greater than 0",
+        error: "Radius must be greater than 0.",
       });
       return;
     }
@@ -208,7 +208,7 @@ export const getRestaurants = async (
       const radiusInKm = parseFloat(radius);
 
       if (isNaN(lat) || isNaN(lng) || isNaN(radiusInKm)) {
-        res.status(400).json({ error: "Invalid coordinates or radius" });
+        res.status(400).json({ error: "Invalid coordinates or radius." });
         return;
       }
 
@@ -305,7 +305,7 @@ export const getRestaurants = async (
     });
   } catch (error) {
     console.error("Restaurant search error:", error);
-    res.status(500).json({ error: "Failed to fetch restaurants" });
+    res.status(500).json({ error: "Unable to fetch restaurants at this time. Please try again later." });
   }
 };
 
@@ -323,12 +323,12 @@ export const getRestaurantById = async (
     );
 
     if (!restaurant) {
-      res.status(404).json({ error: "Restaurant not found" });
+      res.status(404).json({ error: "Restaurant not found." });
       return;
     }
 
     if (!restaurant.isActive) {
-      res.status(404).json({ error: "Restaurant is not available" });
+      res.status(404).json({ error: "Restaurant is not available." });
       return;
     }
 
@@ -337,11 +337,11 @@ export const getRestaurantById = async (
     console.error("Restaurant fetch error:", error);
 
     if (error instanceof Error && error.name === "CastError") {
-      res.status(400).json({ error: "Invalid restaurant ID" });
+      res.status(400).json({ error: "Invalid restaurant ID." });
       return;
     }
 
-    res.status(500).json({ error: "Failed to fetch restaurant" });
+    res.status(500).json({ error: "Unable to fetch restaurant at this time. Please try again later." });
   }
 };
 
@@ -486,13 +486,13 @@ export const createRestaurant = async (
 
     if (error instanceof Error && error.name === "ValidationError") {
       res.status(400).json({
-        error: "Validation failed",
+        error: "Validation failed.",
         details: error.message,
       });
       return;
     }
 
-    res.status(500).json({ error: "Failed to create restaurant" });
+    res.status(500).json({ error: "Unable to create restaurant at this time. Please try again later." });
   }
 };
 

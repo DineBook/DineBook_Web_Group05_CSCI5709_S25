@@ -80,14 +80,14 @@ export const getAvailability = async (
 
         if (error instanceof Error) {
             if (error.name === "CastError") {
-                return ResponseHelper.sendValidationError(res, "Invalid restaurant ID");
+                return ResponseHelper.sendValidationError(res, "Invalid restaurant ID format.");
             }
             if (error.message.includes('Restaurant not found')) {
-                return ResponseHelper.sendNotFoundError(res, error.message);
+                return ResponseHelper.sendNotFoundError(res, "Restaurant not found.");
             }
         }
 
-        ResponseHelper.sendError(res, 500, "Failed to fetch availability");
+        ResponseHelper.sendError(res, 500, "Unable to fetch availability at this time. Please try again later.");
     }
 };
 
@@ -285,10 +285,6 @@ async function sendConfirmationEmail(
 
     } catch (emailError) {
         console.error("Failed to send confirmation email:", emailError);
-        console.error("Email error details:", {
-            userEmail,
-            errorMessage: emailError instanceof Error ? emailError.message : 'Unknown error'
-        });
     }
 }
 
@@ -391,18 +387,24 @@ export const getBookingStats = async (
 function handleBookingError(res: Response, error: any): void {
     if (error instanceof Error) {
         if (error.name === "CastError") {
-            return ResponseHelper.sendValidationError(res, "Invalid ID format");
+            return ResponseHelper.sendValidationError(res, "Invalid ID format.");
         }
         if (error.name === "ValidationError") {
-            return ResponseHelper.sendValidationError(res, "Validation error: " + error.message);
+            return ResponseHelper.sendValidationError(res, "Invalid input: " + error.message);
         }
-        if (error.message.includes('not found') || error.message.includes('permission')) {
-            return ResponseHelper.sendNotFoundError(res, error.message);
+        if (error.message.includes('not found')) {
+            return ResponseHelper.sendNotFoundError(res, "Resource not found.");
         }
-        if (error.message.includes('Restaurant not found') || error.message.includes('User not found')) {
-            return ResponseHelper.sendNotFoundError(res, error.message);
+        if (error.message.includes('permission')) {
+            return ResponseHelper.sendNotFoundError(res, "You do not have permission to access this resource.");
+        }
+        if (error.message.includes('Restaurant not found')) {
+            return ResponseHelper.sendNotFoundError(res, "Restaurant not found.");
+        }
+        if (error.message.includes('User not found')) {
+            return ResponseHelper.sendNotFoundError(res, "User not found.");
         }
     }
 
-    ResponseHelper.sendError(res, 500, "An unexpected error occurred");
+    ResponseHelper.sendError(res, 500, "An unexpected error occurred. Please try again later.");
 } 

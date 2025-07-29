@@ -16,7 +16,7 @@ export const register = async (req: Request, res: Response) => {
 	try {
 		const existingUser = await User.findOne({ email });
 		if (existingUser) {
-			return res.status(400).json({ error: 'User already exists with this email' });
+			return res.status(400).json({ error: 'A user with this email already exists.' });
 		}
 
 		const verificationToken = generateVerificationToken(32);
@@ -33,10 +33,10 @@ export const register = async (req: Request, res: Response) => {
 
 		await sendVerificationEmail(email, verificationToken);
 
-		res.status(201).json({ message: 'Registration successful! Please check your email to verify your account.' });
+		res.status(201).json({ message: 'Registration successful. Please check your email to verify your account.' });
 	} catch (err) {
 		console.error('Error during registration:', err);
-		res.status(500).json({ message: 'Server error', error: err });
+		res.status(500).json({ message: 'An unexpected error occurred during registration. Please try again later.' });
 	}
 };
 
@@ -46,16 +46,16 @@ export const login = async (req: Request, res: Response) => {
 	try {
 		const user = await User.findOne({ email });
 		if (!user) {
-			return res.status(400).json({ message: 'Invalid credentials' });
+			return res.status(400).json({ message: 'Invalid email or password.' });
 		}
 
 		if (!user.isVerified) {
-			return res.status(403).json({ message: 'Please verify your email first' });
+			return res.status(403).json({ message: 'Please verify your email before logging in.' });
 		}
 
 		const isMatch = await verifyPassword(password, user.password);
 		if (!isMatch) {
-			return res.status(400).json({ message: "Invalid credentials" });
+			return res.status(400).json({ message: 'Invalid email or password.' });
 		}
 
 		const payload: userPayload = {
@@ -74,7 +74,7 @@ export const login = async (req: Request, res: Response) => {
 		});
 	} catch (err) {
 		console.error('Error during login:', err);
-		res.status(500).json({ message: 'Server error', error: err });
+		res.status(500).json({ message: 'An unexpected error occurred during login. Please try again later.' });
 	}
 };
 
@@ -84,7 +84,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
 	try {
 		const user = await User.findOne({ verificationToken: token });
 		if (!user) {
-			return res.status(400).json({ message: 'Invalid or expired token' });
+			return res.status(400).json({ message: 'Invalid or expired verification link.' });
 		}
 
 		await User.updateOne(
@@ -92,9 +92,9 @@ export const verifyEmail = async (req: Request, res: Response) => {
 			{ $set: { isVerified: true }, $unset: { verificationToken: "" } }
 		);
 
-		res.json({ message: 'Email verified successfully' });
+		res.json({ message: 'Your email has been verified successfully.' });
 	} catch (err) {
 		console.error('Error during email verification:', err);
-		res.status(500).json({ message: 'Server error', error: err });
+		res.status(500).json({ message: 'An unexpected error occurred during email verification. Please try again later.' });
 	}
 };

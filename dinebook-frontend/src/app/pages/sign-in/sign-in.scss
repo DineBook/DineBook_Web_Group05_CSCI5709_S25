@@ -128,12 +128,27 @@
           font-size: 0.875rem;
           font-weight: 500;
           
-          .message-icon {
-            font-size: 1rem;
-            width: 1rem;
-            height: 1rem;
-          }
+            .message-icon {
+              font-size: 1rem;
+              width: 1rem;
+              height: 1rem;
+            }
         }
+  // Fix for cropped warning/error icon in error messages
+  .error-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    min-height: 32px;
+  }
+
+  .message-icon {
+    font-size: 24px !important;
+    min-width: 24px;
+    min-height: 24px;
+    margin-top: 2px;
+    color: #d32f2f;
+  }
         
         .error-message {
           color: var(--error-600);
@@ -187,6 +202,43 @@
       &:focus {
         outline: 2px solid var(--primary-500);
         outline-offset: 2px;
+    // Consistent error color for input border and error message
+    $error-red: #d32f2f;
+    $error-red-light: #ffb3b3;
+  
+    // Override Angular Material error border color for input fields
+    .mat-form-field-appearance-outline.mat-form-field-invalid .mat-form-field-outline {
+      color: $error-red-light !important;
+      stroke: $error-red-light !important;
+      border-color: $error-red-light !important;
+    }
+  
+    .mat-form-field-appearance-outline.mat-form-field-invalid .mat-form-field-outline-thick {
+      color: $error-red !important;
+      stroke: $error-red !important;
+      border-color: $error-red !important;
+    }
+  
+    .mat-form-field-appearance-outline .mat-form-field-outline {
+      transition: border-color 0.2s, stroke 0.2s;
+    }
+  
+    .mat-form-field-appearance-outline.mat-form-field-invalid .mat-form-field-outline-start,
+    .mat-form-field-appearance-outline.mat-form-field-invalid .mat-form-field-outline-end {
+      border-color: $error-red-light !important;
+    }
+  
+    .mat-form-field-appearance-outline.mat-form-field-invalid .mat-form-field-outline-gap {
+      border-color: $error-red !important;
+    }
+  
+    .mat-form-field.mat-form-field-invalid .mat-input-element {
+      caret-color: $error-red !important;
+    }
+  
+    .error-message {
+      color: $error-red;
+    }
       }
     }
   }

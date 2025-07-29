@@ -6,7 +6,7 @@ import { Restaurant } from '../models';
 export const toggleFavorite = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     try {
         if (req.user.role !== 'customer') {
-            res.status(403).json({ error: "Only customers can manage favorites" });
+            res.status(403).json({ error: "Only customers can manage favorites." });
             return;
         }
 
@@ -15,7 +15,7 @@ export const toggleFavorite = async (req: AuthenticatedRequest, res: Response): 
 
         const restaurant = await Restaurant.findById(restaurantId);
         if (!restaurant || !restaurant.isActive) {
-            res.status(404).json({ error: "Restaurant not found or not active" });
+            res.status(404).json({ error: "Restaurant not found or not active." });
             return;
         }
 
@@ -24,27 +24,27 @@ export const toggleFavorite = async (req: AuthenticatedRequest, res: Response): 
         if (existingFavorite) {
             await Favorite.deleteOne({ _id: existingFavorite._id });
             res.json({ 
-                message: "Restaurant removed from favorites",
+                message: "Restaurant removed from favorites.",
                 isFavorited: false 
             });
         } else {
             const favorite = new Favorite({ userId, restaurantId });
             await favorite.save();
             res.status(201).json({ 
-                message: "Restaurant added to favorites",
+                message: "Restaurant added to favorites.",
                 isFavorited: true 
             });
         }
     } catch (error) {
         console.error('Favorite toggle error:', error);
-        res.status(500).json({ error: "Failed to manage favorite" });
+        res.status(500).json({ error: "Unable to update favorite at this time. Please try again later." });
     }
 };
 
 export const getFavorites = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     try {
         if (req.user.role !== 'customer') {
-            res.status(403).json({ error: "Only customers can view favorites" });
+            res.status(403).json({ error: "Only customers can view favorites." });
             return;
         }
 
@@ -55,14 +55,14 @@ export const getFavorites = async (req: AuthenticatedRequest, res: Response): Pr
         res.json({ favorites });
     } catch (error) {
         console.error('Get favorites error:', error);
-        res.status(500).json({ error: "Failed to fetch favorites" });
+        res.status(500).json({ error: "Unable to fetch favorites at this time. Please try again later." });
     }
 };
 
 export const checkFavoriteStatus = async (req: AuthenticatedRequest, res: Response): Promise<void> => {
     try {
         if (req.user.role !== 'customer') {
-            res.status(403).json({ error: "Only customers can check favorite status" });
+            res.status(403).json({ error: "Only customers can check favorite status." });
             return;
         }
 
@@ -74,6 +74,6 @@ export const checkFavoriteStatus = async (req: AuthenticatedRequest, res: Respon
         res.json({ isFavorited: !!favorite });
     } catch (error) {
         console.error('Check favorite status error:', error);
-        res.status(500).json({ error: "Failed to check favorite status" });
+        res.status(500).json({ error: "Unable to check favorite status at this time. Please try again later." });
     }
 };
