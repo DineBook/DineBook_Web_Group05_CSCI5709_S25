@@ -418,4 +418,10 @@ export class RestaurantsComponent implements OnInit {
       });
     });
   }
+   onImageError(event: any): void {
+    // Set fallback image when restaurant image fails to load
+    event.target.src =
+      'https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg';
+  }
 }
+

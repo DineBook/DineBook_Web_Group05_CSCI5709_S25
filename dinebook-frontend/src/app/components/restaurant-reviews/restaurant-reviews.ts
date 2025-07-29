@@ -1,4 +1,16 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  AfterViewInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -27,16 +39,22 @@ import { AuthService } from '../../services/auth.service';
     MatChipsModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   templateUrl: './restaurant-reviews.html',
-  styleUrl: './restaurant-reviews.scss'
+  styleUrl: './restaurant-reviews.scss',
 })
-export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewInit {
+export class RestaurantReviewsComponent
+  implements OnInit, OnChanges, AfterViewInit, OnDestroy
+{
   @Input() restaurantId!: string;
   @Input() restaurantName!: string;
   @Input() restaurantOwnerId!: string;
-  @Output() reviewsUpdated = new EventEmitter<{ totalReviews: number, averageRating: number }>();
+  @Output() reviewsUpdated = new EventEmitter<{
+    totalReviews: number;
+    averageRating: number;
+  }>();
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   reviews: Review[] = [];
   userReview: Review | null = null;
@@ -57,7 +75,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
     private reviewService: ReviewService,
     public authService: AuthService,
     private snackBar: MatSnackBar
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.loadReviews();
@@ -96,7 +114,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
         console.error('Error loading reviews:', error);
         this.error = 'Failed to load reviews';
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -113,7 +131,9 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
       return false;
     }
 
-    const currentUserId = String(currentUser.id || currentUser._id || '').trim();
+    const currentUserId = String(
+      currentUser.id || currentUser._id || ''
+    ).trim();
 
     if (!currentUserId) {
       return false;
@@ -162,18 +182,24 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
       const reviewData = {
         restaurantId: this.restaurantId,
         rating: this.editReviewData.rating,
-        comment: this.editReviewData.comment.trim()
+        comment: this.editReviewData.comment.trim(),
       };
 
       await this.reviewService.createReview(reviewData).toPromise();
 
-      this.snackBar.open('Review submitted successfully!', 'Close', { duration: 3000 });
+      this.snackBar.open('Review submitted successfully!', 'Close', {
+        duration: 3000,
+      });
       this.cancelWriteReview();
       await this.loadReviews();
       this.reviewsUpdated.emit();
     } catch (error) {
       console.error('Error submitting review:', error);
-      this.snackBar.open('Failed to submit review. Please try again.', 'Close', { duration: 3000 });
+      this.snackBar.open(
+        'Failed to submit review. Please try again.',
+        'Close',
+        { duration: 3000 }
+      );
     }
   }
 
@@ -185,21 +211,29 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
     try {
       const updateData = {
         rating: this.editReviewData.rating,
-        comment: this.editReviewData.comment.trim()
+        comment: this.editReviewData.comment.trim(),
       };
 
       console.log('Updating review with data:', updateData);
       console.log('Review ID:', this.editingReviewId);
 
-      await this.reviewService.updateReview(this.editingReviewId, updateData).toPromise();
+      await this.reviewService
+        .updateReview(this.editingReviewId, updateData)
+        .toPromise();
 
-      this.snackBar.open('Review updated successfully!', 'Close', { duration: 3000 });
+      this.snackBar.open('Review updated successfully!', 'Close', {
+        duration: 3000,
+      });
       this.cancelEditReviewInList();
       await this.loadReviews();
       this.reviewsUpdated.emit();
     } catch (error) {
       console.error('Error updating review:', error);
-      this.snackBar.open('Failed to update review. Please try again.', 'Close', { duration: 3000 });
+      this.snackBar.open(
+        'Failed to update review. Please try again.',
+        'Close',
+        { duration: 3000 }
+      );
     }
   }
 
@@ -211,12 +245,18 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
     try {
       console.log('Deleting review with ID:', review._id);
       await this.reviewService.deleteReview(review._id).toPromise();
-      this.snackBar.open('Review deleted successfully!', 'Close', { duration: 3000 });
+      this.snackBar.open('Review deleted successfully!', 'Close', {
+        duration: 3000,
+      });
       await this.loadReviews();
       this.reviewsUpdated.emit();
     } catch (error) {
       console.error('Error deleting review:', error);
-      this.snackBar.open('Failed to delete review. Please try again.', 'Close', { duration: 3000 });
+      this.snackBar.open(
+        'Failed to delete review. Please try again.',
+        'Close',
+        { duration: 3000 }
+      );
     }
   }
 
@@ -232,7 +272,9 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
       return;
     }
 
-    const currentUserId = String(currentUser.id || currentUser._id || '').trim();
+    const currentUserId = String(
+      currentUser.id || currentUser._id || ''
+    ).trim();
 
     if (!currentUserId) {
       return;
@@ -271,19 +313,24 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
       this.averageRating = 0;
       this.ratingDistribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
     } else {
-      const sum = this.reviews.reduce((total, review) => total + review.rating, 0);
+      const sum = this.reviews.reduce(
+        (total, review) => total + review.rating,
+        0
+      );
       this.averageRating = sum / this.totalReviews;
 
       this.ratingDistribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
 
-      this.reviews.forEach(review => {
-        this.ratingDistribution[review.rating as keyof typeof this.ratingDistribution]++;
+      this.reviews.forEach((review) => {
+        this.ratingDistribution[
+          review.rating as keyof typeof this.ratingDistribution
+        ]++;
       });
     }
 
     this.reviewsUpdated.emit({
       totalReviews: this.totalReviews,
-      averageRating: this.averageRating
+      averageRating: this.averageRating,
     });
   }
 
@@ -297,16 +344,24 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
 
   getRatingPercentage(rating: number): number {
     if (this.totalReviews === 0) return 0;
-    return (this.ratingDistribution[rating as keyof typeof this.ratingDistribution] / this.totalReviews) * 100;
+    return (
+      (this.ratingDistribution[rating as keyof typeof this.ratingDistribution] /
+        this.totalReviews) *
+      100
+    );
   }
 
   getRatingCount(rating: number): number {
-    return this.ratingDistribution[rating as keyof typeof this.ratingDistribution];
+    return this.ratingDistribution[
+      rating as keyof typeof this.ratingDistribution
+    ];
   }
 
   // Filter out reviews with empty comments for display
   getFilteredReviews(): Review[] {
-    return this.reviews.filter(review => review.comment && review.comment.trim().length > 0);
+    return this.reviews.filter(
+      (review) => review.comment && review.comment.trim().length > 0
+    );
   }
 
   startEditUserReview() {
@@ -314,7 +369,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
     this.isEditingReview = true;
     this.editReviewData = {
       rating: this.userReview.rating,
-      comment: this.userReview.comment
+      comment: this.userReview.comment,
     };
   }
 
@@ -325,41 +380,61 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
     if (this.userReview) {
       this.editReviewData = {
         rating: this.userReview.rating,
-        comment: this.userReview.comment
+        comment: this.userReview.comment,
       };
     }
   }
 
   updateUserReview() {
-    if (!this.userReview || !this.editReviewData.rating || !this.editReviewData.comment.trim()) {
-      this.snackBar.open('Please provide both rating and comment', 'Close', { duration: 3000 });
+    if (
+      !this.userReview ||
+      !this.editReviewData.rating ||
+      !this.editReviewData.comment.trim()
+    ) {
+      this.snackBar.open('Please provide both rating and comment', 'Close', {
+        duration: 3000,
+      });
       return;
     }
 
-    this.reviewService.updateReview(this.userReview._id!, {
-      rating: this.editReviewData.rating,
-      comment: this.editReviewData.comment.trim()
-    }).subscribe({
-      next: (response) => {
-        this.snackBar.open('Review updated successfully!', 'Close', { duration: 3000 });
-        this.isEditingReview = false;
-        this.editReviewData = { rating: 0, comment: '' };
-        this.loadReviews();
-      },
-      error: (error) => {
-        console.error('Error updating review:', error);
-        this.snackBar.open(error.error?.error || 'Failed to update review', 'Close', { duration: 3000 });
-      }
-    });
+    this.reviewService
+      .updateReview(this.userReview._id!, {
+        rating: this.editReviewData.rating,
+        comment: this.editReviewData.comment.trim(),
+      })
+      .subscribe({
+        next: (response) => {
+          this.snackBar.open('Review updated successfully!', 'Close', {
+            duration: 3000,
+          });
+          this.isEditingReview = false;
+          this.editReviewData = { rating: 0, comment: '' };
+          this.loadReviews();
+        },
+        error: (error) => {
+          console.error('Error updating review:', error);
+          this.snackBar.open(
+            error.error?.error || 'Failed to update review',
+            'Close',
+            { duration: 3000 }
+          );
+        },
+      });
   }
 
   deleteUserReview() {
     if (!this.userReview) return;
 
-    if (confirm('Are you sure you want to delete your review? This action cannot be undone.')) {
+    if (
+      confirm(
+        'Are you sure you want to delete your review? This action cannot be undone.'
+      )
+    ) {
       this.reviewService.deleteReview(this.userReview._id!).subscribe({
         next: (response) => {
-          this.snackBar.open('Review deleted successfully', 'Close', { duration: 3000 });
+          this.snackBar.open('Review deleted successfully', 'Close', {
+            duration: 3000,
+          });
           this.userReview = null;
           this.isEditingReview = false;
           this.editReviewData = { rating: 0, comment: '' };
@@ -367,8 +442,12 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
         },
         error: (error) => {
           console.error('Error deleting review:', error);
-          this.snackBar.open(error.error?.error || 'Failed to delete review', 'Close', { duration: 3000 });
-        }
+          this.snackBar.open(
+            error.error?.error || 'Failed to delete review',
+            'Close',
+            { duration: 3000 }
+          );
+        },
       });
     }
   }
@@ -394,7 +473,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
     if (!this.userReview) {
       return this.reviews;
     }
-    return this.reviews.filter(review => review._id !== this.userReview!._id);
+    return this.reviews.filter((review) => review._id !== this.userReview!._id);
   }
 
   startEditReply(review: Review) {
@@ -417,18 +496,26 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
       return;
     }
 
-    this.reviewService.replyToReview(reviewId, { reply: reply.trim() }).subscribe({
-      next: (response) => {
-        this.snackBar.open('Reply added successfully', 'Close', { duration: 3000 });
-        this.loadReviews(); // Reload to show the new reply
-        this.editingReply = '';
-        this.newReply = '';
-      },
-      error: (error) => {
-        console.error('Error adding reply:', error);
-        this.snackBar.open(error.error?.error || 'Failed to add reply', 'Close', { duration: 3000 });
-      }
-    });
+    this.reviewService
+      .replyToReview(reviewId, { reply: reply.trim() })
+      .subscribe({
+        next: (response) => {
+          this.snackBar.open('Reply added successfully', 'Close', {
+            duration: 3000,
+          });
+          this.loadReviews(); // Reload to show the new reply
+          this.editingReply = '';
+          this.newReply = '';
+        },
+        error: (error) => {
+          console.error('Error adding reply:', error);
+          this.snackBar.open(
+            error.error?.error || 'Failed to add reply',
+            'Close',
+            { duration: 3000 }
+          );
+        },
+      });
   }
 
   onUpdateReply(reviewId: string, reply: string) {
@@ -437,33 +524,47 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
       return;
     }
 
-    this.reviewService.updateReply(reviewId, { reply: reply.trim() }).subscribe({
-      next: (response) => {
-        this.snackBar.open('Reply updated successfully', 'Close', { duration: 3000 });
-        this.loadReviews(); // Reload to show the updated reply
-        this.editingReply = '';
-        this.newReply = '';
-      },
-      error: (error) => {
-        console.error('Error updating reply:', error);
-        this.snackBar.open(error.error?.error || 'Failed to update reply', 'Close', { duration: 3000 });
-      }
-    });
+    this.reviewService
+      .updateReply(reviewId, { reply: reply.trim() })
+      .subscribe({
+        next: (response) => {
+          this.snackBar.open('Reply updated successfully', 'Close', {
+            duration: 3000,
+          });
+          this.loadReviews(); // Reload to show the updated reply
+          this.editingReply = '';
+          this.newReply = '';
+        },
+        error: (error) => {
+          console.error('Error updating reply:', error);
+          this.snackBar.open(
+            error.error?.error || 'Failed to update reply',
+            'Close',
+            { duration: 3000 }
+          );
+        },
+      });
   }
 
   onDeleteReply(reviewId: string) {
     if (confirm('Are you sure you want to delete this reply?')) {
       this.reviewService.deleteReply(reviewId).subscribe({
         next: (response) => {
-          this.snackBar.open('Reply deleted successfully', 'Close', { duration: 3000 });
+          this.snackBar.open('Reply deleted successfully', 'Close', {
+            duration: 3000,
+          });
           this.loadReviews(); // Reload to show the updated review without reply
           this.editingReply = '';
           this.newReply = '';
         },
         error: (error) => {
           console.error('Error deleting reply:', error);
-          this.snackBar.open(error.error?.error || 'Failed to delete reply', 'Close', { duration: 3000 });
-        }
+          this.snackBar.open(
+            error.error?.error || 'Failed to delete reply',
+            'Close',
+            { duration: 3000 }
+          );
+        },
       });
     }
   }
@@ -493,7 +594,9 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
       return false;
     }
 
-    const currentUserId = String(currentUser.id || currentUser._id || '').trim();
+    const currentUserId = String(
+      currentUser.id || currentUser._id || ''
+    ).trim();
     const restaurantOwnerIdStr = String(this.restaurantOwnerId).trim();
     console.log('🔍 currentUserId:', currentUserId);
     console.log('🔍 restaurantOwnerIdStr:', restaurantOwnerIdStr);
@@ -512,7 +615,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
 
   getCurrentUserId(): string {
     const user = this.authService.getUser();
-    return user ? (user.id || user._id || 'NO_ID') : 'NO_USER';
+    return user ? user.id || user._id || 'NO_ID' : 'NO_USER';
   }
 
   testClick() {
@@ -526,7 +629,7 @@ export class RestaurantReviewsComponent implements OnInit, OnChanges, AfterViewI
       2: '😐 Fair - Below average experience',
       3: '🙂 Good - Average experience',
       4: '😊 Very Good - Above average',
-      5: '🤩 Excellent - Outstanding experience!'
+      5: '🤩 Excellent - Outstanding experience!',
     };
     return ratingTexts[rating as keyof typeof ratingTexts] || '';
   }

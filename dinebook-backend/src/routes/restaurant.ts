@@ -14,7 +14,7 @@ import {
   updateMenuItem,
   deleteMenuItem,
 } from "../controllers/";
-import { authenticate, checkOwner } from "../utils";
+import { authenticate, checkOwner, optionalImageUpload } from "../utils";
 
 const router = express.Router();
 
@@ -27,6 +27,7 @@ router.post(
   "/",
   authenticate as any,
   checkOwner as any,
+  optionalImageUpload,
   createRestaurant as any
 );
 router.get(
@@ -41,6 +42,7 @@ router.put(
   "/:id",
   authenticate as any,
   checkOwner as any,
+  optionalImageUpload,
   updateRestaurant as any
 );
 router.delete(

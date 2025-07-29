@@ -9,13 +9,13 @@ import {
   updateReply,
   deleteReply,
 } from '../controllers/review';
-import { authenticate } from '../utils';
+import { authenticate , optionalImageUpload } from '../utils';
 
 const router = express.Router();
 
 // Customer routes (authenticated)
-router.post('/', authenticate as any, createReview as any);
-router.put('/:id', authenticate as any, updateReview as any);
+router.post('/', authenticate as any, optionalImageUpload, createReview as any);
+router.put('/:id', authenticate as any, optionalImageUpload, updateReview as any);
 router.delete('/:id', authenticate as any, deleteReview as any);
 router.get('/my-reviews', authenticate as any, getMyReviews as any);
 

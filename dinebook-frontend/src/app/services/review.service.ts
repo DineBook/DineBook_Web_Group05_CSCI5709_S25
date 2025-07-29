@@ -29,6 +29,7 @@ export interface CreateReviewRequest {
 export interface UpdateReviewRequest {
   rating?: number;
   comment?: string;
+  image?: File; // Optional image file for update
 }
 
 export interface ReplyToReviewRequest {
@@ -63,9 +64,44 @@ export class ReviewService {
 
   // Create a new review (customer only)
   createReview(reviewData: CreateReviewRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reviews`, reviewData, { 
-      headers: this.getHeaders() 
-    });
+     // If an image is present, use FormData for multipart/form-data
+    if (reviewData.image) {
+      const formData = new FormData();
+      formData.append('restaurantId', reviewData.restaurantId);
+      formData.append('rating', reviewData.rating.toString());
+      formData.append('comment', reviewData.comment);
+      formData.append('image', reviewData.image);
+
+      // For FormData, don't set Content-Type header - let the browser set it
+      const headers = this.getAuthHeaders();
+      return this.http.post(`${this.apiUrl}/reviews`, formData, {
+        headers: headers,
+      });
+    } else {
+      // No image, send regular JSON
+      return this.http.post(
+        `${this.apiUrl}/reviews`,
+        {
+          restaurantId: reviewData.restaurantId,
+          rating: reviewData.rating,
+          comment: reviewData.comment,
+        },
+        {
+          headers: this.getHeaders(),
+        }
+      );
+    }
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    const headers: { [key: string]: string } = {};
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return new HttpHeaders(headers);
   }
 
   // Update a review (customer only, own review)
