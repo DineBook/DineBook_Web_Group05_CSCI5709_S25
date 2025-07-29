@@ -59,6 +59,7 @@ export class MyReviewsComponent implements OnInit {
   // Image upload properties for editing
   selectedImage: { file: File; preview: string } | null = null;
   currentImageUrl: string | null = null;
+  imageWasRemoved = false; // Track if user removed the existing image
   isDragOver = false;
   uploadError = '';
   maxFileSize = 5 * 1024 * 1024; // 5MB
@@ -69,7 +70,7 @@ export class MyReviewsComponent implements OnInit {
     private snackBar: MatSnackBar,
     private fb: FormBuilder,
     private dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.initializeEditForm();
@@ -160,6 +161,7 @@ export class MyReviewsComponent implements OnInit {
     this.currentImageUrl = review.imageUrl || null;
     this.selectedImage = null;
     this.uploadError = '';
+    this.imageWasRemoved = false; // Reset removal flag
 
     this.editForm.patchValue({
       rating: review.rating,
@@ -174,6 +176,7 @@ export class MyReviewsComponent implements OnInit {
     this.currentImageUrl = null;
     this.selectedImage = null;
     this.uploadError = '';
+    this.imageWasRemoved = false; // Reset removal flag
     this.editForm.reset();
   }
 
@@ -211,9 +214,13 @@ export class MyReviewsComponent implements OnInit {
       comment: this.editForm.value.comment.trim(),
     };
 
-    // Add image if selected
+    // Add image file if new image selected
     if (this.selectedImage) {
       updateData.image = this.selectedImage.file;
+    }
+    // If no new image but user removed existing image, set removal flag
+    else if (this.imageWasRemoved) {
+      updateData.removeImage = true;
     }
 
     this.reviewService.updateReview(reviewId, updateData).subscribe({
@@ -265,9 +272,8 @@ export class MyReviewsComponent implements OnInit {
     const field = this.editForm.get(fieldName);
     if (field?.errors && field.touched) {
       if (field.errors['required']) {
-        return `${
-          fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
-        } is required`;
+        return `${fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+          } is required`;
       }
       if (field.errors['minlength']) {
         return `Comment must be at least ${field.errors['minlength'].requiredLength} characters`;
@@ -460,6 +466,7 @@ export class MyReviewsComponent implements OnInit {
 
   removeCurrentImage(): void {
     this.currentImageUrl = null;
+    this.imageWasRemoved = true; // Mark that the image should be removed
     this.snackBar.open(
       'Current image will be removed when you save changes',
       'Close',

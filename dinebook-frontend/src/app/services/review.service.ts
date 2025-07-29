@@ -10,11 +10,11 @@ export interface Review {
     name: string;
   };
   restaurantId:
-    | string
-    | {
-        _id: string;
-        name: string;
-      };
+  | string
+  | {
+    _id: string;
+    name: string;
+  };
   rating: number;
   comment: string;
   imageUrl?: string; // Optional image URL from S3
@@ -34,6 +34,7 @@ export interface UpdateReviewRequest {
   rating?: number;
   comment?: string;
   image?: File; // Optional image file for updates
+  removeImage?: boolean; // Flag to remove existing image
 }
 
 export interface ReplyToReviewRequest {
@@ -48,7 +49,7 @@ export class ReviewService {
   private reviewsSubject = new BehaviorSubject<Review[]>([]);
   public reviews$ = this.reviewsSubject.asObservable();
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
@@ -129,8 +130,19 @@ export class ReviewService {
         headers: headers,
       });
     } else {
-      // No image, send regular JSON
-      return this.http.put(`${this.apiUrl}/reviews/${reviewId}`, reviewData, {
+      // No image, send regular JSON (including removeImage flag if needed)
+      const updatePayload: any = {};
+      if (reviewData.rating !== undefined) {
+        updatePayload.rating = reviewData.rating;
+      }
+      if (reviewData.comment !== undefined) {
+        updatePayload.comment = reviewData.comment;
+      }
+      if (reviewData.removeImage !== undefined) {
+        updatePayload.removeImage = reviewData.removeImage;
+      }
+
+      return this.http.put(`${this.apiUrl}/reviews/${reviewId}`, updatePayload, {
         headers: this.getHeaders(),
       });
     }

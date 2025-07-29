@@ -86,6 +86,7 @@ export class RestaurantReviewsComponent
 
   // Image editing properties for inline edit
   currentImageUrl: string | null = null;
+  imageWasRemoved = false; // Track if user removed the existing image
 
   constructor(
     private reviewService: ReviewService,
@@ -222,6 +223,7 @@ export class RestaurantReviewsComponent
     this.currentImageUrl = review.imageUrl || null;
     this.selectedImage = null;
     this.uploadError = '';
+    this.imageWasRemoved = false; // Reset removal flag
   }
 
   cancelEditReviewInList(): void {
@@ -232,6 +234,7 @@ export class RestaurantReviewsComponent
     this.currentImageUrl = null;
     this.selectedImage = null;
     this.uploadError = '';
+    this.imageWasRemoved = false; // Reset removal flag
   }
 
   cancelWriteReview(): void {
@@ -283,7 +286,7 @@ export class RestaurantReviewsComponent
     }
 
     try {
-      const updateData: { rating: number; comment: string; image?: File } = {
+      const updateData: { rating: number; comment: string; image?: File; removeImage?: boolean } = {
         rating: this.editReviewData.rating,
         comment: this.editReviewData.comment.trim(),
       };
@@ -291,6 +294,10 @@ export class RestaurantReviewsComponent
       // Add image file if new image selected
       if (this.selectedImage) {
         updateData.image = this.selectedImage.file;
+      }
+      // If no new image but user removed existing image, set removal flag
+      else if (this.imageWasRemoved) {
+        updateData.removeImage = true;
       }
 
       console.log('Updating review with data:', updateData);
@@ -1067,6 +1074,7 @@ export class RestaurantReviewsComponent
 
   removeCurrentImage(): void {
     this.currentImageUrl = null;
+    this.imageWasRemoved = true; // Mark that the image should be removed
     this.snackBar.open(
       'Current image will be removed when you save changes',
       'Close',

@@ -3,7 +3,6 @@ import { Review, Restaurant } from "../models/";
 import type { AuthenticatedRequest } from "../types/";
 import { uploadFileToS3 } from "../services/s3Upload";
 
-// Helper function to calculate and update average rating
 const calculateAverageRating = async (restaurantId: string) => {
   try {
     const reviews = await Review.find({ restaurantId });
@@ -23,7 +22,6 @@ const calculateAverageRating = async (restaurantId: string) => {
   }
 };
 
-// Create a review (customer only)
 export const createReview = async (
   req: AuthenticatedRequest,
   res: Response
@@ -36,7 +34,6 @@ export const createReview = async (
     const { restaurantId, rating, comment } = req.body;
     const customerId = req.user.id;
 
-    // Input validation
     if (!restaurantId || !rating || !comment) {
       res
         .status(400)
@@ -52,14 +49,12 @@ export const createReview = async (
       return;
     }
 
-    // Check if restaurant exists and is active
     const restaurant = await Restaurant.findById(restaurantId);
     if (!restaurant || !restaurant.isActive) {
       res.status(404).json({ error: "Restaurant not found or not active" });
       return;
     }
 
-    // Check if customer has already reviewed this restaurant
     const existingReview = await Review.findOne({ customerId, restaurantId });
     if (existingReview) {
       res
@@ -68,7 +63,6 @@ export const createReview = async (
       return;
     }
 
-    // Handle optional image upload
     let imageUrl: string | undefined;
     if (req.file) {
       try {
@@ -81,7 +75,6 @@ export const createReview = async (
         console.log("Image uploaded successfully:", imageUrl);
       } catch (uploadError) {
         console.error("Image upload error:", uploadError);
-        // Continue with review creation without image if upload fails
         console.log(
           "Continuing review creation without image due to upload failure"
         );
@@ -89,7 +82,6 @@ export const createReview = async (
       }
     }
 
-    // Create review with optional image URL
     const reviewData: any = {
       customerId,
       restaurantId,
@@ -97,16 +89,12 @@ export const createReview = async (
       comment,
     };
 
-    // Only add imageUrl if it exists
     if (imageUrl) {
       reviewData.imageUrl = imageUrl;
     }
 
     const review = new Review(reviewData);
-
     await review.save();
-
-    // Update average rating
     await calculateAverageRating(restaurantId);
 
     res.status(201).json({
@@ -129,7 +117,6 @@ export const createReview = async (
   }
 };
 
-// Update a review (customer only, for their own review)
 export const updateReview = async (
   req: AuthenticatedRequest,
   res: Response
@@ -142,10 +129,9 @@ export const updateReview = async (
       return;
     }
     const { id } = req.params;
-    const { rating, comment } = req.body;
+    const { rating, comment, removeImage } = req.body;
     const customerId = req.user.id;
 
-    // Input validation
     if (rating && (rating < 1 || rating > 5)) {
       res.status(400).json({ error: "Rating must be between 1 and 5" });
       return;
@@ -164,11 +150,14 @@ export const updateReview = async (
       return;
     }
 
-    // Update basic fields
     if (rating) review.rating = rating;
     if (comment) review.comment = comment;
 
-    // Handle image upload if present
+    if (removeImage === true || removeImage === 'true') {
+      review.imageUrl = undefined;
+      console.log("Image removed from review");
+    }
+
     if (req.file) {
       try {
         console.log(
@@ -191,8 +180,6 @@ export const updateReview = async (
     }
 
     await review.save();
-
-    // Update average rating
     await calculateAverageRating(review.restaurantId.toString());
 
     res.json({
@@ -205,7 +192,6 @@ export const updateReview = async (
   }
 };
 
-// Delete a review (customer only, for their own review)
 export const deleteReview = async (
   req: AuthenticatedRequest,
   res: Response
@@ -229,7 +215,6 @@ export const deleteReview = async (
       return;
     }
 
-    // Update average rating
     await calculateAverageRating(review.restaurantId.toString());
 
     res.json({
@@ -241,7 +226,6 @@ export const deleteReview = async (
   }
 };
 
-// Get all reviews for a restaurant (public)
 export const getReviewsByRestaurant = async (
   req: Request,
   res: Response
@@ -249,7 +233,6 @@ export const getReviewsByRestaurant = async (
   try {
     const { restaurantId } = req.params;
 
-    // Check if restaurant exists and is active
     const restaurant = await Restaurant.findById(restaurantId);
     if (!restaurant || !restaurant.isActive) {
       res.status(404).json({ error: "Restaurant not found or not active" });
@@ -271,7 +254,6 @@ export const getReviewsByRestaurant = async (
   }
 };
 
-// Reply to a review (owner only)
 export const replyToReview = async (
   req: AuthenticatedRequest,
   res: Response
@@ -287,7 +269,6 @@ export const replyToReview = async (
     const { reply } = req.body;
     const ownerId = req.user.id;
 
-    // Input validation
     if (!reply || reply.trim() === "") {
       res.status(400).json({ error: "Reply cannot be empty" });
       return;
@@ -321,7 +302,6 @@ export const replyToReview = async (
   }
 };
 
-// Get all reviews by the authenticated customer
 export const getMyReviews = async (
   req: AuthenticatedRequest,
   res: Response
@@ -344,7 +324,6 @@ export const getMyReviews = async (
   }
 };
 
-// Update owner's reply to a review (owner only)
 export const updateReply = async (
   req: AuthenticatedRequest,
   res: Response
@@ -360,7 +339,6 @@ export const updateReply = async (
     const { reply } = req.body;
     const ownerId = req.user.id;
 
-    // Input validation
     if (!reply || reply.trim() === "") {
       res.status(400).json({ error: "Reply cannot be empty" });
       return;
@@ -394,7 +372,6 @@ export const updateReply = async (
   }
 };
 
-// Delete owner's reply to a review (owner only)
 export const deleteReply = async (
   req: AuthenticatedRequest,
   res: Response
