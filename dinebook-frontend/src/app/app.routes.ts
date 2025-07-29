@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { LandingComponent } from './pages/landing/landing';
-import { OwnerLandingComponent } from './pages/owner-landing/owner-landing';
 import { SignInComponent } from './pages/sign-in/sign-in';
 import { SignUpComponent } from './pages/sign-up/sign-up';
 import { VerifyComponent } from './pages/verify/verify';
@@ -25,7 +24,6 @@ import { FavoritesPageComponent } from './pages/favorites/favorites-page.compone
 export const routes: Routes = [
   { path: '', redirectTo: '/landing', pathMatch: 'full' },
   { path: 'landing', component: LandingComponent },
-  { path: 'owner-home', component: OwnerLandingComponent, canActivate: [OwnerGuard] },
   { path: 'sign-in', component: SignInComponent, canActivate: [PublicGuard] },
   { path: 'sign-up', component: SignUpComponent, canActivate: [PublicGuard] },
   { path: 'verify', component: VerifyComponent },
@@ -43,6 +41,6 @@ export const routes: Routes = [
   { path: 'booking-confirmation/:bookingId', component: BookingConfirmationComponent, canActivate: [CustomerGuard] },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
-  { path: 'favorites', component: FavoritesPageComponent },
+  { path: 'favorites', component: FavoritesPageComponent, canActivate: [CustomerGuard] },
   { path: '**', redirectTo: '/landing' }
 ];

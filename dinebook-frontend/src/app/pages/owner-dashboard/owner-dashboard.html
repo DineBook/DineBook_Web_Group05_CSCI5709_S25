@@ -3,159 +3,222 @@
     
     <!-- Loading State -->
     <div *ngIf="loading" class="loading-state">
-      <div class="loading-spinner"></div>
-      <p>Loading your dashboard...</p>
+      <div class="loading-container">
+        <div class="loading-spinner">
+          <div class="spinner-ring"></div>
+        </div>
+        <h3>Loading Dashboard</h3>
+        <p>Please wait while we load your restaurant data...</p>
+      </div>
     </div>
 
     <!-- Error State -->
     <div *ngIf="error && !loading" class="error-state">
-      <mat-icon>error_outline</mat-icon>
-      <p>{{ error }}</p>
-      <button mat-raised-button class="btn-primary" (click)="loadDashboardData()">
-        Try Again
-      </button>
+      <div class="error-container">
+        <div class="error-icon">
+          <mat-icon>error_outline</mat-icon>
+        </div>
+        <h2>Something went wrong</h2>
+        <p>{{ error }}</p>
+        <button mat-raised-button color="primary" (click)="loadDashboardData()">
+          <mat-icon>refresh</mat-icon>
+          Try Again
+        </button>
+      </div>
     </div>
 
     <!-- Dashboard Content -->
     <div *ngIf="!loading && !error && restaurant" class="dashboard-content">
       
-      <!-- Restaurant Details Card -->
-      <mat-card class="restaurant-card">
-        <mat-card-header>
-          <div class="restaurant-header-content">
-            <div class="restaurant-main-info">
-              <mat-card-title class="restaurant-name">{{ restaurant.name }}</mat-card-title>
-              <mat-card-subtitle class="restaurant-basic-info">
-                <span class="cuisine-type">{{ restaurant.cuisine }}</span>
-                <span class="price-range">{{ getPriceRangeDisplay(restaurant.priceRange) }}</span>
-                <span class="rating" *ngIf="restaurant.averageRating">
-                  <mat-icon>star</mat-icon>
-                  {{ restaurant.averageRating.toFixed(1) }}
-                </span>
-              </mat-card-subtitle>
-            </div>
-            <div class="restaurant-actions">
-              <button mat-raised-button color="primary" routerLink="/owner/restaurant">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="header-content">
+          <div class="header-text">
+            <h1 class="page-title">Owner Dashboard</h1>
+            <p class="page-description">
+              Manage your restaurant, view bookings, and track performance all in one place.
+            </p>
+          </div>
+          <div class="header-visual">
+            <div class="quick-actions">
+              <button mat-raised-button color="primary" routerLink="/owner/restaurant" class="action-btn">
                 <mat-icon>edit</mat-icon>
                 Edit Restaurant
               </button>
+              <button mat-stroked-button routerLink="/owner/bookings" class="action-btn">
+                <mat-icon>calendar_today</mat-icon>
+                View All Bookings
+              </button>
             </div>
           </div>
-        </mat-card-header>
-        
+        </div>
+      </div>
+      
+      <!-- Restaurant Overview Card -->
+      <mat-card class="restaurant-overview-card">
         <mat-card-content>
-          <div class="restaurant-details-grid">
-            <div class="detail-section">
-              <h4><mat-icon>location_on</mat-icon>Location</h4>
-              <p *ngIf="restaurant.address">
-                {{ restaurant.address.street }}<br>
-                {{ restaurant.address.city }}, {{ restaurant.address.province }} {{ restaurant.address.postalCode }}
-              </p>
-              <p *ngIf="!restaurant.address && restaurant.location">{{ restaurant.location }}</p>
-            </div>
-            
-            <div class="detail-section" *ngIf="restaurant.phoneNumber">
-              <h4><mat-icon>phone</mat-icon>Phone</h4>
-              <p>{{ restaurant.phoneNumber }}</p>
-            </div>
-            
-            <div class="detail-section" *ngIf="restaurant.email">
-              <h4><mat-icon>email</mat-icon>Email</h4>
-              <p>{{ restaurant.email }}</p>
-            </div>
-            
-            <div class="detail-section" *ngIf="restaurant.capacity">
-              <h4><mat-icon>people</mat-icon>Capacity</h4>
-              <p>{{ restaurant.capacity }} guests</p>
-            </div>
-          </div>
-          
-          <div class="restaurant-description" *ngIf="restaurant.description">
-            <h4><mat-icon>description</mat-icon>Description</h4>
-            <p>{{ restaurant.description }}</p>
-          </div>
-          
-          <div class="restaurant-timings" *ngIf="restaurant.openingHours">
-            <h4><mat-icon>schedule</mat-icon>Restaurant Timings</h4>
-            <div class="hours-cards-grid">
-              <mat-card *ngFor="let day of getDaysOfWeek(); let i = index" 
-                        class="day-card"
-                        [class.closed-day]="!restaurant.openingHours![day.key].open || !restaurant.openingHours![day.key].close"
-                        [attr.data-day-index]="i">
-                <mat-card-content>
-                  <div class="day-header">
-                    <span class="day-name">{{ day.label }}</span>
-                    <mat-icon class="status-icon" 
-                              [class.open]="restaurant.openingHours![day.key].open && restaurant.openingHours![day.key].close"
-                              [class.closed]="!restaurant.openingHours![day.key].open || !restaurant.openingHours![day.key].close">
-                      {{ (restaurant.openingHours![day.key].open && restaurant.openingHours![day.key].close) ? 'schedule' : 'schedule_send' }}
-                    </mat-icon>
+          <div class="restaurant-overview">
+            <div class="restaurant-info">
+              <div class="restaurant-basic-info">
+                <h2 class="restaurant-name">{{ restaurant.name }}</h2>
+                <div class="restaurant-meta">
+                  <span class="cuisine-tag">{{ restaurant.cuisine }}</span>
+                  <span class="price-tag">{{ getPriceRangeDisplay(restaurant.priceRange) }}</span>
+                  <div class="rating-display" *ngIf="restaurant.averageRating">
+                    <mat-icon class="star-icon">star</mat-icon>
+                    <span class="rating-value">{{ restaurant.averageRating.toFixed(1) }}</span>
+                    <span class="rating-text">Average Rating</span>
                   </div>
-                  <div class="hours-info">
-                    <div class="hours" *ngIf="restaurant.openingHours![day.key].open && restaurant.openingHours![day.key].close">
-                      {{ restaurant.openingHours![day.key].open }} - {{ restaurant.openingHours![day.key].close }}
-                    </div>
-                    <div class="hours closed" *ngIf="!restaurant.openingHours![day.key]?.open || !restaurant.openingHours![day.key]?.close">
-                      Closed
-                    </div>
-                  </div>
-                </mat-card-content>
-              </mat-card>
+                </div>
+              </div>
+              
+              <div class="restaurant-details-summary">
+                <div class="detail-row">
+                  <mat-icon>location_on</mat-icon>
+                  <span *ngIf="restaurant.address">
+                    {{ restaurant.address.street }}, {{ restaurant.address.city }}, {{ restaurant.address.province }}{{ restaurant.address.postalCode ? ', ' + restaurant.address.postalCode : '' }}
+                  </span>
+                  <span *ngIf="!restaurant.address && restaurant.location">{{ restaurant.location }}</span>
+                </div>
+                
+                <div class="detail-row" *ngIf="restaurant.phoneNumber">
+                  <mat-icon>phone</mat-icon>
+                  <span>{{ restaurant.phoneNumber }}</span>
+                </div>
+                
+                <div class="detail-row" *ngIf="restaurant.capacity">
+                  <mat-icon>people</mat-icon>
+                  <span>{{ restaurant.capacity }} guests capacity</span>
+                </div>
+              </div>
+            </div>
+            
+            <div class="restaurant-image-section">
+              <div class="image-container">
+                <img 
+                  *ngIf="restaurant.imageUrl" 
+                  [src]="restaurant.imageUrl" 
+                  [alt]="restaurant.name"
+                  class="restaurant-image">
+                <div *ngIf="!restaurant.imageUrl" class="image-placeholder">
+                  <mat-icon>restaurant</mat-icon>
+                  <span>No image available</span>
+                </div>
+              </div>
             </div>
           </div>
         </mat-card-content>
       </mat-card>
 
       <!-- Stats Cards -->
-      <div class="stats-grid" *ngIf="stats">
-        <div class="stat-card">
-          <div class="stat-icon">📊</div>
-          <div class="stat-content">
-            <div class="stat-number">{{ stats.totalBookings }}</div>
-            <div class="stat-label">Total Bookings</div>
+      <div class="stats-section" *ngIf="stats">
+        <h3 class="section-title">Performance Overview</h3>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon total">
+              <mat-icon>event_available</mat-icon>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number">{{ stats.totalBookings }}</div>
+              <div class="stat-label">Total Bookings</div>
+            </div>
           </div>
-        </div>
-        
-        <div class="stat-card">
-          <div class="stat-icon">📅</div>
-          <div class="stat-content">
-            <div class="stat-number">{{ stats.todayBookings }}</div>
-            <div class="stat-label">Today's Bookings</div>
+          
+          <div class="stat-card">
+            <div class="stat-icon today">
+              <mat-icon>today</mat-icon>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number">{{ stats.todayBookings }}</div>
+              <div class="stat-label">Today's Bookings</div>
+            </div>
           </div>
-        </div>
-        
-        <div class="stat-card">
-          <div class="stat-icon">⭐</div>
-          <div class="stat-content">
-            <div class="stat-number">{{ stats.totalReviews }}</div>
-            <div class="stat-label">Total Reviews</div>
+          
+          <div class="stat-card">
+            <div class="stat-icon reviews">
+              <mat-icon>rate_review</mat-icon>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number">{{ stats.totalReviews }}</div>
+              <div class="stat-label">Total Reviews</div>
+            </div>
           </div>
-        </div>
-        
-        <div class="stat-card">
-          <div class="stat-icon">📈</div>
-          <div class="stat-content">
-            <div class="stat-number">{{ (stats.averageRating || 0).toFixed(1) }}</div>
-            <div class="stat-label">Average Rating</div>
+          
+          <div class="stat-card">
+            <div class="stat-icon rating">
+              <mat-icon>star</mat-icon>
+            </div>
+            <div class="stat-content">
+              <div class="stat-number">{{ (stats.averageRating || 0).toFixed(1) }}</div>
+              <div class="stat-label">Average Rating</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Main Content -->
-      <div class="dashboard-main">
-        <mat-tab-group class="dashboard-tabs">
+      <!-- Operating Hours Section -->
+      <div class="operating-hours-section">
+        <h3 class="section-title">Operating Hours</h3>
+        <mat-card class="hours-card">
+          <mat-card-content>
+            <div class="hours-grid">
+              <div *ngFor="let day of getDaysOfWeek()" class="day-hours">
+                <div class="day-info">
+                  <span class="day-name">{{ day.label }}</span>
+                  <div class="hours-display">
+                    <span *ngIf="getOperatingHours()[day.key] && getOperatingHours()[day.key].open && getOperatingHours()[day.key].close" 
+                          class="hours-text">
+                      {{ formatOperatingTime(getOperatingHours()[day.key].open) }} - {{ formatOperatingTime(getOperatingHours()[day.key].close) }}
+                    </span>
+                    <span *ngIf="!getOperatingHours()[day.key] || !getOperatingHours()[day.key].open || !getOperatingHours()[day.key].close" 
+                          class="closed-text">
+                      Closed
+                    </span>
+                  </div>
+                </div>
+                <div class="status-indicator">
+                  <div class="status-dot" 
+                       [class.open]="getOperatingHours()[day.key] && getOperatingHours()[day.key].open && getOperatingHours()[day.key].close"
+                       [class.closed]="!getOperatingHours()[day.key] || !getOperatingHours()[day.key].open || !getOperatingHours()[day.key].close">
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div *ngIf="!hasRestaurantHours()" class="hours-note">
+              <mat-icon>info_outline</mat-icon>
+              <span>No operating hours set. Update your restaurant details to add your business hours.</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Main Content Tabs -->
+      <div class="main-content-section">
+        <mat-tab-group class="dashboard-tabs" animationDuration="300ms">
           
           <!-- Recent Bookings Tab -->
           <mat-tab label="Recent Bookings">
             <div class="tab-content">
               <div class="section-header">
-                <h3>Recent Bookings</h3>
-                <p>Latest reservations at your restaurant</p>
+                <div class="header-text">
+                  <h3>Recent Bookings</h3>
+                  <p>Latest reservations at your restaurant</p>
+                </div>
+                <div class="header-action">
+                  <button mat-stroked-button routerLink="/owner/bookings">
+                    <mat-icon>visibility</mat-icon>
+                    View All
+                  </button>
+                </div>
               </div>
               
               <div *ngIf="recentBookings.length === 0" class="empty-state">
-                <mat-icon>calendar_today</mat-icon>
-                <p>No recent bookings</p>
+                <div class="empty-icon">
+                  <mat-icon>calendar_today</mat-icon>
+                </div>
+                <h4>No recent bookings</h4>
+                <p>New bookings will appear here when customers make reservations.</p>
               </div>
               
               <div class="bookings-list" *ngIf="recentBookings.length > 0">
@@ -166,7 +229,8 @@
                         <h4>{{ booking.customerId?.name || 'Customer' }}</h4>
                         <p>{{ booking.customerId?.email }}</p>
                       </div>
-                      <mat-chip [color]="getStatusColor(booking.status)" selected>
+                      <mat-chip [style.background-color]="getStatusColor(booking.status)" 
+                               class="status-chip">
                         {{ booking.status | titlecase }}
                       </mat-chip>
                     </div>
@@ -187,7 +251,10 @@
                     </div>
                     
                     <div *ngIf="booking.specialRequests" class="special-requests">
-                      <mat-icon>note</mat-icon>
+                      <div class="request-label">
+                        <mat-icon>note</mat-icon>
+                        <span>Special Requests:</span>
+                      </div>
                       <p>{{ booking.specialRequests }}</p>
                     </div>
                   </mat-card-content>
@@ -200,13 +267,24 @@
           <mat-tab label="Recent Reviews">
             <div class="tab-content">
               <div class="section-header">
-                <h3>Recent Reviews</h3>
-                <p>What customers are saying about your restaurant</p>
+                <div class="header-text">
+                  <h3>Recent Reviews</h3>
+                  <p>What customers are saying about your restaurant</p>
+                </div>
+                <div class="header-action">
+                  <button mat-stroked-button routerLink="/owner/reviews">
+                    <mat-icon>visibility</mat-icon>
+                    View All
+                  </button>
+                </div>
               </div>
               
               <div *ngIf="recentReviews.length === 0" class="empty-state">
-                <mat-icon>rate_review</mat-icon>
-                <p>No recent reviews</p>
+                <div class="empty-icon">
+                  <mat-icon>rate_review</mat-icon>
+                </div>
+                <h4>No recent reviews</h4>
+                <p>Customer reviews will appear here to help you understand their experience.</p>
               </div>
               
               <div class="reviews-list" *ngIf="recentReviews.length > 0">
@@ -215,10 +293,12 @@
                     <div class="review-header">
                       <div class="customer-info">
                         <h4>{{ review.customerId?.name || 'Anonymous' }}</h4>
-                        <div class="rating">
-                          <span *ngFor="let star of getStarArray(review.rating)" 
-                                [class]="star ? 'star filled' : 'star'">★</span>
-                          <span class="rating-text">({{ review.rating }}/5)</span>
+                        <div class="rating-display">
+                          <div class="stars">
+                            <mat-icon *ngFor="let star of getStarArray(review.rating)" 
+                                      [class.filled]="star">star</mat-icon>
+                          </div>
+                          <span class="rating-text">{{ review.rating }}/5</span>
                         </div>
                       </div>
                       <div class="review-date">
@@ -234,28 +314,28 @@
                     <div class="owner-reply-section">
                       <!-- Existing Reply Display -->
                       <div *ngIf="review.ownerReply && editingReply !== review._id" class="owner-reply">
-                        <div class="reply-label">
+                        <div class="reply-header">
                           <mat-icon>reply</mat-icon>
-                          <span>Your Reply:</span>
+                          <span class="reply-label">Your Reply:</span>
                         </div>
-                        <p>{{ review.ownerReply }}</p>
+                        <p class="reply-content">{{ review.ownerReply }}</p>
                         
                         <!-- Edit/Delete Actions -->
                         <div class="reply-actions">
-                          <button mat-button class="btn-secondary btn-with-icon" (click)="startReply(review)">
+                          <button mat-button class="edit-btn" (click)="startReply(review)">
                             <mat-icon>edit</mat-icon>
-                            Edit Reply
+                            Edit
                           </button>
-                          <button mat-button class="btn-danger btn-with-icon" (click)="deleteReply(review._id!)">
+                          <button mat-button class="delete-btn" (click)="deleteReply(review._id!)">
                             <mat-icon>delete</mat-icon>
-                            Delete Reply
+                            Delete
                           </button>
                         </div>
                       </div>
                       
                       <!-- Reply Button for new replies -->
-                      <div *ngIf="!review.ownerReply && editingReply !== review._id" class="reply-actions">
-                        <button mat-button class="btn-primary btn-with-icon" (click)="startReply(review)">
+                      <div *ngIf="!review.ownerReply && editingReply !== review._id" class="reply-prompt">
+                        <button mat-stroked-button color="primary" (click)="startReply(review)" class="reply-btn">
                           <mat-icon>reply</mat-icon>
                           Reply to Review
                         </button>
@@ -263,24 +343,25 @@
                       
                       <!-- Reply Form (for new reply or editing) -->
                       <div *ngIf="editingReply === review._id" class="reply-form">
+                        <div class="form-header">
+                          <mat-icon>reply</mat-icon>
+                          <span>{{ review.ownerReply ? 'Edit your reply' : 'Reply to this review' }}</span>
+                        </div>
                         <div class="reply-input">
-                          <mat-icon class="reply-icon">reply</mat-icon>
-                          <div class="input-container">
-                            <textarea 
-                              [(ngModel)]="newReply"
-                              placeholder="Write your response to this review..."
-                              rows="3"
-                              class="reply-textarea"></textarea>
-                            <div class="reply-form-actions">
-                              <button mat-button (click)="cancelReply()">
-                                Cancel
-                              </button>
-                              <button mat-raised-button color="primary" 
-                                      [disabled]="!newReply.trim()"
-                                      (click)="saveReply(review._id!)">
-                                {{ review.ownerReply ? 'Update Reply' : 'Post Reply' }}
-                              </button>
-                            </div>
+                          <textarea 
+                            [(ngModel)]="newReply"
+                            placeholder="Write a thoughtful response to this review..."
+                            rows="4"
+                            class="reply-textarea"></textarea>
+                          <div class="form-actions">
+                            <button mat-button (click)="cancelReply()">
+                              Cancel
+                            </button>
+                            <button mat-raised-button color="primary" 
+                                    [disabled]="!newReply.trim()"
+                                    (click)="saveReply(review._id!)">
+                              {{ review.ownerReply ? 'Update Reply' : 'Post Reply' }}
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -298,12 +379,17 @@
 
     <!-- No Restaurant State -->
     <div *ngIf="!loading && !error && !restaurant" class="no-restaurant-state">
-      <mat-icon>restaurant</mat-icon>
-      <h2>No Restaurant Found</h2>
-      <p>You don't have a restaurant registered yet.</p>
-      <button mat-raised-button class="btn-primary" (click)="createRestaurant()">
-        Register Restaurant
-      </button>
+      <div class="no-restaurant-container">
+        <div class="no-restaurant-icon">
+          <mat-icon>restaurant</mat-icon>
+        </div>
+        <h2>Welcome to DineBook</h2>
+        <p>Get started by registering your restaurant to begin accepting bookings and managing your business.</p>
+        <button mat-raised-button color="primary" (click)="createRestaurant()" class="register-btn">
+          <mat-icon>add_business</mat-icon>
+          Register Your Restaurant
+        </button>
+      </div>
     </div>
 
   </div>

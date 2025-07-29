@@ -51,6 +51,46 @@
   --transition-fast: 150ms ease;
   --transition-normal: 200ms ease;
   --transition-slow: 300ms ease;
+  
+  // Global Material Design Theme Override - Blue/Purple Theme
+  // Override Angular Material's default pink/magenta theme
+  --mat-sys-primary: #667eea !important;
+  --mat-sys-primary-container: #e0e7ff !important;
+  --mat-sys-primary-fixed: #e0e7ff !important;
+  --mat-sys-primary-fixed-dim: #c7d2fe !important;
+  --mat-sys-on-primary: #ffffff !important;
+  --mat-sys-on-primary-container: #312e81 !important;
+  --mat-sys-on-primary-fixed: #1e1b4b !important;
+  --mat-sys-on-primary-fixed-variant: #312e81 !important;
+  
+  // Secondary colors in purple tones
+  --mat-sys-secondary: #764ba2 !important;
+  --mat-sys-secondary-container: #f3f4f6 !important;
+  --mat-sys-secondary-fixed: #f3f4f6 !important;
+  --mat-sys-secondary-fixed-dim: #e5e7eb !important;
+  --mat-sys-on-secondary: #ffffff !important;
+  --mat-sys-on-secondary-container: #374151 !important;
+  --mat-sys-on-secondary-fixed: #1f2937 !important;
+  --mat-sys-on-secondary-fixed-variant: #374151 !important;
+  
+  // Tertiary colors
+  --mat-sys-tertiary: #5a67d8 !important;
+  --mat-sys-tertiary-container: #eef2ff !important;
+  --mat-sys-tertiary-fixed: #eef2ff !important;
+  --mat-sys-tertiary-fixed-dim: #ddd6fe !important;
+  --mat-sys-on-tertiary: #ffffff !important;
+  --mat-sys-on-tertiary-container: #2d3748 !important;
+  --mat-sys-on-tertiary-fixed: #1a202c !important;
+  --mat-sys-on-tertiary-fixed-variant: #2d3748 !important;
+  
+  // Surface and background colors
+  --mat-sys-surface-tint: #667eea !important;
+  --mat-sys-inverse-primary: #c7d2fe !important;
+  
+  // Ensure backgrounds are neutral/white
+  --mat-sys-background: #ffffff !important;
+  --mat-sys-surface: #ffffff !important;
+  --mat-sys-surface-variant: #f8fafc !important;
 }
 
 // Typography system
@@ -493,8 +533,153 @@ html, body {
   
   .mat-mdc-button, .mat-mdc-raised-button {
     height: 40px;
+    padding: 0 12px;
     font-size: 0.875rem;
   }
+}
+
+// Global Material Design Theme Overrides for Dropdowns and Checkboxes
+// This ensures all Angular Material components use blue-purple theme instead of pink/magenta
+
+.mat-mdc-select-panel {
+  background: white !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid #e2e8f0 !important;
+  
+  .mat-mdc-option {
+    border-radius: 8px !important;
+    margin: 4px 8px !important;
+    padding: 12px 16px !important;
+    transition: all 0.2s ease !important;
+    background: transparent !important;
+    color: #374151 !important;
+    
+    &:hover {
+      background: #f0f7ff !important;
+      color: #667eea !important;
+    }
+    
+    &.mat-mdc-option-active,
+    &.mdc-list-item--selected,
+    &[aria-selected="true"] {
+      background: #667eea !important;
+      color: white !important;
+      
+      &:hover {
+        background: #5a67d8 !important;
+      }
+      
+      .mdc-list-item__primary-text {
+        color: white !important;
+      }
+    }
+    
+    .mdc-list-item__primary-text {
+      color: inherit !important;
+    }
+  }
+}
+
+// Global Material Checkbox Theme Override
+.mat-mdc-checkbox {
+  --mdc-checkbox-disabled-selected-icon-color: #e2e8f0 !important;
+  --mdc-checkbox-disabled-unselected-icon-color: #e2e8f0 !important;
+  --mdc-checkbox-selected-checkmark-color: white !important;
+  --mdc-checkbox-selected-focus-icon-color: #667eea !important;
+  --mdc-checkbox-selected-hover-icon-color: #667eea !important;
+  --mdc-checkbox-selected-icon-color: #667eea !important;
+  --mdc-checkbox-selected-pressed-icon-color: #5a67d8 !important;
+  --mdc-checkbox-unselected-focus-icon-color: #667eea !important;
+  --mdc-checkbox-unselected-hover-icon-color: #667eea !important;
+  --mdc-checkbox-unselected-icon-color: #94a3b8 !important;
+  --mdc-checkbox-unselected-pressed-icon-color: #667eea !important;
+  --mdc-checkbox-selected-focus-state-layer-color: #667eea !important;
+  --mdc-checkbox-selected-hover-state-layer-color: #667eea !important;
+  --mdc-checkbox-selected-pressed-state-layer-color: #667eea !important;
+  --mdc-checkbox-unselected-focus-state-layer-color: #667eea !important;
+  --mdc-checkbox-unselected-hover-state-layer-color: #667eea !important;
+  --mdc-checkbox-unselected-pressed-state-layer-color: #667eea !important;
+  
+  .mdc-checkbox__background {
+    border-color: #94a3b8 !important;
+    background-color: transparent !important;
+    
+    &::before {
+      background-color: #667eea !important;
+    }
+  }
+  
+  &.mat-mdc-checkbox-checked {
+    .mdc-checkbox__background {
+      background-color: #667eea !important;
+      border-color: #667eea !important;
+    }
+    
+    .mdc-checkbox__checkmark {
+      color: white !important;
+    }
+  }
+  
+  .mdc-checkbox__ripple {
+    background-color: #667eea !important;
+  }
+  
+  .mdc-checkbox__native-control:enabled:checked + .mdc-checkbox__background {
+    background-color: #667eea !important;
+    border-color: #667eea !important;
+  }
+}
+
+// Global Material Select Component Colors
+.mat-mdc-select {
+  &.mat-focused {
+    .mat-mdc-select-arrow {
+      color: #667eea !important;
+    }
+    
+    .mat-mdc-select-value {
+      color: #374151 !important;
+    }
+  }
+  
+  .mat-mdc-select-value {
+    color: #374151 !important;
+  }
+  
+  .mat-mdc-select-arrow svg {
+    fill: #667eea !important;
+  }
+}
+
+// Global Material Form Field Focus Colors
+.mat-mdc-form-field {
+  &.mat-focused {
+    .mat-mdc-floating-label {
+      color: #667eea !important;
+    }
+    
+    .mat-mdc-line-ripple::before {
+      border-bottom-color: #667eea !important;
+    }
+    
+    .mat-mdc-line-ripple::after {
+      border-bottom-color: #667eea !important;
+    }
+  }
+  
+  &.mat-form-field-invalid {
+    .mat-mdc-floating-label {
+      color: #dc2626 !important;
+    }
+  }
+}
+
+// Override Material Design primary color for all components
+.mat-primary {
+  --mat-option-selected-state-layer-color: #667eea !important;
+  --mat-option-focus-state-layer-color: #f0f7ff !important;
+  --mat-option-hover-state-layer-color: #f0f7ff !important;
 }
 
 // Link styles

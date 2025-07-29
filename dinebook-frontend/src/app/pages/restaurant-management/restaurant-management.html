@@ -1,493 +1,328 @@
 <div class="restaurant-management">
-  <div class="container">
-    
-    <!-- Loading State -->
-    <div *ngIf="loading" class="loading-state">
-      <div class="loading-spinner"></div>
-      <p>Loading restaurant data...</p>
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="loading-container">
+      <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+      </div>
+      <h3>Loading Restaurant Data</h3>
+      <p>Please wait while we fetch your restaurant information...</p>
     </div>
+  </div>
 
-    <!-- Error State -->
-    <div *ngIf="error && !loading" class="error-state">
-      <mat-icon>error_outline</mat-icon>
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-state">
+    <div class="error-container">
+      <div class="error-icon">
+        <mat-icon>error_outline</mat-icon>
+      </div>
+      <h2>Unable to Load Restaurant</h2>
       <p>{{ error }}</p>
-      <button mat-raised-button color="primary" (click)="loadRestaurant()">
+      <button mat-raised-button color="primary" (click)="loadRestaurant()" class="retry-btn">
+        <mat-icon>refresh</mat-icon>
         Try Again
       </button>
     </div>
+  </div>
 
-    <!-- Restaurant Details View Mode -->
-    <div *ngIf="!loading && !error && restaurant && viewMode === 'details'" class="details-view">
-      <div class="page-header">
-        <div class="header-content">
-          <div class="title-section">
-            <h1>Restaurant Details</h1>
-            <p>Manage your restaurant information</p>
-          </div>
-          <div class="action-buttons">
-            <button mat-raised-button color="primary" (click)="switchToEditMode()">
-              <mat-icon>edit</mat-icon>
-              Edit Restaurant
-            </button>
-          </div>
+  <!-- Restaurant Management Content -->
+  <div *ngIf="!loading && !error" class="restaurant-content">
+    <!-- Navigation Header -->
+    <div class="nav-header">
+      <div class="container">
+        <button mat-icon-button routerLink="/owner/dashboard" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div class="breadcrumb">
+          <span class="breadcrumb-item">Dashboard</span>
+          <mat-icon class="breadcrumb-separator">chevron_right</mat-icon>
+          <span class="breadcrumb-current">Edit Restaurant</span>
         </div>
       </div>
-
-      <mat-card class="restaurant-details-card">
-        <mat-card-header>
-          <div class="restaurant-header-content">
-            <div class="restaurant-main-info">
-              <mat-card-title class="restaurant-name">{{ restaurant.name }}</mat-card-title>
-              <mat-card-subtitle class="restaurant-basic-info">
-                <span class="cuisine-type">{{ restaurant.cuisine }}</span>
-                <span class="price-range">{{ getPriceRangeDisplay(restaurant.priceRange) }}</span>
-                <span class="rating" *ngIf="restaurant.averageRating">
-                  <mat-icon>star</mat-icon>
-                  {{ restaurant.averageRating.toFixed(1) }}
-                </span>
-              </mat-card-subtitle>
-            </div>
-              <!-- Restaurant Image (when available) -->
-  <div class="restaurant-image" *ngIf="getRestaurantImageUrl()">
-    <img [src]="getRestaurantImageUrl()" [alt]="restaurant.name + ' image'" />
-  </div>
-          </div>
-        </mat-card-header>
-        
-        <mat-card-content>
-          <div class="restaurant-details-grid">
-            <div class="detail-section">
-              <h4><mat-icon>location_on</mat-icon>Location</h4>
-              <p *ngIf="restaurant.address">
-                {{ restaurant.address.street }}<br>
-                {{ restaurant.address.city }}, {{ restaurant.address.province }} {{ restaurant.address.postalCode }}
-              </p>
-              <p *ngIf="!restaurant.address && restaurant.location">{{ restaurant.location }}</p>
-            </div>
-            
-            <div class="detail-section" *ngIf="restaurant.phoneNumber">
-              <h4><mat-icon>phone</mat-icon>Phone</h4>
-              <p>{{ restaurant.phoneNumber }}</p>
-            </div>
-            
-            <div class="detail-section" *ngIf="restaurant.email">
-              <h4><mat-icon>email</mat-icon>Email</h4>
-              <p>{{ restaurant.email }}</p>
-            </div>
-            
-            <div class="detail-section" *ngIf="restaurant.capacity">
-              <h4><mat-icon>people</mat-icon>Capacity</h4>
-              <p>{{ restaurant.capacity }} guests</p>
-            </div>
-          </div>
-          
-          <div class="restaurant-description" *ngIf="restaurant.description">
-            <h4><mat-icon>description</mat-icon>Description</h4>
-            <p>{{ restaurant.description }}</p>
-          </div>
-          
-          <div class="opening-hours" *ngIf="restaurant.openingHours">
-            <h4><mat-icon>schedule</mat-icon>Restaurant Timings</h4>
-            <div class="hours-cards-grid">
-              <mat-card *ngFor="let day of getDaysOfWeek()" class="day-card" 
-                        [ngClass]="{'closed-day': !restaurant.openingHours[day.key].open || !restaurant.openingHours[day.key].close}">
-                <mat-card-content>
-                  <div class="day-header">
-                    <span class="day-name">{{ day.label }}</span>
-                    <mat-icon *ngIf="restaurant.openingHours[day.key].open && restaurant.openingHours[day.key].close" 
-                              class="status-icon open">access_time</mat-icon>
-                    <mat-icon *ngIf="!restaurant.openingHours[day.key].open || !restaurant.openingHours[day.key].close" 
-                              class="status-icon closed">schedule_send</mat-icon>
-                  </div>
-                  <div class="hours-info">
-                    <span class="hours" *ngIf="restaurant.openingHours[day.key].open && restaurant.openingHours[day.key].close">
-                      {{ formatTime(restaurant.openingHours[day.key].open) }} - {{ formatTime(restaurant.openingHours[day.key].close) }}
-                    </span>
-                    <span class="hours closed" *ngIf="!restaurant.openingHours[day.key].open || !restaurant.openingHours[day.key].close">
-                      Closed
-                    </span>
-                  </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
-          </div>
-
-          <div class="coordinates-section" *ngIf="restaurant.coordinates?.latitude && restaurant.coordinates?.longitude">
-            <h4><mat-icon>gps_fixed</mat-icon>Coordinates</h4>
-            <p><strong>Location:</strong> 
-              Latitude: {{ restaurant.coordinates?.latitude }}, Longitude: {{ restaurant.coordinates?.longitude }}
-            </p>
-          </div>
-        </mat-card-content>
-
-        <mat-card-actions class="card-actions">
-          <button mat-button color="warn" (click)="deleteRestaurant()" 
-                  [disabled]="saving">
-            <mat-icon>delete</mat-icon>
-            Delete Restaurant
-          </button>
-        </mat-card-actions>
-      </mat-card>
     </div>
 
-    <!-- Restaurant Edit/Create Form Mode -->
-    <div *ngIf="!loading && !error && (viewMode === 'edit' || !restaurant)" class="form-view">
+    <div class="container">
+      <!-- Page Header -->
       <div class="page-header">
         <div class="header-content">
-          <div class="title-section">
-            <h1>{{ restaurant ? 'Edit Restaurant' : 'Create Restaurant' }}</h1>
-            <p>{{ restaurant ? 'Update your restaurant information' : 'Add your restaurant details' }}</p>
+          <div class="header-text">
+            <h1 class="page-title">
+              <span *ngIf="restaurant">Edit Restaurant</span>
+              <span *ngIf="!restaurant">Create Restaurant</span>
+            </h1>
+            <p class="page-description">
+              <span *ngIf="restaurant">Update your restaurant details and settings</span>
+              <span *ngIf="!restaurant">Set up your restaurant profile to start accepting bookings</span>
+            </p>
           </div>
-          <div class="action-buttons" *ngIf="restaurant">
-            <button mat-button (click)="switchToViewMode()">
-              <mat-icon>arrow_back</mat-icon>
-              Back to Details
+          
+          <div class="header-actions">
+            <button mat-stroked-button 
+                    routerLink="/owner/dashboard" 
+                    class="secondary-action-btn">
+              <mat-icon>close</mat-icon>
+              Cancel
+            </button>
+            <button mat-raised-button 
+                    color="primary" 
+                    (click)="saveRestaurant()" 
+                    [disabled]="!restaurantForm.valid || saving"
+                    class="primary-action-btn">
+              <mat-icon *ngIf="!saving">save</mat-icon>
+              <mat-spinner *ngIf="saving" diameter="20"></mat-spinner>
+              <span *ngIf="restaurant">Save Changes</span>
+              <span *ngIf="!restaurant">Create Restaurant</span>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Restaurant Form -->
-      <form [formGroup]="restaurantForm" (ngSubmit)="onSubmit()" class="restaurant-form">
-        
-        <!-- Basic Information -->
-        <mat-card class="form-section">
-          <mat-card-header>
-            <mat-card-title>
-              <mat-icon>restaurant</mat-icon>
-              Basic Information
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="form-grid">
-              <mat-form-field appearance="outline">
-                <mat-label>Restaurant Name</mat-label>
-                <input matInput formControlName="name" placeholder="Enter restaurant name">
-                <mat-error>{{ getErrorMessage('name') }}</mat-error>
-              </mat-form-field>
+      <!-- Restaurant Edit Form -->
+      <div class="edit-view">
+        <form [formGroup]="restaurantForm" (ngSubmit)="saveRestaurant()" class="restaurant-form">
+          
+          <!-- Basic Information Section -->
+          <mat-card class="form-section">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>restaurant</mat-icon>
+                Basic Information
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="form-grid">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Restaurant Name</mat-label>
+                  <input matInput formControlName="name" placeholder="Enter restaurant name">
+                  <mat-error *ngIf="restaurantForm.get('name')?.hasError('required')">
+                    Restaurant name is required
+                  </mat-error>
+                </mat-form-field>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Cuisine Type</mat-label>
-                <mat-select formControlName="cuisine">
-                  <mat-option *ngFor="let cuisine of cuisineTypes" [value]="cuisine">
-                    {{ cuisine }}
-                  </mat-option>
-                </mat-select>
-                <mat-error>{{ getErrorMessage('cuisine') }}</mat-error>
-              </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Cuisine Type</mat-label>
+                  <mat-select formControlName="cuisine">
+                    <mat-option *ngFor="let cuisine of cuisineTypes" [value]="cuisine">
+                      {{ cuisine }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Price Range</mat-label>
-                <mat-select formControlName="priceRange">
-                  <mat-option *ngFor="let range of priceRanges" [value]="range.value">
-                    {{ range.label }}
-                  </mat-option>
-                </mat-select>
-                <mat-error>{{ getErrorMessage('priceRange') }}</mat-error>
-              </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Price Range</mat-label>
+                  <mat-select formControlName="priceRange">
+                    <mat-option *ngFor="let range of priceRanges" [value]="range.value">
+                      {{ range.label }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Capacity</mat-label>
-                <input matInput type="number" formControlName="capacity" placeholder="Number of guests">
-                <mat-error>{{ getErrorMessage('capacity') }}</mat-error>
-              </mat-form-field>
-            </div>
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Description</mat-label>
+                  <textarea matInput formControlName="description" rows="3" 
+                            placeholder="Describe your restaurant..."></textarea>
+                </mat-form-field>
+              </div>
+            </mat-card-content>
+          </mat-card>
 
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Description</mat-label>
-              <textarea matInput formControlName="description" rows="3" 
-                        placeholder="Tell customers about your restaurant..."></textarea>
-              <mat-error>{{ getErrorMessage('description') }}</mat-error>
-            </mat-form-field>
-          </mat-card-content>
-        </mat-card>
+          <!-- Contact & Location Section -->
+          <mat-card class="form-section">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>location_on</mat-icon>
+                Location & Contact
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="form-grid">
+                <div class="location-row">
+                  <mat-form-field appearance="outline" class="location-input">
+                    <mat-label>Street Address</mat-label>
+                    <input matInput formControlName="location" placeholder="Enter your address">
+                  </mat-form-field>
+                  <button type="button" mat-stroked-button class="location-button">
+                    <mat-icon>my_location</mat-icon>
+                    Current Location
+                  </button>
+                </div>
 
-        <!-- Restaurant Image Upload -->
-        <mat-card class="form-section">
-          <mat-card-header>
-            <mat-card-title>
-              <mat-icon>image</mat-icon>
-              Restaurant Image
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="image-upload-section">
-              <!-- Hidden file input -->
-              <input 
-                id="imageFileInput"
-                type="file" 
-                accept="image/*" 
-                (change)="onImageFileSelected($event)"
-                style="display: none;">
-              
-              <!-- Upload area -->
-              <div class="image-upload-area" 
-                   [class.drag-over]="isDragOver"
-                   [class.has-image]="selectedImageFile"
-                   (dragover)="onDragOver($event)"
-                   (dragleave)="onDragLeave($event)"
-                   (drop)="onImageDrop($event)"
-                   (click)="triggerFileInput()"
-                   (keydown)="onKeyboardActivate($event)"
-                   tabindex="0"
-                   role="button"
-                   [attr.aria-label]="selectedImageFile ? 'Change restaurant image: ' + selectedImageFile.name : 'Upload restaurant image'"
-                   [attr.aria-describedby]="imageUploadError ? 'image-upload-error' : 'upload-instructions'">>
+                <mat-form-field appearance="outline">
+                  <mat-label>Phone Number</mat-label>
+                  <input matInput formControlName="phoneNumber" placeholder="+1 (555) 123-4567">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Email Address</mat-label>
+                  <input matInput formControlName="email" type="email" placeholder="restaurant@example.com">
+                </mat-form-field>
+              </div>
+
+              <!-- Address Details -->
+              <div formGroupName="address" class="address-section">
+                <h5>Address Details (Optional)</h5>
+                <div class="form-grid">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Street</mat-label>
+                    <input matInput formControlName="street">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>City</mat-label>
+                    <input matInput formControlName="city">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Province</mat-label>
+                    <input matInput formControlName="province">
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline">
+                    <mat-label>Postal Code</mat-label>
+                    <input matInput formControlName="postalCode">
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Operating Hours Section -->
+          <mat-card class="form-section">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>schedule</mat-icon>
+                Operating Hours
+              </mat-card-title>
+              <mat-card-subtitle>Set your restaurant's business hours</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <!-- Quick Hour Templates -->
+              <div class="hours-templates">
+                <h5>Quick Setup</h5>
+                <div class="template-buttons">
+                  <button type="button" mat-stroked-button (click)="applyHourTemplate('standard')">
+                    <mat-icon>schedule</mat-icon>
+                    Standard Hours (9 AM - 9 PM)
+                  </button>
+                  <button type="button" mat-stroked-button (click)="applyHourTemplate('extended')">
+                    <mat-icon>access_time</mat-icon>
+                    Extended Hours (10 AM - 11 PM)
+                  </button>
+                  <button type="button" mat-stroked-button (click)="applyHourTemplate('weekend')">
+                    <mat-icon>weekend</mat-icon>
+                    Weekend Only
+                  </button>
+                  <button type="button" mat-stroked-button (click)="clearAllHours()">
+                    <mat-icon>clear</mat-icon>
+                    Clear All
+                  </button>
+                </div>
+              </div>
+
+              <!-- Individual Day Hours -->
+              <div formGroupName="openingHours" class="hours-grid">
+                <div *ngFor="let day of daysOfWeek" class="day-hours-form">
+                  <div class="day-header">
+                    <mat-checkbox 
+                      [checked]="isDayOpen(day)" 
+                      (change)="toggleDay(day, $event.checked)"
+                      class="day-toggle">
+                      {{ formatDayName(day) }}
+                    </mat-checkbox>
+                  </div>
+                  
+                  <div *ngIf="isDayOpen(day)" class="time-inputs" [formGroupName]="day">
+                    <mat-form-field appearance="outline" class="time-field">
+                      <mat-label>Open</mat-label>
+                      <input matInput type="time" formControlName="open">
+                    </mat-form-field>
+                    
+                    <span class="time-separator">to</span>
+                    
+                    <mat-form-field appearance="outline" class="time-field">
+                      <mat-label>Close</mat-label>
+                      <input matInput type="time" formControlName="close">
+                    </mat-form-field>
+                  </div>
+                  
+                  <div *ngIf="!isDayOpen(day)" class="closed-indicator">
+                    <span class="closed-text">Closed</span>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <!-- Image Upload Section -->
+          <mat-card class="form-section">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>image</mat-icon>
+                Restaurant Image
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="image-upload-section">
+                <!-- Current Restaurant Image (only show if restaurant has existing image and no new image selected) -->
+                <div class="current-image" *ngIf="getRestaurantImageUrl() && !imagePreviewUrl">
+                  <img [src]="getRestaurantImageUrl()" alt="Current restaurant image">
+                  <div class="image-overlay">
+                    <button type="button" mat-icon-button (click)="removeCurrentImage()" matTooltip="Delete current image">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
                 
-                <!-- Upload prompt (shown when no image selected) -->
-                <div *ngIf="!selectedImageFile && !restaurant?.imageUrl" class="upload-prompt">
-                  <mat-icon class="upload-icon">cloud_upload</mat-icon>
-                  <div class="upload-content">
-                    <p class="upload-text">
-                      <strong>Drag and drop an image here, or click to upload</strong>
-                    </p>
-                    <p class="upload-hint">
-                      Choose a high-quality image that represents your restaurant
-                    </p>
-                    <div class="upload-features">
-                      <div class="feature">
-                        <mat-icon>check_circle</mat-icon>
-                        <span>JPG, PNG, GIF, WebP</span>
-                      </div>
-                      <div class="feature">
-                        <mat-icon>check_circle</mat-icon>
-                        <span>Up to 5MB</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Existing restaurant image (shown when editing and no new image selected) -->
-                <div *ngIf="!selectedImageFile && restaurant?.imageUrl" class="existing-image">
-                  <img [src]="restaurant!.imageUrl" alt="Current restaurant image" />
-                  <div class="image-overlay">
-                    <div class="image-actions">
-                      <button 
-                        type="button" 
-                        class="action-btn replace-btn"
-                        (click)="triggerFileInput(); $event.stopPropagation()"
-                        matTooltip="Replace image"
-                        aria-label="Replace restaurant image">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                    </div>
-                    <div class="image-info">
-                      <p class="image-name">Current Restaurant Image</p>
-                      <div class="image-details">
-                        <div class="detail-item">
-                          <mat-icon>image</mat-icon>
-                          <span>Click to replace</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Image preview (shown when image selected) -->
-                <div *ngIf="selectedImageFile && imagePreviewUrl" class="image-preview">
-                  <img [src]="imagePreviewUrl" alt="Restaurant image preview" />
-                  <div class="image-overlay">
-                    <div class="image-actions">
-                      <button 
-                        type="button" 
-                        class="action-btn replace-btn"
-                        (click)="triggerFileInput(); $event.stopPropagation()"
-                        matTooltip="Replace image"
-                        aria-label="Replace restaurant image">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                      <button 
-                        type="button" 
-                        class="action-btn remove-btn"
-                        (click)="removeSelectedImage(); $event.stopPropagation()"
-                        matTooltip="Remove image"
-                        aria-label="Remove restaurant image">
+                <!-- New Image Preview (only show if new image is selected) -->
+                <div *ngIf="imagePreviewUrl" class="image-preview">
+                  <div class="preview-container">
+                    <img [src]="imagePreviewUrl" alt="New restaurant image preview">
+                    <div class="image-overlay">
+                      <button type="button" mat-icon-button (click)="removeSelectedImage()" matTooltip="Remove selected image">
                         <mat-icon>close</mat-icon>
                       </button>
                     </div>
-                    <div class="image-info">
-                      <p class="image-name">{{ selectedImageFile.name }}</p>
-                      <div class="image-details">
-                        <div class="detail-item">
-                          <mat-icon>insert_drive_file</mat-icon>
-                          <span>{{ (selectedImageFile.size / 1024 / 1024).toFixed(2) }} MB</span>
-                        </div>
-                        <div class="detail-item">
-                          <mat-icon>image</mat-icon>
-                          <span>{{ selectedImageFile.type.split('/')[1].toUpperCase() }}</span>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
-              </div>
-
-              <!-- Success message -->
-              <div *ngIf="imageUploadSuccess" class="image-upload-success" role="status">
-                <mat-icon>check_circle</mat-icon>
-                <span>Image uploaded successfully!</span>
-              </div>
-
-              <!-- Error message -->
-              <div *ngIf="imageUploadError" id="image-upload-error" class="image-upload-error" role="alert">
-                <mat-icon>error</mat-icon>
-                <span>{{ imageUploadError }}</span>
-              </div>
-
-              <!-- Upload instructions -->
-              <div id="upload-instructions" class="upload-instructions">
-                <p>
-                  <mat-icon>info</mat-icon>
-                  Choose a high-quality image that represents your restaurant. This will be displayed to customers browsing restaurants.
-                </p>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <!-- Contact Information -->
-        <mat-card class="form-section">
-          <mat-card-header>
-            <mat-card-title>
-              <mat-icon>contact_phone</mat-icon>
-              Contact Information
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="form-grid">
-              <mat-form-field appearance="outline">
-                <mat-label>Phone Number</mat-label>
-                <input matInput formControlName="phoneNumber" placeholder="+1 (xxx) xxx-xxxx">
-                <mat-error>{{ getErrorMessage('phoneNumber') }}</mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Email</mat-label>
-                <input matInput type="email" formControlName="email" placeholder="restaurant@example.com">
-                <mat-error>{{ getErrorMessage('email') }}</mat-error>
-              </mat-form-field>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <!-- Location Information -->
-        <mat-card class="form-section">
-          <mat-card-header>
-            <mat-card-title>
-              <mat-icon>location_on</mat-icon>
-              Location
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>General Location</mat-label>
-              <input matInput formControlName="location" placeholder="e.g., Downtown Halifax, Spring Garden Road">
-              <mat-error>{{ getErrorMessage('location') }}</mat-error>
-            </mat-form-field>
-
-            <div formGroupName="address" class="address-section">
-              <h4>Detailed Address</h4>
-              <div class="form-grid">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Street Address</mat-label>
-                  <input matInput formControlName="street" placeholder="123 Main Street">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>City</mat-label>
-                  <input matInput formControlName="city" placeholder="Halifax">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>Province</mat-label>
-                  <input matInput formControlName="province" placeholder="Nova Scotia">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>Postal Code</mat-label>
-                  <input matInput formControlName="postalCode" placeholder="B3J 2K1">
-                </mat-form-field>
-              </div>
-            </div>
-
-            <div formGroupName="coordinates" class="coordinates-section">
-              <h4>GPS Coordinates</h4>
-              <div class="form-grid">
-                <mat-form-field appearance="outline">
-                  <mat-label>Latitude</mat-label>
-                  <input matInput type="number" formControlName="latitude" step="any" placeholder="44.6488">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>Longitude</mat-label>
-                  <input matInput type="number" formControlName="longitude" step="any" placeholder="-63.5752">
-                </mat-form-field>
-
-                <button type="button" mat-raised-button (click)="getCurrentLocation()" 
-                        class="location-button">
-                  <mat-icon>my_location</mat-icon>
-                  Get Current Location
-                </button>
-              </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <!-- Restaurant Timings -->
-        <mat-card class="form-section">
-          <mat-card-header>
-            <mat-card-title>
-              <mat-icon>schedule</mat-icon>
-              Restaurant Timings
-            </mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <div formGroupName="openingHours" class="opening-hours-section">
-              <div *ngFor="let day of daysOfWeek" class="day-hours-row">
-                <div class="day-label">
-                  <span>{{ formatDayName(day) }}</span>
+                
+                <!-- Upload Area (only show if no image exists and no new image selected) -->
+                <div class="image-upload-area" 
+                     *ngIf="!getRestaurantImageUrl() && !imagePreviewUrl"
+                     [class.drag-over]="isDragOver"
+                     (dragover)="onDragOver($event)"
+                     (dragleave)="onDragLeave($event)"
+                     (drop)="onFileDropped($event)"
+                     (click)="fileInput.click()">
+                  <mat-icon>cloud_upload</mat-icon>
+                  <p>Drag & drop an image here, or click to select</p>
+                  <span class="file-requirements">PNG, JPG up to 5MB</span>
+                  <input #fileInput type="file" hidden accept="image/*" (change)="onFileSelected($event)">
                 </div>
-                <div class="hours-inputs" [formGroupName]="day">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Open</mat-label>
-                    <input matInput type="time" formControlName="open">
-                  </mat-form-field>
-                  <span class="time-separator">to</span>
-                  <mat-form-field appearance="outline">
-                    <mat-label>Close</mat-label>
-                    <input matInput type="time" formControlName="close">
-                  </mat-form-field>
-                  <div class="day-actions">
-                    <button type="button" mat-icon-button (click)="copyHours(day)" 
-                            matTooltip="Copy to all days">
-                      <mat-icon>content_copy</mat-icon>
-                    </button>
-                    <button type="button" mat-icon-button (click)="clearHours(day)" 
-                            matTooltip="Clear hours" color="warn">
-                      <mat-icon>clear</mat-icon>
-                    </button>
-                  </div>
+                
+                <!-- Upload Button (show when current image is removed but no new image selected) -->
+                <div class="upload-button-container" *ngIf="!getRestaurantImageUrl() && !imagePreviewUrl && imageWasRemoved">
+                  <button mat-raised-button color="primary" (click)="fileInput.click()" class="upload-btn">
+                    Add Restaurant Image
+                  </button>
+                  <input #fileInput type="file" hidden accept="image/*" (change)="onFileSelected($event)">
+                </div>
+                
+                <!-- Upload Error Display -->
+                <div *ngIf="imageUploadError" class="upload-error">
+                  <mat-icon>error</mat-icon>
+                  <span>{{ imageUploadError }}</span>
+                </div>
+                
+                <!-- Upload Success Display -->
+                <div *ngIf="imageUploadSuccess" class="upload-success">
+                  <mat-icon>check_circle</mat-icon>
+                  <span>Image uploaded successfully!</span>
                 </div>
               </div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <!-- Form Actions -->
-        <div class="form-actions">
-          <button type="submit" mat-raised-button color="primary" [disabled]="!restaurantForm.valid || saving">
-            <mat-icon>save</mat-icon>
-            {{ saving ? 'Saving...' : (restaurant ? 'Update Restaurant' : 'Create Restaurant') }}
-          </button>
-
-          <button *ngIf="restaurant" type="button" mat-button color="warn" (click)="deleteRestaurant()" 
-                  [disabled]="saving">
-            <mat-icon>delete</mat-icon>
-            Delete Restaurant
-          </button>
-        </div>
-      </form>
+            </mat-card-content>
+          </mat-card>
+        </form>
+      </div>
     </div>
-
   </div>
 </div>
