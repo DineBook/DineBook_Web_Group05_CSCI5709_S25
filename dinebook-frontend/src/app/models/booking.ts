@@ -11,11 +11,17 @@ export interface CreateBookingRequest {
   specialRequests?: string;
 }
 
+export interface Customer {
+  _id: string;
+  name: string;
+  email: string;
+}
+
 export interface BookingResponse {
   id: string;
-  customerId: string;
-  restaurantId: string;
-  restaurantName: string;
+  customerId: Customer | string;
+  restaurantId: Restaurant | string;
+  restaurantName?: string;
   date: string;
   time: string;
   guests: number;
