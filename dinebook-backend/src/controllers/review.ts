@@ -28,7 +28,7 @@ export const createReview = async (
 ): Promise<void> => {
   try {
     if (req.user.role !== "customer") {
-      res.status(403).json({ error: "Only customers can create reviews" });
+      res.status(403).json({ error: "Only customers can create reviews." });
       return;
     }
     const { restaurantId, rating, comment } = req.body;
@@ -37,21 +37,21 @@ export const createReview = async (
     if (!restaurantId || !rating || !comment) {
       res
         .status(400)
-        .json({ error: "Restaurant ID, rating, and comment are required" });
+        .json({ error: "Restaurant ID, rating, and comment are required." });
       return;
     }
     if (rating < 1 || rating > 5) {
-      res.status(400).json({ error: "Rating must be between 1 and 5" });
+      res.status(400).json({ error: "Rating must be between 1 and 5." });
       return;
     }
     if (comment.trim() === "") {
-      res.status(400).json({ error: "Comment cannot be empty" });
+      res.status(400).json({ error: "Comment cannot be empty." });
       return;
     }
 
     const restaurant = await Restaurant.findById(restaurantId);
     if (!restaurant || !restaurant.isActive) {
-      res.status(404).json({ error: "Restaurant not found or not active" });
+      res.status(404).json({ error: "Restaurant not found or not active." });
       return;
     }
 
@@ -59,7 +59,7 @@ export const createReview = async (
     if (existingReview) {
       res
         .status(400)
-        .json({ error: "You have already reviewed this restaurant" });
+        .json({ error: "You have already reviewed this restaurant." });
       return;
     }
 
@@ -101,7 +101,7 @@ export const createReview = async (
       message: "Review created successfully",
       review,
     });
-  } catch (error) {
+    } catch (error) {
     console.error("Review creation error:", error);
     if (
       error instanceof Error &&
@@ -110,9 +110,9 @@ export const createReview = async (
     ) {
       res
         .status(400)
-        .json({ error: "You have already reviewed this restaurant" });
+        .json({ error: "You have already reviewed this restaurant." });
     } else {
-      res.status(500).json({ error: "Failed to create review" });
+      res.status(500).json({ error: "Unable to create review at this time. Please try again later." });
     }
   }
 };
@@ -125,7 +125,7 @@ export const updateReview = async (
     if (req.user.role !== "customer") {
       res
         .status(403)
-        .json({ error: "Only customers can update their reviews" });
+        .json({ error: "Only customers can update their reviews." });
       return;
     }
     const { id } = req.params;
@@ -133,11 +133,11 @@ export const updateReview = async (
     const customerId = req.user.id;
 
     if (rating && (rating < 1 || rating > 5)) {
-      res.status(400).json({ error: "Rating must be between 1 and 5" });
+      res.status(400).json({ error: "Rating must be between 1 and 5." });
       return;
     }
     if (comment && comment.trim() === "") {
-      res.status(400).json({ error: "Comment cannot be empty" });
+      res.status(400).json({ error: "Comment cannot be empty." });
       return;
     }
 
@@ -145,7 +145,7 @@ export const updateReview = async (
 
     if (!review) {
       res.status(404).json({
-        error: "Review not found or you don't have permission to update it",
+        error: "Review not found or you do not have permission to update it.",
       });
       return;
     }
@@ -186,9 +186,9 @@ export const updateReview = async (
       message: "Review updated successfully",
       review,
     });
-  } catch (error) {
+    } catch (error) {
     console.error("Review update error:", error);
-    res.status(500).json({ error: "Failed to update review" });
+    res.status(500).json({ error: "Unable to update review at this time. Please try again later." });
   }
 };
 
@@ -200,7 +200,7 @@ export const deleteReview = async (
     if (req.user.role !== "customer") {
       res
         .status(403)
-        .json({ error: "Only customers can delete their reviews" });
+        .json({ error: "Only customers can delete their reviews." });
       return;
     }
     const { id } = req.params;
@@ -210,7 +210,7 @@ export const deleteReview = async (
 
     if (!review) {
       res.status(404).json({
-        error: "Review not found or you don't have permission to delete it",
+        error: "Review not found or you do not have permission to delete it.",
       });
       return;
     }
@@ -220,9 +220,9 @@ export const deleteReview = async (
     res.json({
       message: "Review deleted successfully",
     });
-  } catch (error) {
+    } catch (error) {
     console.error("Review deletion error:", error);
-    res.status(500).json({ error: "Failed to delete review" });
+    res.status(500).json({ error: "Unable to delete review at this time. Please try again later." });
   }
 };
 
@@ -235,7 +235,7 @@ export const getReviewsByRestaurant = async (
 
     const restaurant = await Restaurant.findById(restaurantId);
     if (!restaurant || !restaurant.isActive) {
-      res.status(404).json({ error: "Restaurant not found or not active" });
+      res.status(404).json({ error: "Restaurant not found or not active." });
       return;
     }
 
@@ -248,9 +248,9 @@ export const getReviewsByRestaurant = async (
       restaurantName: restaurant.name,
       reviews,
     });
-  } catch (error) {
+    } catch (error) {
     console.error("Reviews fetch error:", error);
-    res.status(500).json({ error: "Failed to fetch reviews" });
+    res.status(500).json({ error: "Unable to fetch reviews at this time. Please try again later." });
   }
 };
 
@@ -262,7 +262,7 @@ export const replyToReview = async (
     if (req.user.role !== "owner") {
       res
         .status(403)
-        .json({ error: "Only restaurant owners can reply to reviews" });
+        .json({ error: "Only restaurant owners can reply to reviews." });
       return;
     }
     const { id } = req.params;
@@ -270,14 +270,14 @@ export const replyToReview = async (
     const ownerId = req.user.id;
 
     if (!reply || reply.trim() === "") {
-      res.status(400).json({ error: "Reply cannot be empty" });
+      res.status(400).json({ error: "Reply cannot be empty." });
       return;
     }
 
     const review = await Review.findById(id).populate("restaurantId");
 
     if (!review) {
-      res.status(404).json({ error: "Review not found" });
+      res.status(404).json({ error: "Review not found." });
       return;
     }
 
@@ -285,7 +285,7 @@ export const replyToReview = async (
     if (restaurant.ownerId.toString() !== ownerId) {
       res
         .status(403)
-        .json({ error: "You don't have permission to reply to this review" });
+        .json({ error: "You do not have permission to reply to this review." });
       return;
     }
 
@@ -296,9 +296,9 @@ export const replyToReview = async (
       message: "Reply added successfully",
       review,
     });
-  } catch (error) {
+    } catch (error) {
     console.error("Review reply error:", error);
-    res.status(500).json({ error: "Failed to add reply" });
+    res.status(500).json({ error: "Unable to add reply at this time. Please try again later." });
   }
 };
 
@@ -308,7 +308,7 @@ export const getMyReviews = async (
 ): Promise<void> => {
   try {
     if (req.user.role !== "customer") {
-      res.status(403).json({ error: "Only customers can view their reviews" });
+      res.status(403).json({ error: "Only customers can view their reviews." });
       return;
     }
     const customerId = req.user.id;
@@ -318,9 +318,9 @@ export const getMyReviews = async (
     res.json({
       reviews,
     });
-  } catch (error) {
+    } catch (error) {
     console.error("Fetch my reviews error:", error);
-    res.status(500).json({ error: "Failed to fetch reviews" });
+    res.status(500).json({ error: "Unable to fetch your reviews at this time. Please try again later." });
   }
 };
 
@@ -332,7 +332,7 @@ export const updateReply = async (
     if (req.user.role !== "owner") {
       res
         .status(403)
-        .json({ error: "Only restaurant owners can update replies" });
+        .json({ error: "Only restaurant owners can update replies." });
       return;
     }
     const { id } = req.params;
@@ -340,14 +340,14 @@ export const updateReply = async (
     const ownerId = req.user.id;
 
     if (!reply || reply.trim() === "") {
-      res.status(400).json({ error: "Reply cannot be empty" });
+      res.status(400).json({ error: "Reply cannot be empty." });
       return;
     }
 
     const review = await Review.findById(id).populate("restaurantId");
 
     if (!review) {
-      res.status(404).json({ error: "Review not found" });
+      res.status(404).json({ error: "Review not found." });
       return;
     }
 
@@ -355,7 +355,7 @@ export const updateReply = async (
     if (restaurant.ownerId.toString() !== ownerId) {
       res
         .status(403)
-        .json({ error: "You don't have permission to update this reply" });
+        .json({ error: "You do not have permission to update this reply." });
       return;
     }
 
@@ -366,9 +366,9 @@ export const updateReply = async (
       message: "Reply updated successfully",
       review,
     });
-  } catch (error) {
+    } catch (error) {
     console.error("Reply update error:", error);
-    res.status(500).json({ error: "Failed to update reply" });
+    res.status(500).json({ error: "Unable to update reply at this time. Please try again later." });
   }
 };
 
@@ -380,7 +380,7 @@ export const deleteReply = async (
     if (req.user.role !== "owner") {
       res
         .status(403)
-        .json({ error: "Only restaurant owners can delete replies" });
+        .json({ error: "Only restaurant owners can delete replies." });
       return;
     }
     const { id } = req.params;
@@ -389,7 +389,7 @@ export const deleteReply = async (
     const review = await Review.findById(id).populate("restaurantId");
 
     if (!review) {
-      res.status(404).json({ error: "Review not found" });
+      res.status(404).json({ error: "Review not found." });
       return;
     }
 
@@ -397,7 +397,7 @@ export const deleteReply = async (
     if (restaurant.ownerId.toString() !== ownerId) {
       res
         .status(403)
-        .json({ error: "You don't have permission to delete this reply" });
+        .json({ error: "You do not have permission to delete this reply." });
       return;
     }
 
@@ -408,8 +408,8 @@ export const deleteReply = async (
       message: "Reply deleted successfully",
       review,
     });
-  } catch (error) {
+    } catch (error) {
     console.error("Reply deletion error:", error);
-    res.status(500).json({ error: "Failed to delete reply" });
+    res.status(500).json({ error: "Unable to delete reply at this time. Please try again later." });
   }
 };
