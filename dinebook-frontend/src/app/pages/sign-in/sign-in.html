@@ -28,9 +28,10 @@
                 matInput 
                 formControlName="email" 
                 type="email" 
-                placeholder="Enter your email address"
+                placeholder="e.g. john.doe&#64;email.com"
                 autocomplete="email"
-                [attr.aria-describedby]="getEmailErrorId()">
+                [attr.aria-describedby]="getEmailErrorId()"
+                (blur)="loginForm.get('email')?.markAsTouched()">
               <mat-icon matSuffix class="field-icon">alternate_email</mat-icon>
             </mat-form-field>
             
@@ -39,17 +40,17 @@
               <div *ngIf="loginForm.get('email')?.hasError('required') && loginForm.get('email')?.touched" 
                    class="error-message">
                 <mat-icon class="message-icon">error_outline</mat-icon>
-                <span>Email address is required</span>
+                <span>Email address is required. Please enter your email (e.g. john.doe&#64;email.com).</span>
               </div>
               <div *ngIf="loginForm.get('email')?.hasError('email') && loginForm.get('email')?.touched" 
                    class="error-message">
                 <mat-icon class="message-icon">error_outline</mat-icon>
-                <span>Please enter a valid email address</span>
+                <span>The email address format is invalid. Please use a valid email like john.doe&#64;email.com.</span>
               </div>
               <div *ngIf="loginForm.get('email')?.valid && loginForm.get('email')?.touched" 
                    class="success-message">
                 <mat-icon class="message-icon">check_circle</mat-icon>
-                <span>Email looks good</span>
+                <span>Email looks good!</span>
               </div>
             </div>
           </div>
@@ -67,9 +68,10 @@
                 matInput 
                 formControlName="password" 
                 [type]="hidePassword ? 'password' : 'text'"
-                placeholder="Enter your password"
+                placeholder="At least 8 characters, e.g. Passw0rd"
                 autocomplete="current-password"
-                [attr.aria-describedby]="getPasswordErrorId()">
+                [attr.aria-describedby]="getPasswordErrorId()"
+                (blur)="loginForm.get('password')?.markAsTouched()">
               <button 
                 mat-icon-button 
                 matSuffix 
@@ -86,12 +88,22 @@
               <div *ngIf="loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched" 
                    class="error-message">
                 <mat-icon class="message-icon">error_outline</mat-icon>
-                <span>Password is required</span>
+                <span>Password is required. Please enter your password.</span>
+              </div>
+              <div *ngIf="loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched" 
+                   class="error-message">
+                <mat-icon class="message-icon">error_outline</mat-icon>
+                <span>Password must be at least 8 characters long.</span>
+              </div>
+              <div *ngIf="loginForm.get('password')?.hasError('pattern') && loginForm.get('password')?.touched" 
+                   class="error-message">
+                <mat-icon class="message-icon">error_outline</mat-icon>
+                <span>Password must contain at least one letter and one number. Example: Passw0rd</span>
               </div>
               <div *ngIf="loginForm.get('password')?.valid && loginForm.get('password')?.touched" 
                    class="success-message">
                 <mat-icon class="message-icon">check_circle</mat-icon>
-                <span>Password entered</span>
+                <span>Password looks good!</span>
               </div>
             </div>
           </div>

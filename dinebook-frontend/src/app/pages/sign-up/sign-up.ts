@@ -41,10 +41,23 @@ export class SignUpComponent {
     private router: Router,
   ) {
     this.signUpForm = this.fb.group({
-      email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required, Validators.minLength(6)]],
+      name: ["", [Validators.required, Validators.minLength(2)]],
+      email: [
+        "",
+        [
+          Validators.required,
+          Validators.email,
+        ],
+      ],
+      password: [
+        "",
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+\-=]{8,}$/),
+        ],
+      ],
       role: ["customer", Validators.required],
-      name: ["", Validators.required],
     })
   }
 
@@ -70,15 +83,17 @@ export class SignUpComponent {
 
   getPasswordStrengthClass(): string {
     const password = this.signUpForm.get("password")?.value || ""
-    if (password.length < 6) return "weak"
-    if (password.length < 10) return "medium"
+    if (password.length < 8) return "weak"
+    if (!/^(?=.*[A-Za-z])(?=.*\d)/.test(password)) return "weak"
+    if (password.length < 12) return "medium"
     return "strong"
   }
 
   getPasswordStrengthText(): string {
     const password = this.signUpForm.get("password")?.value || ""
-    if (password.length < 6) return "Weak password"
-    if (password.length < 10) return "Medium strength"
+    if (password.length < 8) return "Password must be at least 8 characters"
+    if (!/^(?=.*[A-Za-z])(?=.*\d)/.test(password)) return "Add at least one letter and one number"
+    if (password.length < 12) return "Medium strength"
     return "Strong password"
   }
 
