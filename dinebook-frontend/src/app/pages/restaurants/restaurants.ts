@@ -245,9 +245,13 @@ export class RestaurantsComponent implements OnInit {
 
   bookTable() {
     if (this.authService.isLoggedIn) {
-      this.router.navigate(["/book-table"])
+      this.router.navigate(["/book-table"]).then(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     } else {
-      this.router.navigate(["/sign-in"])
+      this.router.navigate(["/sign-in"]).then(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     }
   }
 
@@ -260,14 +264,22 @@ export class RestaurantsComponent implements OnInit {
           cuisine: restaurant.cuisine,
           location: restaurant.location
         }
-      })
+      }).then(() => {
+        // Ensure page scrolls to top after navigation
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     } else {
-      this.router.navigate(["/sign-in"])
+      this.router.navigate(["/sign-in"]).then(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
     }
   }
 
   viewRestaurantDetails(restaurant: RestaurantDisplay) {
-    this.router.navigate(['/restaurants', restaurant._id]);
+    this.router.navigate(['/restaurants', restaurant._id]).then(() => {
+      // Ensure page scrolls to top after navigation
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }
 
   retry() {

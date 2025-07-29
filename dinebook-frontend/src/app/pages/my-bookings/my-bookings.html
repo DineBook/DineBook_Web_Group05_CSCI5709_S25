@@ -1,43 +1,60 @@
 <div class="my-bookings-page">
   <div class="container">
     
+    <!-- Page Header -->
     <div class="page-header">
       <div class="header-content">
         <div class="header-text">
-          <h1 class="page-title">My Bookings</h1>
+          <h1 class="page-title">Your Dining Journey</h1>
           <p class="page-description">
-            Manage your restaurant reservations and view your booking history.
+            Track your reservations and discover your next dining adventure.
           </p>
         </div>
-        <div class="header-actions">
-          <button mat-raised-button color="primary" (click)="bookNewTable()" class="new-booking-btn">
-            Book New Table
-          </button>
+        <div class="header-visual">
+          <div class="header-actions">
+            <button mat-raised-button color="primary" (click)="bookNewTable()" class="new-booking-btn">
+              <mat-icon>add</mat-icon>
+              Book New Table
+            </button>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Stats Section -->
     <div class="stats-section" *ngIf="bookingStats">
       <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card total">
+          <div class="stat-icon total">
+            <mat-icon>restaurant_menu</mat-icon>
+          </div>
           <div class="stat-content">
             <h3>{{ bookingStats.totalBookings }}</h3>
             <p>Total Bookings</p>
           </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card upcoming">
+          <div class="stat-icon upcoming">
+            <mat-icon>schedule</mat-icon>
+          </div>
           <div class="stat-content">
             <h3>{{ bookingStats.upcomingBookings }}</h3>
             <p>Upcoming</p>
           </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card completed">
+          <div class="stat-icon completed">
+            <mat-icon>check_circle</mat-icon>
+          </div>
           <div class="stat-content">
             <h3>{{ bookingStats.completedBookings }}</h3>
             <p>Completed</p>
           </div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card cancelled">
+          <div class="stat-icon cancelled">
+            <mat-icon>cancel</mat-icon>
+          </div>
           <div class="stat-content">
             <h3>{{ bookingStats.cancelledBookings }}</h3>
             <p>Cancelled</p>
@@ -46,95 +63,157 @@
       </div>
     </div>
 
+    <!-- Bookings Content -->
     <div class="bookings-content">
       
-      <mat-tab-group [(selectedIndex)]="selectedTab" (selectedIndexChange)="onTabChange($event)" class="filter-tabs">
-        <mat-tab label="All Bookings">
-          <ng-template mat-tab-label>
-            All Bookings
-          </ng-template>
-        </mat-tab>
-        <mat-tab label="Upcoming">
-          <ng-template mat-tab-label>
-            Upcoming
-          </ng-template>
-        </mat-tab>
-        <mat-tab label="Past">
-          <ng-template mat-tab-label>
-            Past
-          </ng-template>
-        </mat-tab>
-        <mat-tab label="Cancelled">
-          <ng-template mat-tab-label>
-            Cancelled
-          </ng-template>
-        </mat-tab>
-      </mat-tab-group>
-
-      <div *ngIf="isLoading" class="loading-container">
-        <mat-spinner diameter="50"></mat-spinner>
-        <p>Loading your bookings...</p>
+      <!-- Filter Tabs -->
+      <div class="filter-tabs-container">
+        <mat-tab-group 
+          [(selectedIndex)]="selectedTab" 
+          (selectedIndexChange)="onTabChange($event)" 
+          class="filter-tabs"
+          style="--mdc-secondary-navigation-tab-active-indicator-color: #667eea; --mat-tab-header-active-label-text-color: #111827;">
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <div class="tab-label-content">
+                <mat-icon>all_inclusive</mat-icon>
+                <span>All Bookings</span>
+              </div>
+            </ng-template>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <div class="tab-label-content">
+                <mat-icon>schedule</mat-icon>
+                <span>Upcoming</span>
+              </div>
+            </ng-template>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <div class="tab-label-content">
+                <mat-icon>history</mat-icon>
+                <span>Past</span>
+              </div>
+            </ng-template>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <div class="tab-label-content">
+                <mat-icon>cancel</mat-icon>
+                <span>Cancelled</span>
+              </div>
+            </ng-template>
+          </mat-tab>
+        </mat-tab-group>
       </div>
 
-      <div *ngIf="!isLoading" class="bookings-list">
-        
-        <div *ngIf="filteredBookings.length === 0" class="empty-state">
-          <h3>No Bookings Found</h3>
-          <p *ngIf="selectedTab === 0">You haven't made any reservations yet.</p>
-          <p *ngIf="selectedTab === 1">You don't have any upcoming reservations.</p>
-          <p *ngIf="selectedTab === 2">You don't have any past reservations.</p>
-          <p *ngIf="selectedTab === 3">You don't have any cancelled reservations.</p>
-          <button mat-raised-button color="primary" (click)="bookNewTable()" class="empty-action-btn">
-            Book Your First Table
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="loading-container">
+        <div class="loading-spinner">
+          <div class="spinner-ring"></div>
+        </div>
+        <h3>Loading Your Reservations</h3>
+        <p>Gathering your dining experiences...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!isLoading && filteredBookings.length === 0" class="empty-state">
+        <div class="empty-icon">
+          <mat-icon>restaurant_menu</mat-icon>
+        </div>
+        <h3>{{ getEmptyStateTitle() }}</h3>
+        <p>{{ getEmptyStateDescription() }}</p>
+        <div class="empty-actions">
+          <button mat-raised-button color="primary" (click)="bookNewTable()" class="action-btn">
+            <mat-icon>add</mat-icon>
+            {{ selectedTab === 0 ? 'Book Your First Table' : 'Book New Table' }}
           </button>
         </div>
+      </div>
 
-        <div class="bookings-grid" *ngIf="filteredBookings.length > 0">
-          <div class="booking-card" *ngFor="let booking of filteredBookings">
+      <!-- Bookings Grid -->
+      <div class="bookings-grid" *ngIf="!isLoading && filteredBookings.length > 0">
+        <div class="booking-card" *ngFor="let booking of filteredBookings" [class]="'status-' + booking.status.toLowerCase()">
+          
+          <!-- Card Image -->
+          <div class="card-image-container">
+            <img 
+              src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" 
+              [alt]="booking.restaurantName + ' restaurant'"
+              class="restaurant-image" />
             
-            <div class="card-header">
+            <!-- Image Overlay -->
+            <div class="image-overlay"></div>
+            
+            <!-- Status Badge -->
+            <div class="status-badge" [ngClass]="getStatusClass(booking.status)">
+              <mat-icon class="status-icon">{{ getStatusIcon(booking.status) }}</mat-icon>
+              <span>{{ booking.status | titlecase }}</span>
+            </div>
+          </div>
+
+          <!-- Card Content -->
+          <div class="card-content">
+            <div class="content-header">
               <div class="restaurant-info">
                 <h3 class="restaurant-name">{{ booking.restaurantName }}</h3>
-                <p class="booking-id">Booking #{{ booking.id }}</p>
-              </div>
-              <div class="status-badge" [ngClass]="getStatusClass(booking.status)">
-                <span>{{ booking.status | titlecase }}</span>
+                <p class="booking-reference">Booking #{{ booking.id }}</p>
               </div>
             </div>
 
-            <div class="card-content">
-              <div class="booking-details">
-                <div class="detail-row">
-                  <span class="detail-text">{{ formatBookingDateTime(booking) }}</span>
+            <div class="booking-details">
+              <div class="detail-row">
+                <div class="detail-icon">
+                  <mat-icon>schedule</mat-icon>
                 </div>
-                <div class="detail-row">
-                  <span class="detail-text">
-                    {{ booking.guests }} {{ booking.guests === 1 ? 'Guest' : 'Guests' }}
-                  </span>
+                <div class="detail-content">
+                  <span class="detail-label">Date & Time</span>
+                  <span class="detail-value">{{ formatBookingDateTime(booking) }}</span>
                 </div>
-                <div class="detail-row" *ngIf="booking.specialRequests">
-                  <span class="detail-text">{{ booking.specialRequests }}</span>
+              </div>
+              
+              <div class="detail-row">
+                <div class="detail-icon">
+                  <mat-icon>people</mat-icon>
+                </div>
+                <div class="detail-content">
+                  <span class="detail-label">Party Size</span>
+                  <span class="detail-value">{{ booking.guests }} {{ booking.guests === 1 ? 'Guest' : 'Guests' }}</span>
+                </div>
+              </div>
+              
+              <div class="detail-row">
+                <div class="detail-icon">
+                  <mat-icon>note</mat-icon>
+                </div>
+                <div class="detail-content">
+                  <span class="detail-label">Special Requests</span>
+                  <span class="detail-value">{{ booking.specialRequests || 'None' }}</span>
                 </div>
               </div>
             </div>
-
-            <div class="card-actions">
-              <button mat-button class="action-btn secondary" (click)="viewBookingDetails(booking)">
-                View Details
-              </button>
-              <button 
-                *ngIf="isBookingCancellable(booking)" 
-                mat-button 
-                class="action-btn danger" 
-                (click)="cancelBooking(booking)">
-                Cancel
-              </button>
-            </div>
-
           </div>
-        </div>
 
+          <!-- Card Actions -->
+          <div class="card-actions">
+            <button mat-stroked-button class="action-btn secondary" (click)="viewBookingDetails(booking)">
+              <mat-icon>visibility</mat-icon>
+              View Details
+            </button>
+            <button 
+              *ngIf="isBookingCancellable(booking)" 
+              mat-stroked-button 
+              class="action-btn danger" 
+              (click)="cancelBooking(booking)">
+              <mat-icon>cancel</mat-icon>
+              Cancel
+            </button>
+          </div>
+
+        </div>
       </div>
+
     </div>
 
   </div>

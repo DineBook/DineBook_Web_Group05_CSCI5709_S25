@@ -98,29 +98,32 @@
 
 // Page Header
 .page-header {
-  padding: 40px 0 32px;
-  text-align: center;
+  padding: 48px 0 32px;
   
   .header-content {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     
     @media (max-width: 768px) {
       flex-direction: column;
+      text-align: center;
       gap: 16px;
     }
   }
   
   .header-text {
+    flex: 1;
+    max-width: 600px;
+    
     .page-title {
-      font-size: clamp(2rem, 4vw, 3rem);
+      font-size: clamp(2rem, 4vw, 3.5rem);
       font-weight: 700;
       color: #0f172a;
       margin: 0 0 16px;
       line-height: 1.2;
       letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
