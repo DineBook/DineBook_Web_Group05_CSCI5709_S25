@@ -302,7 +302,6 @@
                 <!-- Upload Button (show when current image is removed but no new image selected) -->
                 <div class="upload-button-container" *ngIf="!getRestaurantImageUrl() && !imagePreviewUrl && imageWasRemoved">
                   <button mat-raised-button color="primary" (click)="fileInput.click()" class="upload-btn">
-                    <mat-icon>add_photo_alternate</mat-icon>
                     Add Restaurant Image
                   </button>
                   <input #fileInput type="file" hidden accept="image/*" (change)="onFileSelected($event)">
