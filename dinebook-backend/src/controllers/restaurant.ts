@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Restaurant, Booking, Review } from "../models/";
+import { uploadFileToS3 } from "../services/s3Upload";
 
 import type {
   AuthenticatedRequest,
@@ -401,7 +402,28 @@ export const createRestaurant = async (
       return;
     }
 
-    const restaurantData = {
+    // Handle optional image upload
+    let imageUrl: string | undefined;
+    if (req.file) {
+      try {
+        console.log("Restaurant image file detected, uploading to S3...");
+        imageUrl = await uploadFileToS3(
+          req.file.buffer,
+          req.file.originalname,
+          req.file.mimetype
+        );
+        console.log("Restaurant image uploaded successfully:", imageUrl);
+      } catch (uploadError) {
+        console.error("Restaurant image upload error:", uploadError);
+        // Continue with restaurant creation without image if upload fails
+        console.log(
+          "Continuing restaurant creation without image due to upload failure"
+        );
+        imageUrl = undefined;
+      }
+    }
+
+    const restaurantData: any = {
       ...otherData,
       location,
       geometry: {
@@ -410,6 +432,11 @@ export const createRestaurant = async (
       },
       ownerId: req.user.id,
     };
+
+    // Only add imageUrl if it exists
+    if (imageUrl) {
+      restaurantData.imageUrl = imageUrl;
+    }
 
     const restaurant = new Restaurant(restaurantData);
     await restaurant.save();
@@ -602,6 +629,29 @@ export const updateRestaurant = async (
         if (restaurant.ownerId.toString() !== ownerId) {
             res.status(403).json({ error: "You don't have permission to update this restaurant" });
             return;
+        }
+
+        // Handle optional image upload
+        if (req.file) {
+            try {
+                console.log(
+                    "Restaurant image file detected for update, uploading to S3..."
+                );
+                const imageUrl = await uploadFileToS3(
+                    req.file.buffer,
+                    req.file.originalname,
+                    req.file.mimetype
+                );
+                updateData.imageUrl = imageUrl;
+                console.log("Restaurant image uploaded successfully:", imageUrl);
+            } catch (uploadError) {
+                console.error("S3 upload failed during restaurant update:", uploadError);
+                res.status(500).json({ 
+                    error: "Failed to upload restaurant image",
+                    details: uploadError instanceof Error ? uploadError.message : "Unknown upload error"
+                });
+                return;
+            }
         }
 
         // Handle coordinates if provided

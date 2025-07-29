@@ -1,25 +1,37 @@
 import mongoose from 'mongoose';
 
-export const restaurantSchema = new mongoose.Schema({
+export const restaurantSchema = new mongoose.Schema(
+  {
     _averageRating: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
     name: {
-        type: String,
-        required: [true, 'Restaurant name is required'],
-        trim: true,
-        maxlength: [100, 'Restaurant name cannot exceed 100 characters']
+      type: String,
+      required: [true, "Restaurant name is required"],
+      trim: true,
+      maxlength: [100, "Restaurant name cannot exceed 100 characters"],
     },
     cuisine: {
-        type: String,
-        required: [true, 'Cuisine type is required'],
-        enum: ['Italian', 'Indian', 'Chinese', 'Mexican', 'American', 'Thai', 'Japanese', 'Mediterranean', 'French', 'Other']
+      type: String,
+      required: [true, "Cuisine type is required"],
+      enum: [
+        "Italian",
+        "Indian",
+        "Chinese",
+        "Mexican",
+        "American",
+        "Thai",
+        "Japanese",
+        "Mediterranean",
+        "French",
+        "Other",
+      ],
     },
     location: {
-        type: String,
-        required: [true, 'Location is required'],
-        trim: true
+      type: String,
+      required: [true, "Location is required"],
+      trim: true,
     },
     coordinates: {
       latitude: {
@@ -35,7 +47,7 @@ export const restaurantSchema = new mongoose.Schema({
         required: false,
       },
     },
-       geometry: {
+    geometry: {
       type: {
         type: String,
         enum: ["Point"],
@@ -61,113 +73,136 @@ export const restaurantSchema = new mongoose.Schema({
       },
     },
     address: {
-        street: String,
-        city: String,
-        province: String,
-        postalCode: String
+      street: String,
+      city: String,
+      province: String,
+      postalCode: String,
     },
     priceRange: {
-        type: Number,
-        required: [true, 'Price range is required'],
-        min: [1, 'Price range must be between 1-4'],
-        max: [4, 'Price range must be between 1-4']
+      type: Number,
+      required: [true, "Price range is required"],
+      min: [1, "Price range must be between 1-4"],
+      max: [4, "Price range must be between 1-4"],
     },
     ownerId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: [true, 'Owner ID is required']
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "Owner ID is required"],
     },
     description: {
-        type: String,
-        maxlength: [500, 'Description cannot exceed 500 characters']
+      type: String,
+      maxlength: [500, "Description cannot exceed 500 characters"],
     },
     phoneNumber: {
-        type: String,
-        match: [/^\+?[\d\s\-\(\)]+$/, 'Please enter a valid phone number']
+      type: String,
+      match: [/^\+?[\d\s\-\(\)]+$/, "Please enter a valid phone number"],
     },
     email: {
-        type: String,
-        match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
+      type: String,
+      match: [
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+        "Please enter a valid email",
+      ],
     },
     capacity: {
-        type: Number,
-        default: 50,
-        min: [1, 'Capacity must be at least 1']
+      type: Number,
+      default: 50,
+      min: [1, "Capacity must be at least 1"],
     },
     openingHours: {
-        monday: { open: String, close: String },
-        tuesday: { open: String, close: String },
-        wednesday: { open: String, close: String },
-        thursday: { open: String, close: String },
-        friday: { open: String, close: String },
-        saturday: { open: String, close: String },
-        sunday: { open: String, close: String }
+      monday: { open: String, close: String },
+      tuesday: { open: String, close: String },
+      wednesday: { open: String, close: String },
+      thursday: { open: String, close: String },
+      friday: { open: String, close: String },
+      saturday: { open: String, close: String },
+      sunday: { open: String, close: String },
     },
     isActive: {
-        type: Boolean,
-        default: true
+      type: Boolean,
+      default: true,
     },
-    menuItems: [{
+    imageUrl: {
+      type: String,
+      required: false,
+    },
+    menuItems: [
+      {
         _id: {
-            type: mongoose.Schema.Types.ObjectId,
-            default: () => new mongoose.Types.ObjectId()
+          type: mongoose.Schema.Types.ObjectId,
+          default: () => new mongoose.Types.ObjectId(),
         },
         name: {
-            type: String,
-            required: true,
-            trim: true,
-            maxlength: [100, 'Menu item name cannot exceed 100 characters']
+          type: String,
+          required: true,
+          trim: true,
+          maxlength: [100, "Menu item name cannot exceed 100 characters"],
         },
         description: {
-            type: String,
-            maxlength: [300, 'Menu item description cannot exceed 300 characters']
+          type: String,
+          maxlength: [
+            300,
+            "Menu item description cannot exceed 300 characters",
+          ],
         },
         price: {
-            type: Number,
-            required: true,
-            min: [0, 'Price must be positive']
+          type: Number,
+          required: true,
+          min: [0, "Price must be positive"],
         },
         category: {
-            type: String,
-            required: true,
-            enum: ['Appetizers', 'Mains', 'Desserts', 'Beverages', 'Salads', 'Soups', 'Specials', 'Other']
+          type: String,
+          required: true,
+          enum: [
+            "Appetizers",
+            "Mains",
+            "Desserts",
+            "Beverages",
+            "Salads",
+            "Soups",
+            "Specials",
+            "Other",
+          ],
         },
         imageUrl: {
-            type: String
+          type: String,
         },
         isVegetarian: {
-            type: Boolean,
-            default: false
+          type: Boolean,
+          default: false,
         },
         isVegan: {
-            type: Boolean,
-            default: false
+          type: Boolean,
+          default: false,
         },
         isGlutenFree: {
-            type: Boolean,
-            default: false
+          type: Boolean,
+          default: false,
         },
         isAvailable: {
-            type: Boolean,
-            default: true
+          type: Boolean,
+          default: true,
         },
         createdAt: {
-            type: Date,
-            default: Date.now
+          type: Date,
+          default: Date.now,
         },
         updatedAt: {
-            type: Date,
-            default: Date.now
-        }
-    }]
-}, {
-    timestamps: true
-});
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
-restaurantSchema.virtual('averageRating').get(function () {
-    return this._averageRating || 0;
+restaurantSchema.virtual("averageRating").get(function () {
+  return this._averageRating || 0;
 });
 
 restaurantSchema.index({ geometry: "2dsphere" }, { sparse: true }); // Create 2dsphere index for geospatial queries
 
-export const Restaurant = mongoose.model('Restaurant', restaurantSchema);
+export const Restaurant = mongoose.model("Restaurant", restaurantSchema);

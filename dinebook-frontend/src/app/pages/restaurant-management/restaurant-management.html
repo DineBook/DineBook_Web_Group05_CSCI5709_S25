@@ -47,6 +47,10 @@
                 </span>
               </mat-card-subtitle>
             </div>
+              <!-- Restaurant Image (when available) -->
+  <div class="restaurant-image" *ngIf="getRestaurantImageUrl()">
+    <img [src]="getRestaurantImageUrl()" [alt]="restaurant.name + ' image'" />
+  </div>
           </div>
         </mat-card-header>
         
@@ -195,6 +199,149 @@
                         placeholder="Tell customers about your restaurant..."></textarea>
               <mat-error>{{ getErrorMessage('description') }}</mat-error>
             </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Restaurant Image Upload -->
+        <mat-card class="form-section">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>image</mat-icon>
+              Restaurant Image
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="image-upload-section">
+              <!-- Hidden file input -->
+              <input 
+                id="imageFileInput"
+                type="file" 
+                accept="image/*" 
+                (change)="onImageFileSelected($event)"
+                style="display: none;">
+              
+              <!-- Upload area -->
+              <div class="image-upload-area" 
+                   [class.drag-over]="isDragOver"
+                   [class.has-image]="selectedImageFile"
+                   (dragover)="onDragOver($event)"
+                   (dragleave)="onDragLeave($event)"
+                   (drop)="onImageDrop($event)"
+                   (click)="triggerFileInput()"
+                   (keydown)="onKeyboardActivate($event)"
+                   tabindex="0"
+                   role="button"
+                   [attr.aria-label]="selectedImageFile ? 'Change restaurant image: ' + selectedImageFile.name : 'Upload restaurant image'"
+                   [attr.aria-describedby]="imageUploadError ? 'image-upload-error' : 'upload-instructions'">>
+                
+                <!-- Upload prompt (shown when no image selected) -->
+                <div *ngIf="!selectedImageFile && !restaurant?.imageUrl" class="upload-prompt">
+                  <mat-icon class="upload-icon">cloud_upload</mat-icon>
+                  <div class="upload-content">
+                    <p class="upload-text">
+                      <strong>Drag and drop an image here, or click to upload</strong>
+                    </p>
+                    <p class="upload-hint">
+                      Choose a high-quality image that represents your restaurant
+                    </p>
+                    <div class="upload-features">
+                      <div class="feature">
+                        <mat-icon>check_circle</mat-icon>
+                        <span>JPG, PNG, GIF, WebP</span>
+                      </div>
+                      <div class="feature">
+                        <mat-icon>check_circle</mat-icon>
+                        <span>Up to 5MB</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Existing restaurant image (shown when editing and no new image selected) -->
+                <div *ngIf="!selectedImageFile && restaurant?.imageUrl" class="existing-image">
+                  <img [src]="restaurant!.imageUrl" alt="Current restaurant image" />
+                  <div class="image-overlay">
+                    <div class="image-actions">
+                      <button 
+                        type="button" 
+                        class="action-btn replace-btn"
+                        (click)="triggerFileInput(); $event.stopPropagation()"
+                        matTooltip="Replace image"
+                        aria-label="Replace restaurant image">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </div>
+                    <div class="image-info">
+                      <p class="image-name">Current Restaurant Image</p>
+                      <div class="image-details">
+                        <div class="detail-item">
+                          <mat-icon>image</mat-icon>
+                          <span>Click to replace</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Image preview (shown when image selected) -->
+                <div *ngIf="selectedImageFile && imagePreviewUrl" class="image-preview">
+                  <img [src]="imagePreviewUrl" alt="Restaurant image preview" />
+                  <div class="image-overlay">
+                    <div class="image-actions">
+                      <button 
+                        type="button" 
+                        class="action-btn replace-btn"
+                        (click)="triggerFileInput(); $event.stopPropagation()"
+                        matTooltip="Replace image"
+                        aria-label="Replace restaurant image">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button 
+                        type="button" 
+                        class="action-btn remove-btn"
+                        (click)="removeSelectedImage(); $event.stopPropagation()"
+                        matTooltip="Remove image"
+                        aria-label="Remove restaurant image">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                    <div class="image-info">
+                      <p class="image-name">{{ selectedImageFile.name }}</p>
+                      <div class="image-details">
+                        <div class="detail-item">
+                          <mat-icon>insert_drive_file</mat-icon>
+                          <span>{{ (selectedImageFile.size / 1024 / 1024).toFixed(2) }} MB</span>
+                        </div>
+                        <div class="detail-item">
+                          <mat-icon>image</mat-icon>
+                          <span>{{ selectedImageFile.type.split('/')[1].toUpperCase() }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Success message -->
+              <div *ngIf="imageUploadSuccess" class="image-upload-success" role="status">
+                <mat-icon>check_circle</mat-icon>
+                <span>Image uploaded successfully!</span>
+              </div>
+
+              <!-- Error message -->
+              <div *ngIf="imageUploadError" id="image-upload-error" class="image-upload-error" role="alert">
+                <mat-icon>error</mat-icon>
+                <span>{{ imageUploadError }}</span>
+              </div>
+
+              <!-- Upload instructions -->
+              <div id="upload-instructions" class="upload-instructions">
+                <p>
+                  <mat-icon>info</mat-icon>
+                  Choose a high-quality image that represents your restaurant. This will be displayed to customers browsing restaurants.
+                </p>
+              </div>
+            </div>
           </mat-card-content>
         </mat-card>
 

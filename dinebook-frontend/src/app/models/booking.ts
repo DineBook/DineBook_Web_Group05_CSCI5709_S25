@@ -73,6 +73,7 @@ export interface Restaurant {
   phoneNumber?: string;
   email?: string;
   capacity: number;
+  imageUrl?: string; // URL for restaurant image
   openingHours: {
     monday?: { open: string; close: string };
     tuesday?: { open: string; close: string };
@@ -105,4 +106,4 @@ export interface BookingStats {
   upcomingBookings: number;
   completedBookings: number;
   cancelledBookings: number;
-} 
+}

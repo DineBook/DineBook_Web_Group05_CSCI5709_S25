@@ -39,6 +39,7 @@
         </div>
       </div>
     </div>
+    </div>
 
     <!-- Elegant Rating Summary -->
     <div class="rating-overview" *ngIf="totalReviews > 0">
@@ -108,19 +109,94 @@
           </p>
         </div>
         
-        <div class="comment-input">
-          <label class="input-label">Share your thoughts</label>
-          <textarea 
-            [(ngModel)]="editReviewData.comment"
-            placeholder="What made your experience special? Share the details that other diners would find helpful..."
-            rows="4"
-            class="review-textarea"
-            maxlength="500"></textarea>
-          <div class="char-counter">{{ editReviewData.comment.length }}/500</div>
+         <div class="review-input">
+          <mat-icon class="input-icon">edit</mat-icon>
+          <div class="input-container">
+            <textarea 
+              [(ngModel)]="editReviewData.comment"
+              placeholder="Share your experience..."
+              rows="4"
+              class="review-write-textarea"
+              maxlength="500"></textarea>
+            <div class="char-count">{{ editReviewData.comment.length }}/500</div>
+          </div>
         </div>
-        
+
+        <!-- Image Upload Section -->
+        <div class="image-upload-section">
+          <div class="section-label">
+            <mat-icon class="upload-icon">photo_camera</mat-icon>
+            Add Photo (Optional)
+          </div>
+          
+          <div class="upload-area" 
+               [class.drag-over]="isDragOver" 
+               (dragenter)="onDragEnter($event)"
+               (dragover)="onDragOver($event)" 
+               (dragleave)="onDragLeave($event)" 
+               (drop)="onDrop($event)"
+               (contextmenu)="$event.preventDefault()"
+               *ngIf="!selectedImage">
+            
+            <input 
+              type="file" 
+              #fileInput 
+              id="fileInput"
+              accept="image/png,image/jpg,image/jpeg,.png,.jpg,.jpeg" 
+              (change)="onFileSelected($event)"
+              class="file-input">
+            
+            <div class="upload-content">
+              <mat-icon class="upload-large-icon">cloud_upload</mat-icon>
+              <div class="upload-text">
+                <h4 class="clickable-upload-text" 
+                    (click)="triggerFileInput($event)"
+                    (keydown)="onUploadKeydown($event)"
+                    tabindex="0"
+                    role="button"
+                    aria-label="Click to select an image file">
+                  Click to upload an image
+                </h4>
+                <p>or <span class="browse-text">drag and drop</span></p>
+              </div>
+              <div class="file-constraints">PNG, JPG up to {{ formatFileSize(maxFileSize) }}</div>
+            </div>
+          </div>
+
+          <!-- Selected Image Preview -->
+          <div *ngIf="selectedImage" class="selected-image-container">
+            <div class="selected-image-label">Selected Image:</div>
+            <div class="image-preview">
+              <div class="preview-container">
+                <img [src]="selectedImage.preview" 
+                     [alt]="selectedImage.file.name" 
+                     class="preview-image">
+                <button 
+                  type="button" 
+                  class="remove-button"
+                  (click)="removeImage()"
+                  aria-label="Remove selected image">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upload Progress -->
+          <div class="upload-progress" *ngIf="uploadProgress > 0 && uploadProgress < 100">
+            <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+            <div class="progress-text">Uploading image... {{ uploadProgress }}%</div>
+          </div>
+
+          <!-- Upload Error -->
+          <div class="upload-error" *ngIf="uploadError">
+            <mat-icon class="error-icon">error</mat-icon>
+            <span class="error-message">{{ uploadError }}</span>
+          </div>
+        </div>
+
         <div class="form-actions">
-          <button mat-button (click)="cancelWriteReview()" class="cancel-btn">
+          <button mat-button (click)="cancelWriteReview()">
             Cancel
           </button>
           <button mat-raised-button color="primary" 
@@ -192,8 +268,19 @@
 
           <div class="review-content">
             <!-- Display Mode -->
-            <div *ngIf="editingReviewId !== review._id" class="review-text">
-              <p>{{ review.comment }}</p>
+            <div *ngIf="editingReviewId !== review._id">
+              <p class="review-comment">{{ review.comment }}</p>
+              
+              <!-- Display review image if available -->
+              <div *ngIf="review.imageUrl && review.imageUrl.trim().length > 0" class="review-image-container">
+                <img [src]="review.imageUrl" 
+                     [alt]="'Review image by ' + (review.customerId.name || 'User')"
+                     class="review-image"
+                     (error)="onImageError($event)"
+                     (click)="onImageClick(review.imageUrl)"
+                     loading="lazy"
+                     title="Click to view full size">
+              </div>
             </div>
             
             <!-- Edit Mode for User's Own Review -->
@@ -210,17 +297,114 @@
                 </div>
               </div>
               
-              <div class="comment-input">
-                <textarea 
-                  [(ngModel)]="editReviewData.comment"
-                  placeholder="Update your review..."
-                  rows="4"
-                  class="review-textarea"
-                  maxlength="500"></textarea>
-                <div class="char-counter">{{ editReviewData.comment.length }}/500</div>
+                <div class="review-input">
+                <mat-icon class="input-icon">edit</mat-icon>
+                <div class="input-container">
+                  <textarea 
+                    [(ngModel)]="editReviewData.comment"
+                    placeholder="Share your updated experience..."
+                    rows="4"
+                    class="review-write-textarea"
+                    maxlength="500"></textarea>
+                  <div class="char-count">{{ editReviewData.comment.length }}/500</div>
+                </div>
               </div>
-              
-              <div class="edit-actions">
+
+              <!-- Image Upload Section for Editing -->
+              <div class="image-upload-section">
+                <div class="section-label">
+                  <mat-icon class="upload-icon">photo_camera</mat-icon>
+                  Update Photo (Optional)
+                </div>
+                
+                <!-- Current Image Display -->
+                <div *ngIf="currentImageUrl && currentImageUrl.trim().length > 0" class="current-image-container">
+                  <div class="current-image-label">Current Image:</div>
+                  <div class="image-preview">
+                    <div class="preview-container">
+                      <img [src]="currentImageUrl" 
+                           alt="Current review image"
+                           class="preview-image"
+                           (error)="onImageError($event)">
+                      <button 
+                        type="button" 
+                        class="remove-button"
+                        (click)="removeCurrentImage()"
+                        aria-label="Remove current image">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Upload Area (only show if no current image OR current image was removed) -->
+                <div class="upload-area" 
+                     [class.drag-over]="isDragOver" 
+                     (dragenter)="onDragEnter($event)"
+                     (dragover)="onDragOver($event)" 
+                     (dragleave)="onDragLeave($event)" 
+                     (drop)="onDrop($event)"
+                     (contextmenu)="$event.preventDefault()"
+                     *ngIf="!currentImageUrl && !selectedImage">
+                  
+                  <input 
+                    type="file" 
+                    #fileInput 
+                    id="fileInputEdit"
+                    accept="image/png,image/jpg,image/jpeg,.png,.jpg,.jpeg" 
+                    (change)="onFileSelected($event)"
+                    class="file-input">
+                  
+                  <div class="upload-content">
+                    <mat-icon class="upload-large-icon">cloud_upload</mat-icon>
+                    <div class="upload-text">
+                      <h4 class="clickable-upload-text" 
+                          (click)="triggerFileInput($event)"
+                          (keydown)="onUploadKeydown($event)"
+                          tabindex="0"
+                          role="button"
+                          aria-label="Click to select an image file">
+                        Click to upload an image
+                      </h4>
+                      <p>or <span class="browse-text">drag and drop</span></p>
+                    </div>
+                    <div class="file-constraints">PNG, JPG up to {{ formatFileSize(maxFileSize) }}</div>
+                  </div>
+                </div>
+
+                <!-- Selected Image Preview -->
+                <div *ngIf="selectedImage" class="selected-image-container">
+                  <div class="selected-image-label">New Image:</div>
+                  <div class="image-preview">
+                    <div class="preview-container">
+                      <img [src]="selectedImage.preview" 
+                           [alt]="selectedImage.file.name" 
+                           class="preview-image">
+                      <button 
+                        type="button" 
+                        class="remove-button"
+                        (click)="removeImage()"
+                        aria-label="Remove selected image">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Upload Progress -->
+                <div class="upload-progress" *ngIf="uploadProgress > 0 && uploadProgress < 100">
+                  <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+                  <div class="progress-text">Uploading image... {{ uploadProgress }}%</div>
+                </div>
+
+                <!-- Error Message -->
+                <div class="upload-error" *ngIf="uploadError">
+                  <mat-icon class="error-icon">error</mat-icon>
+                  {{ uploadError }}
+                </div>
+              </div>
+
+              <div class="edit-form-actions">
                 <button mat-button (click)="cancelEditReviewInList()" class="cancel-btn">
                   Cancel
                 </button>
@@ -295,4 +479,3 @@
       </div>
     </div>
   </div>
-</div>

@@ -48,8 +48,9 @@
           <!-- Restaurant Gallery -->
           <div class="restaurant-gallery">
             <div class="main-image">
-              <img src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" 
-                   [alt]="restaurant.name" />
+              <img [src]="restaurant.imageUrl || 'https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg'" 
+                   [alt]="restaurant.name"
+                   (error)="onImageError($event)" />
               <div class="image-badges">
                 <div class="badge featured">
                   <mat-icon>star</mat-icon>
@@ -331,7 +332,6 @@
             </div>
           </div>
 
-          <!-- Reviews Tab -->
           <div *ngIf="selectedTabIndex === 1" class="reviews-content">
             <app-restaurant-reviews
               [restaurantId]="restaurant._id"
