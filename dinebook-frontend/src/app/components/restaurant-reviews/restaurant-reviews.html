@@ -262,8 +262,19 @@
 
           <div class="review-content">
             <!-- Display Mode -->
-            <div *ngIf="editingReviewId !== review._id" class="review-text">
-              <p>{{ review.comment }}</p>
+            <div *ngIf="editingReviewId !== review._id">
+              <p class="review-comment">{{ review.comment }}</p>
+              
+              <!-- Display review image if available -->
+              <div *ngIf="review.imageUrl && review.imageUrl.trim().length > 0" class="review-image-container">
+                <img [src]="review.imageUrl" 
+                     [alt]="'Review image by ' + (review.customerId.name || 'User')"
+                     class="review-image"
+                     (error)="onImageError($event)"
+                     (click)="onImageClick(review.imageUrl)"
+                     loading="lazy"
+                     title="Click to view full size">
+              </div>
             </div>
             
             <!-- Edit Mode for User's Own Review -->

@@ -29,6 +29,10 @@ import { RestaurantReviewsComponent } from '../../components/restaurant-reviews/
     styleUrl: './restaurant-detail.scss',
 })
 export class RestaurantDetailComponent implements OnInit {
+    onImageError(event: Event): void {
+      const img = event.target as HTMLImageElement;
+      img.style.display = 'none';
+    }
     restaurant: Restaurant | null = null;
     loading = false;
     error: string | null = null;

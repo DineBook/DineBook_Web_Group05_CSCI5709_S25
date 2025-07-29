@@ -107,6 +107,9 @@ export const restaurantSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    imageUrl: {
+        type: String
+    },
     menuItems: [{
         _id: {
             type: mongoose.Schema.Types.ObjectId,

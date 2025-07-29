@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import multer from "multer";
 import { User } from '../models';
 import { Request, Response, NextFunction } from 'express';
 import { AuthenticatedRequest, userPayload } from '../types/';

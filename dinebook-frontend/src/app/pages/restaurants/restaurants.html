@@ -182,7 +182,7 @@
           
           <div class="card-image-container">
             <img 
-              [src]="restaurant.imageUrl || 'https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg'" 
+              [src]="restaurant.imageUrl ? (restaurant.imageUrl + (restaurant.updatedAt ? ('?t=' + restaurant.updatedAt) : '')) : 'https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg'" 
               [alt]="restaurant.name + ' restaurant'"
               class="restaurant-image" />
             
@@ -288,7 +288,6 @@
               View DineBook restaurants and discover nearby dining options on the interactive map.
             </p>
           </div>
-          <app-restaurant-map [restaurants]="restaurants"></app-restaurant-map>
         </div>
       </div>
       

@@ -9,10 +9,12 @@ export interface Review {
     _id: string;
     name: string;
   };
-  restaurantId: string | {
-    _id: string;
-    name: string;
-  };
+  restaurantId:
+    | string
+    | {
+        _id: string;
+        name: string;
+      };
   rating: number;
   comment: string;
   ownerReply?: string;
@@ -37,22 +39,19 @@ export interface ReplyToReviewRequest {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReviewService {
-  private apiUrl = 'https://dinebook-web-group05-csci5709-s25.onrender.com/api';
+  private apiUrl = 'http://localhost:3000/api';
   private reviewsSubject = new BehaviorSubject<Review[]>([]);
   public reviews$ = this.reviewsSubject.asObservable();
 
-  constructor(
-    private http: HttpClient,
-    private authService: AuthService
-  ) { }
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   private getHeaders(): HttpHeaders {
     const token = this.authService.getToken();
     const headers: { [key: string]: string } = {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     };
 
     if (token) {
@@ -64,7 +63,7 @@ export class ReviewService {
 
   // Create a new review (customer only)
   createReview(reviewData: CreateReviewRequest): Observable<any> {
-     // If an image is present, use FormData for multipart/form-data
+    // If an image is present, use FormData for multipart/form-data
     if (reviewData.image) {
       const formData = new FormData();
       formData.append('restaurantId', reviewData.restaurantId);
@@ -105,16 +104,35 @@ export class ReviewService {
   }
 
   // Update a review (customer only, own review)
-  updateReview(reviewId: string, reviewData: UpdateReviewRequest): Observable<any> {
-    return this.http.put(`${this.apiUrl}/reviews/${reviewId}`, reviewData, { 
-      headers: this.getHeaders() 
-    });
+  updateReview(
+    reviewId: string,
+    reviewData: UpdateReviewRequest
+  ): Observable<any> {
+    // If there is an image, use FormData
+    if (reviewData.image) {
+      const formData = new FormData();
+      if (reviewData.rating !== undefined)
+        formData.append('rating', reviewData.rating.toString());
+      if (reviewData.comment !== undefined)
+        formData.append('comment', reviewData.comment);
+      formData.append('image', reviewData.image);
+
+      // Remove Content-Type so browser sets it for FormData
+      return this.http.put(`${this.apiUrl}/reviews/${reviewId}`, formData, {
+        headers: this.getHeaders().delete('Content-Type'),
+      });
+    } else {
+      // No image, send as JSON
+      return this.http.put(`${this.apiUrl}/reviews/${reviewId}`, reviewData, {
+        headers: this.getHeaders(),
+      });
+    }
   }
 
   // Delete a review (customer only, own review)
   deleteReview(reviewId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/reviews/${reviewId}`, { 
-      headers: this.getHeaders() 
+    return this.http.delete(`${this.apiUrl}/reviews/${reviewId}`, {
+      headers: this.getHeaders(),
     });
   }
 
@@ -125,29 +143,43 @@ export class ReviewService {
 
   // Get customer's own reviews (customer only)
   getMyReviews(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/reviews/my-reviews`, { 
-      headers: this.getHeaders() 
+    return this.http.get(`${this.apiUrl}/reviews/my-reviews`, {
+      headers: this.getHeaders(),
     });
   }
 
   // Reply to a review (owner only)
-  replyToReview(reviewId: string, replyData: ReplyToReviewRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/reviews/${reviewId}/reply`, replyData, { 
-      headers: this.getHeaders() 
-    });
+  replyToReview(
+    reviewId: string,
+    replyData: ReplyToReviewRequest
+  ): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/reviews/${reviewId}/reply`,
+      replyData,
+      {
+        headers: this.getHeaders(),
+      }
+    );
   }
 
   // Update reply to a review (owner only)
-  updateReply(reviewId: string, replyData: ReplyToReviewRequest): Observable<any> {
-    return this.http.put(`${this.apiUrl}/reviews/${reviewId}/reply`, replyData, { 
-      headers: this.getHeaders() 
-    });
+  updateReply(
+    reviewId: string,
+    replyData: ReplyToReviewRequest
+  ): Observable<any> {
+    return this.http.put(
+      `${this.apiUrl}/reviews/${reviewId}/reply`,
+      replyData,
+      {
+        headers: this.getHeaders(),
+      }
+    );
   }
 
   // Delete reply to a review (owner only)
   deleteReply(reviewId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/reviews/${reviewId}/reply`, { 
-      headers: this.getHeaders() 
+    return this.http.delete(`${this.apiUrl}/reviews/${reviewId}/reply`, {
+      headers: this.getHeaders(),
     });
   }
 
@@ -162,7 +194,7 @@ export class ReviewService {
     for (let i = 1; i <= 5; i++) {
       stars.push({
         icon: i <= rating ? 'star' : 'star_border',
-        filled: i <= rating
+        filled: i <= rating,
       });
     }
     return stars;
@@ -174,7 +206,7 @@ export class ReviewService {
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   }
 }

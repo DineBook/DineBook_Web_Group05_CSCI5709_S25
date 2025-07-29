@@ -41,6 +41,7 @@ import { Restaurant } from '../../models/owner-dashboard';
   styleUrl: './restaurant-management.scss',
 })
 export class RestaurantManagementComponent implements OnInit {
+
   restaurant: Restaurant | null = null;
   restaurantForm: FormGroup;
   loading = true;
@@ -276,7 +277,6 @@ export class RestaurantManagementComponent implements OnInit {
       } catch (error: any) {
         console.error('Error saving restaurant:', error);
         const action = this.restaurant ? 'update' : 'create';
-
         // Specific error message for image upload issues
         let errorMessage =
           error.error?.error || `Failed to ${action} restaurant`;
@@ -295,11 +295,11 @@ export class RestaurantManagementComponent implements OnInit {
         ) {
           errorMessage = `Restaurant ${action}d successfully, but image upload failed. You can add an image later.`;
         }
-
-        this.snackBar.open(errorMessage, 'Close', {
-          duration: 5000,
-          panelClass: ['error-snackbar'],
-        });
+        this.snackBar.open(
+          error.error?.error || `Failed to ${action} restaurant`,
+          'Close',
+          { duration: 5000, panelClass: ['error-snackbar'] }
+        );
       } finally {
         this.saving = false;
       }

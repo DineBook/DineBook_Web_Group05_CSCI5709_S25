@@ -179,7 +179,7 @@ export class RestaurantReviewsComponent
     }
 
     try {
-      const reviewData = {
+      const reviewData: { restaurantId: string; rating: number; comment: string; image?: File } = {
         restaurantId: this.restaurantId,
         rating: this.editReviewData.rating,
         comment: this.editReviewData.comment.trim(),
@@ -209,7 +209,7 @@ export class RestaurantReviewsComponent
     }
 
     try {
-      const updateData = {
+      const updateData: { rating: number; comment: string; image?: File } = {
         rating: this.editReviewData.rating,
         comment: this.editReviewData.comment.trim(),
       };
