@@ -198,19 +198,21 @@ export const getBookingById = async (
 
         const booking = await BookingDatabase.findUserBookingById(id, customerId);
 
+        // Restaurant details are already populated from the booking query
+        const restaurant = booking.restaurantId as any; // Restaurant data is populated
+
         res.json({
-            booking: {
-                id: booking._id,
-                customerId: booking.customerId,
-                restaurantId: booking.restaurantId,
-                date: booking.date,
-                time: booking.time,
-                guests: booking.guests,
-                specialRequests: booking.specialRequests,
-                status: booking.status,
-                createdAt: booking.createdAt,
-                updatedAt: booking.updatedAt
-            }
+            id: booking._id,
+            customerId: booking.customerId,
+            restaurantId: restaurant._id,
+            restaurantName: restaurant.name,
+            date: booking.date,
+            time: booking.time,
+            guests: booking.guests,
+            specialRequests: booking.specialRequests,
+            status: booking.status,
+            createdAt: booking.createdAt,
+            updatedAt: booking.updatedAt
         });
 
     } catch (error) {

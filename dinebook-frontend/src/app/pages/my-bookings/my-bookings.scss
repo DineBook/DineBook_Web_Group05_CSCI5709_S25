@@ -485,11 +485,20 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    cursor: pointer;
     
     &:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      border-color: #d1d5db;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+      border-color: #667eea;
+      
+      .restaurant-image {
+        transform: scale(1.05);
+      }
+      
+      .image-overlay {
+        opacity: 1;
+      }
     }
     
     // Card Image - Smaller and cleaner

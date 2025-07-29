@@ -16,7 +16,7 @@ import { ContactComponent } from './pages/contact/contact';
 import { BookTableComponent } from './pages/book-table/book-table';
 import { MyBookingsComponent } from './pages/my-bookings/my-bookings';
 import { MyReviewsComponent } from './pages/my-reviews/my-reviews';
-import { BookingConfirmationComponent } from './components/booking-confirmation/booking-confirmation';
+import { BookingConfirmationComponent } from './pages/booking-confirmation/booking-confirmation';
 import { PublicGuard } from './guards/public.guard';
 import { OwnerGuard } from './guards/owner.guard';
 import { CustomerGuard } from './guards/customer.guard';

@@ -1,0 +1,166 @@
+<div class="booking-confirmation-page">
+  <div class="container">
+    
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+      </div>
+      <h3>Loading Your Booking</h3>
+      <p>Retrieving your reservation details...</p>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !isLoading" class="error-state">
+      <div class="error-icon">
+        <mat-icon>error_outline</mat-icon>
+      </div>
+      <h3>Booking Not Found</h3>
+      <p>{{ error }}</p>
+      <div class="error-actions">
+        <button mat-raised-button color="primary" (click)="goToRestaurants()" class="action-btn">
+          <mat-icon>restaurant</mat-icon>
+          Browse Restaurants
+        </button>
+      </div>
+    </div>
+
+    <!-- Success Content -->
+    <div *ngIf="booking && !isLoading" class="confirmation-content">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="header-content">
+          <div class="success-indicator">
+            <div class="success-icon" [ngClass]="statusClass">
+              <mat-icon>{{ statusIcon }}</mat-icon>
+            </div>
+            <div class="success-pulse" *ngIf="booking?.status === 'confirmed'"></div>
+          </div>
+          <div class="header-text">
+            <h1 class="page-title">{{ getPageTitle() }}</h1>
+            <p class="page-description">
+              {{ getPageDescription() }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking Details Card -->
+      <div class="booking-details-section">
+        <div class="section-header">
+          <h2 class="section-title">Reservation Details</h2>
+          <div class="booking-id">
+            <span class="booking-label">Booking ID:</span>
+            <span class="booking-number">#{{ getBookingId() }}</span>
+          </div>
+        </div>
+
+        <div class="details-card">
+          <div class="details-grid">
+            
+            <!-- Restaurant Info -->
+            <div class="detail-item featured">
+              <div class="detail-icon restaurant">
+                <mat-icon>restaurant</mat-icon>
+              </div>
+              <div class="detail-content">
+                <span class="detail-label">Restaurant</span>
+                <span class="detail-value primary">{{ getRestaurantName() }}</span>
+              </div>
+            </div>
+
+            <!-- Date & Time -->
+            <div class="detail-item">
+              <div class="detail-icon schedule">
+                <mat-icon>schedule</mat-icon>
+              </div>
+              <div class="detail-content">
+                <span class="detail-label">Date & Time</span>
+                <span class="detail-value">{{ getFormattedDateTime() }}</span>
+              </div>
+            </div>
+
+            <!-- Party Size -->
+            <div class="detail-item">
+              <div class="detail-icon guests">
+                <mat-icon>people</mat-icon>
+              </div>
+              <div class="detail-content">
+                <span class="detail-label">Party Size</span>
+                <span class="detail-value">{{ getGuestsDisplay() }}</span>
+              </div>
+            </div>
+
+            <!-- Status -->
+            <div class="detail-item">
+              <div class="detail-icon" [ngClass]="statusClass">
+                <mat-icon>{{ statusIcon }}</mat-icon>
+              </div>
+              <div class="detail-content">
+                <span class="detail-label">Status</span>
+                <span class="detail-value" [ngClass]="statusClass">{{ getStatusDisplay() }}</span>
+              </div>
+            </div>
+
+            <!-- Special Requests -->
+            <div class="detail-item full-width" *ngIf="booking.specialRequests && booking.specialRequests.trim()">
+              <div class="detail-icon notes">
+                <mat-icon>note</mat-icon>
+              </div>
+              <div class="detail-content">
+                <span class="detail-label">Special Requests</span>
+                <span class="detail-value">{{ booking.specialRequests }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Important Information -->
+      <div class="info-section">
+        <div class="info-card">
+          <div class="info-header">
+            <mat-icon class="info-icon">info</mat-icon>
+            <h3>Important Information</h3>
+          </div>
+          <div class="info-content">
+            <div class="info-grid">
+              <div class="info-item">
+                <mat-icon>access_time</mat-icon>
+                <span>Please arrive on time for your reservation</span>
+              </div>
+              <div class="info-item">
+                <mat-icon>cancel</mat-icon>
+                <span>Cancellations must be made at least 2 hours in advance</span>
+              </div>
+              <div class="info-item">
+                <mat-icon>phone</mat-icon>
+                <span>Contact the restaurant directly for special accommodations</span>
+              </div>
+              <div class="info-item">
+                <mat-icon>timer</mat-icon>
+                <span>Your table will be held for 15 minutes past reservation time</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions-section">
+        <div class="action-buttons">
+          <button mat-stroked-button class="action-btn secondary" (click)="viewMyBookings()">
+            <mat-icon>list</mat-icon>
+            View All Bookings
+          </button>
+          <button mat-raised-button color="primary" class="action-btn primary" (click)="bookAnotherTable()">
+            <mat-icon>add</mat-icon>
+            Book Another Table
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div> 

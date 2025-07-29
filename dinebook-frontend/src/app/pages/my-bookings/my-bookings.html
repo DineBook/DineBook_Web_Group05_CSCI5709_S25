@@ -134,7 +134,7 @@
 
       <!-- Bookings Grid -->
       <div class="bookings-grid" *ngIf="!isLoading && filteredBookings.length > 0">
-        <div class="booking-card" *ngFor="let booking of filteredBookings" [class]="'status-' + booking.status.toLowerCase()">
+        <div class="booking-card" *ngFor="let booking of filteredBookings" [class]="'status-' + booking.status.toLowerCase()" (click)="viewBookingDetails(booking)">
           
           <!-- Card Image -->
           <div class="card-image-container">
@@ -196,7 +196,7 @@
           </div>
 
           <!-- Card Actions -->
-          <div class="card-actions">
+          <div class="card-actions" (click)="$event.stopPropagation()">
             <button mat-stroked-button class="action-btn secondary" (click)="viewBookingDetails(booking)">
               <mat-icon>visibility</mat-icon>
               View Details
