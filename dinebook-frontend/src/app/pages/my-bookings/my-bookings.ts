@@ -6,6 +6,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
@@ -22,7 +23,8 @@ import { BookingResponse, BookingFilter, BookingStats } from '../../models/booki
     MatTabsModule,
     MatProgressSpinnerModule,
     MatDialogModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatIconModule
   ],
   templateUrl: './my-bookings.html',
   styleUrls: ['./my-bookings.scss']
@@ -33,7 +35,7 @@ export class MyBookingsComponent implements OnInit, OnDestroy {
   bookingStats: BookingStats | null = null;
   isLoading = true;
   selectedTab = 0;
-  
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -42,7 +44,7 @@ export class MyBookingsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadBookings();
@@ -106,7 +108,7 @@ export class MyBookingsComponent implements OnInit, OnDestroy {
 
   private filterBookings(): void {
     const now = new Date();
-    
+
     switch (this.selectedTab) {
       case 0: // All
         this.filteredBookings = this.allBookings;
@@ -124,7 +126,7 @@ export class MyBookingsComponent implements OnInit, OnDestroy {
         });
         break;
       case 3: // Cancelled
-        this.filteredBookings = this.allBookings.filter(booking => 
+        this.filteredBookings = this.allBookings.filter(booking =>
           booking.status === 'cancelled'
         );
         break;
@@ -214,6 +216,51 @@ export class MyBookingsComponent implements OnInit, OnDestroy {
     }
   }
 
+  getStatusIcon(status: string): string {
+    switch (status) {
+      case 'confirmed':
+        return 'check_circle';
+      case 'pending':
+        return 'schedule';
+      case 'cancelled':
+        return 'cancel';
+      case 'completed':
+        return 'task_alt';
+      default:
+        return 'help_outline';
+    }
+  }
+
+  getEmptyStateTitle(): string {
+    switch (this.selectedTab) {
+      case 0:
+        return 'No Bookings Yet';
+      case 1:
+        return 'No Upcoming Reservations';
+      case 2:
+        return 'No Past Reservations';
+      case 3:
+        return 'No Cancelled Reservations';
+      default:
+        return 'No Bookings Found';
+    }
+  }
+
+  getEmptyStateDescription(): string {
+    switch (this.selectedTab) {
+      case 0:
+        return 'Start your culinary journey by booking your first dining experience.';
+      case 1:
+        return 'You don\'t have any upcoming reservations. Ready to plan your next meal?';
+      case 2:
+        return 'Your dining history will appear here once you complete your reservations.';
+      case 3:
+        return 'No cancelled reservations found. Great job keeping your commitments!';
+      default:
+        return 'No reservations found for this category.';
+    }
+  }
+
 
 }
 
@@ -224,7 +271,8 @@ export class MyBookingsComponent implements OnInit, OnDestroy {
   imports: [
     CommonModule,
     MatDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule
   ],
   template: `
     <div class="cancel-dialog">
@@ -306,7 +354,7 @@ export class MyBookingsComponent implements OnInit, OnDestroy {
   `]
 })
 export class CancelBookingDialogComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: { booking: BookingResponse }) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: { booking: BookingResponse }) { }
 
   formatDateTime(booking: BookingResponse): string {
     const date = new Date(`${booking.date}T${booking.time}`);

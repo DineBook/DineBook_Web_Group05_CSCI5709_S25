@@ -3,10 +3,9 @@
     <div class="page-header">
       <div class="header-content">
         <div class="header-text">
-          <h1 class="page-title">Find Your Perfect Dining Experience</h1>
+          <h1 class="page-title">Find Restaurants</h1>
           <p class="page-description">
-            Discover exceptional restaurants, read authentic reviews, and book your table with ease. 
-            From cozy cafes to fine dining, find exactly what you're craving.
+            Discover exceptional restaurants and book your table with ease.
           </p>
         </div>
         <div class="header-visual">
@@ -28,50 +27,55 @@
     <div class="search-filters-section">
       <div class="filters-container">
         <form [formGroup]="searchForm" class="search-filters-form">
-          <!-- Search Bar -->
-          <div class="search-section">
-            <mat-form-field appearance="outline" class="search-field">
-              <mat-label>Where would you like to dine?</mat-label>
-              <input matInput 
-                     formControlName="location" 
-                     placeholder="Search by location..." 
-                     type="text">
-              <mat-icon matSuffix class="search-icon">search</mat-icon>
-            </mat-form-field>
-          </div>
+          <!-- Unified Form Grid -->
+          <div class="form-grid">
+            <!-- Search Bar -->
+            <div class="search-section">
+              <mat-form-field appearance="outline" class="search-field">
+                <mat-label>Where would you like to dine?</mat-label>
+                <input matInput 
+                       formControlName="location" 
+                       placeholder="Search by location..." 
+                       type="text">
+                <mat-icon matSuffix class="search-icon">search</mat-icon>
+              </mat-form-field>
+            </div>
 
-          <!-- Filters Row -->
-          <div class="filters-row">
-            <mat-form-field appearance="outline" class="filter-field cuisine-filter">
-              <mat-label>Cuisine</mat-label>
-              <mat-select formControlName="cuisine">
-                <mat-option value="">All Cuisines</mat-option>
-                <mat-option *ngFor="let cuisine of cuisineOptions" [value]="cuisine">
-                  {{ cuisine }}
-                </mat-option>
-              </mat-select>
-              <mat-icon matSuffix>restaurant</mat-icon>
-            </mat-form-field>
+            <!-- Filters Row -->
+            <div class="filters-section">
+              <mat-form-field appearance="outline" class="filter-field cuisine-filter">
+                <mat-label>Cuisine</mat-label>
+                <mat-select formControlName="cuisine">
+                  <mat-option value="">All Cuisines</mat-option>
+                  <mat-option *ngFor="let cuisine of cuisineOptions" [value]="cuisine">
+                    {{ cuisine }}
+                  </mat-option>
+                </mat-select>
+                <mat-icon matSuffix>restaurant</mat-icon>
+              </mat-form-field>
 
-            <mat-form-field appearance="outline" class="filter-field price-filter">
-              <mat-label>Price Range</mat-label>
-              <mat-select formControlName="priceRange">
-                <mat-option value="">Any Price</mat-option>
-                <mat-option *ngFor="let option of priceRangeOptions" [value]="option.value">
-                  {{ option.icon }} {{ option.label }}
-                </mat-option>
-              </mat-select>
-              <mat-icon matSuffix>attach_money</mat-icon>
-            </mat-form-field>
+              <mat-form-field appearance="outline" class="filter-field price-filter">
+                <mat-label>Price Range</mat-label>
+                <mat-select formControlName="priceRange">
+                  <mat-option value="">Any Price</mat-option>
+                  <mat-option *ngFor="let option of priceRangeOptions" [value]="option.value">
+                    {{ option.icon }} {{ option.label }}
+                  </mat-option>
+                </mat-select>
+                <mat-icon matSuffix>attach_money</mat-icon>
+              </mat-form-field>
+            </div>
 
-            <button mat-stroked-button 
-                    type="button" 
-                    (click)="clearFilters()" 
-                    class="clear-filters-btn"
-                    *ngIf="getActiveFilterKeys().length > 0">
-              <mat-icon>clear_all</mat-icon>
-              Clear All
-            </button>
+            <!-- Clear Button Section -->
+            <div class="clear-section" *ngIf="getActiveFilterKeys().length > 0">
+              <button mat-stroked-button 
+                      type="button" 
+                      (click)="clearFilters()" 
+                      class="clear-filters-btn">
+                <mat-icon>clear_all</mat-icon>
+                Clear All
+              </button>
+            </div>
           </div>
         </form>
 
@@ -241,8 +245,7 @@
               <button 
                 mat-stroked-button 
                 class="action-btn secondary"
-                [routerLink]="['/restaurants', restaurant._id]" 
-                (click)="$event.stopPropagation()">
+                (click)="viewRestaurantDetails(restaurant); $event.stopPropagation()">
                 View Details
               </button>
               <button 
