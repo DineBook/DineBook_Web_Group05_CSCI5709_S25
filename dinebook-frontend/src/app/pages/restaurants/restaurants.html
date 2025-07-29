@@ -275,6 +275,22 @@
           </mat-paginator>
         </div>
       </div>
+
+      <!-- Restaurant Map Section -->
+      <div *ngIf="!loading && !error && restaurants.length > 0" class="map-section">
+        <div class="map-container">
+          <div class="map-header">
+            <h2 class="map-title">
+              <mat-icon>map</mat-icon>
+              Explore Restaurants on Map
+            </h2>
+            <p class="map-description">
+              View DineBook restaurants and discover nearby dining options on the interactive map.
+            </p>
+          </div>
+          <app-restaurant-map [restaurants]="restaurants"></app-restaurant-map>
+        </div>
+      </div>
       
       <!-- CTA Section -->
       <div class="cta-section" *ngIf="!loading && !error">

@@ -15,6 +15,7 @@ import { ReviewService } from "../../services/review.service"
 import { Restaurant } from "../../models/booking"
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { ApiService } from '../../services/api.service';
+import { RestaurantMapComponent } from '../../components/restaurant-map/restaurant-map.component';
 
 interface RestaurantDisplay extends Restaurant {
   badge: string
@@ -37,7 +38,8 @@ interface RestaurantDisplay extends Restaurant {
     MatChipsModule,
     MatPaginatorModule,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    RestaurantMapComponent
   ],
   templateUrl: "./restaurants.html",
   styleUrl: "./restaurants.scss",

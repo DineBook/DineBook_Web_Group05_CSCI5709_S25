@@ -352,7 +352,7 @@ export const createRestaurant = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { latitude, longitude, location, ...otherData } = req.body;
+    const { latitude, longitude, location, address, ...otherData } = req.body;
 
     let coordinates: [number, number] | null = null;
 
@@ -363,11 +363,33 @@ export const createRestaurant = async (
         return;
       }
       coordinates = [longitude, latitude]; // MongoDB format: [lng, lat]
-    } else if (location) {
-      // Try to geocode the location address
-      const geocodeResult = await geocodeAddress(location);
-      if (geocodeResult) {
-        coordinates = [geocodeResult.longitude, geocodeResult.latitude];
+    } else {
+      // Try to geocode using available address information
+      let addressToGeocode = location;
+      
+      // If structured address is provided, construct a complete address string
+      if (address && (address.street || address.city)) {
+        const addressParts = [
+          address.street,
+          address.city,
+          address.province,
+          address.postalCode
+        ].filter(Boolean);
+        
+        if (addressParts.length > 0) {
+          addressToGeocode = addressParts.join(', ');
+          console.log('Using structured address for geocoding:', addressToGeocode);
+        }
+      }
+      
+      if (addressToGeocode) {
+        const geocodeResult = await geocodeAddress(addressToGeocode);
+        if (geocodeResult) {
+          coordinates = [geocodeResult.longitude, geocodeResult.latitude];
+          console.log('Geocoded address successfully:', addressToGeocode, '->', coordinates);
+        } else {
+          console.warn('Geocoding failed for address:', addressToGeocode);
+        }
       }
     }
 
