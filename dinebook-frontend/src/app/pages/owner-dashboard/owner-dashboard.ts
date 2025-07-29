@@ -37,7 +37,7 @@ export class OwnerDashboardComponent implements OnInit {
     recentReviews: Review[] = [];
     loading = true;
     error: string | null = null;
-    
+
     // Reply form state
     editingReply = '';
     newReply = '';
@@ -58,14 +58,12 @@ export class OwnerDashboardComponent implements OnInit {
             this.loading = true;
             this.error = null;
 
-            // First get owner's restaurants (assuming one restaurant per owner)
             const restaurantsResponse = await this.apiService.getMyRestaurants().toPromise();
 
             if (restaurantsResponse.restaurants && restaurantsResponse.restaurants.length > 0) {
-                this.restaurant = restaurantsResponse.restaurants[0];
+                this.restaurant = this.processRestaurantData(restaurantsResponse.restaurants[0]);
 
                 if (this.restaurant) {
-                    // Load restaurant data in parallel
                     const restaurantId = this.restaurant._id;
                     const [statsResponse, bookingsResponse, reviewsResponse] = await Promise.all([
                         this.apiService.getRestaurantStats(restaurantId).toPromise(),
@@ -86,13 +84,35 @@ export class OwnerDashboardComponent implements OnInit {
         }
     }
 
+    /**
+     * Process restaurant data from API to handle incorrectly formatted fields
+     */
+    private processRestaurantData(rawRestaurant: any): Restaurant {
+        const restaurant = { ...rawRestaurant };
+
+        if (restaurant.openingHours && typeof restaurant.openingHours === 'string') {
+            try {
+                restaurant.openingHours = JSON.parse(restaurant.openingHours);
+            } catch (error) {
+                console.error('Error parsing opening hours:', error);
+                restaurant.openingHours = null;
+            }
+        }
+
+        if (restaurant.address === '[object Object]' || (typeof restaurant.address === 'string' && restaurant.address.includes('[object'))) {
+            restaurant.address = null;
+        }
+
+        return restaurant;
+    }
+
     getStatusColor(status: string): string {
         switch (status) {
-            case 'confirmed': return 'primary';
-            case 'pending': return 'accent';
-            case 'cancelled': return 'warn';
-            case 'completed': return 'primary';
-            default: return '';
+            case 'confirmed': return '#10b981';
+            case 'pending': return '#f59e0b';
+            case 'cancelled': return '#ef4444';
+            case 'completed': return '#667eea';
+            default: return '#64748b';
         }
     }
 
@@ -109,7 +129,6 @@ export class OwnerDashboardComponent implements OnInit {
     }
 
     createRestaurant(): void {
-        // Navigate to restaurant management page to create a new restaurant
         window.location.href = '/owner/restaurant';
     }
 
@@ -119,18 +138,51 @@ export class OwnerDashboardComponent implements OnInit {
 
     getDaysOfWeek(): { key: string; label: string }[] {
         return [
-            { key: 'monday', label: 'Mon' },
-            { key: 'tuesday', label: 'Tue' },
-            { key: 'wednesday', label: 'Wed' },
-            { key: 'thursday', label: 'Thu' },
-            { key: 'friday', label: 'Fri' },
-            { key: 'saturday', label: 'Sat' },
-            { key: 'sunday', label: 'Sun' }
+            { key: 'monday', label: 'Monday' },
+            { key: 'tuesday', label: 'Tuesday' },
+            { key: 'wednesday', label: 'Wednesday' },
+            { key: 'thursday', label: 'Thursday' },
+            { key: 'friday', label: 'Friday' },
+            { key: 'saturday', label: 'Saturday' },
+            { key: 'sunday', label: 'Sunday' }
         ];
     }
 
+    getOperatingHours(): { [key: string]: { open: string; close: string } } {
+        if (this.restaurant?.openingHours && typeof this.restaurant.openingHours === 'object' && Object.keys(this.restaurant.openingHours).length > 0) {
+            return this.restaurant.openingHours;
+        }
+
+        return {};
+    }
+
+    hasRestaurantHours(): boolean {
+        return !!(this.restaurant?.openingHours && typeof this.restaurant.openingHours === 'object' && Object.keys(this.restaurant.openingHours).length > 0);
+    }
+
+    formatOperatingTime(time: string): string {
+        if (!time) return '';
+
+        if (time.includes(':')) {
+            const [hours, minutes] = time.split(':');
+            const hour = parseInt(hours);
+            const minutesPart = minutes || '00';
+
+            if (hour === 0) {
+                return `12:${minutesPart} AM`;
+            } else if (hour < 12) {
+                return `${hour}:${minutesPart} AM`;
+            } else if (hour === 12) {
+                return `12:${minutesPart} PM`;
+            } else {
+                return `${hour - 12}:${minutesPart} PM`;
+            }
+        }
+
+        return time;
+    }
+
     startReply(review: Review) {
-        console.log('🔥 Starting reply for review:', review._id);
         this.editingReply = review._id!;
         this.newReply = review.ownerReply || '';
     }
@@ -146,14 +198,11 @@ export class OwnerDashboardComponent implements OnInit {
             return;
         }
 
-        // Check if this is a new reply or editing existing one
         const review = this.recentReviews.find(r => r._id === reviewId);
-        
+
         if (review?.ownerReply) {
-            // Update existing reply
             this.updateReply(reviewId);
         } else {
-            // Add new reply
             this.addReply(reviewId);
         }
     }
@@ -164,7 +213,7 @@ export class OwnerDashboardComponent implements OnInit {
                 this.snackBar.open('Reply added successfully!', 'Close', { duration: 3000 });
                 this.editingReply = '';
                 this.newReply = '';
-                this.loadDashboardData(); // Reload to show the new reply
+                this.loadDashboardData();
             },
             error: (error) => {
                 console.error('Error adding reply:', error);
@@ -179,7 +228,7 @@ export class OwnerDashboardComponent implements OnInit {
                 this.snackBar.open('Reply updated successfully!', 'Close', { duration: 3000 });
                 this.editingReply = '';
                 this.newReply = '';
-                this.loadDashboardData(); // Reload to show the updated reply
+                this.loadDashboardData();
             },
             error: (error) => {
                 console.error('Error updating reply:', error);
@@ -193,7 +242,7 @@ export class OwnerDashboardComponent implements OnInit {
             this.reviewService.deleteReply(reviewId).subscribe({
                 next: (response) => {
                     this.snackBar.open('Reply deleted successfully!', 'Close', { duration: 3000 });
-                    this.loadDashboardData(); // Reload to remove the reply
+                    this.loadDashboardData();
                 },
                 error: (error) => {
                     console.error('Error deleting reply:', error);
