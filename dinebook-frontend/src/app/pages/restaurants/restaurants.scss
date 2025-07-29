@@ -1089,6 +1089,123 @@
   animation: fadeIn 0.6s ease-out;
 }
 
+// Map Section Styles
+.map-section {
+  margin: 48px 0;
+  
+  .map-container {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+    border: 2px solid #f1f5f9;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      box-shadow: 0 16px 50px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+  }
+  
+  .map-header {
+    padding: 32px 32px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+    
+    .map-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin: 0 0 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      
+      mat-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+    
+    .map-description {
+      font-size: 1rem;
+      opacity: 0.9;
+      margin: 0;
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+  }
+  
+  app-restaurant-map {
+    display: block;
+    // Remove any potential margins from the map component
+    margin: 0;
+    
+    // Ensure the map component takes full width
+    ::ng-deep .map-container {
+      border-radius: 0 0 20px 20px;
+      border: none;
+      box-shadow: none;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    margin: 32px 0;
+    
+    .map-header {
+      padding: 24px 20px 20px;
+      
+      .map-title {
+        font-size: 1.5rem;
+        flex-direction: column;
+        gap: 8px;
+        
+        mat-icon {
+          font-size: 1.75rem;
+          width: 1.75rem;
+          height: 1.75rem;
+        }
+      }
+      
+      .map-description {
+        font-size: 0.9rem;
+      }
+    }
+  }
+  
+  @media (max-width: 480px) {
+    margin: 24px -12px;
+    
+    .map-container {
+      border-radius: 12px;
+      border-left: none;
+      border-right: none;
+    }
+    
+    .map-header {
+      padding: 20px 16px 16px;
+      border-radius: 12px 12px 0 0;
+      
+      .map-title {
+        font-size: 1.375rem;
+      }
+      
+      .map-description {
+        font-size: 0.85rem;
+      }
+    }
+    
+    app-restaurant-map {
+      ::ng-deep .map-container {
+        border-radius: 0 0 12px 12px;
+      }
+    }
+  }
+}
+
 // Accessibility improvements
 .restaurant-card:focus-visible {
   outline: 2px solid #667eea;

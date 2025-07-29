@@ -8,6 +8,14 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script async defer 
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA40_VhgVnBK7zs-XiahFRMR5UPUfk4aKw&libraries=places,marker&callback=initMap">
+  </script>
+  <script>
+    function initMap() {
+      window.googleMapsLoaded = true;
+    }
+  </script>
 </head>
 <body class="mat-typography">
   <app-root></app-root>

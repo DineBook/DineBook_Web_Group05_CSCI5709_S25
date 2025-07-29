@@ -28,22 +28,36 @@ export const authenticate = async (req: AuthenticatedRequest, res: Response, nex
             return res.status(401).json({ error: 'Access denied. No token provided.' });
         }
 
-        const decoded = jwt.verify(token, JWT_SECRET) as userPayload;
-        const user = await User.findById(decoded.id);
+        try {
+            const decoded = jwt.verify(token, JWT_SECRET) as userPayload;
+            const user = await User.findById(decoded.id);
 
-        if (!user) {
-            return res.status(401).json({ error: 'Invalid token. User not found.' });
+            if (!user) {
+                return res.status(401).json({ error: 'Invalid token. User not found.' });
+            }
+
+            req.user = {
+                ...user.toObject(),
+                id: user._id.toString(),
+                role: user.role || decoded.role
+            };
+            next();
+        } catch (jwtError: any) {
+            // Handle different types of JWT errors more gracefully
+            if (jwtError.name === 'TokenExpiredError') {
+                // Don't spam console with expired token errors - just return response
+                return res.status(401).json({ error: 'Token expired. Please login again.' });
+            } else if (jwtError.name === 'JsonWebTokenError') {
+                console.error('Invalid JWT token format:', jwtError.message);
+                return res.status(401).json({ error: 'Invalid token format.' });
+            } else {
+                console.error('JWT verification error:', jwtError);
+                return res.status(401).json({ error: 'Token verification failed.' });
+            }
         }
-
-        req.user = {
-            ...user.toObject(),
-            id: user._id.toString(),
-            role: user.role || decoded.role
-        };
-        next();
     } catch (error) {
         console.error('Authentication error:', error);
-        res.status(401).json({ error: 'Invalid token.' });
+        res.status(401).json({ error: 'Authentication failed.' });
     }
 };
 
