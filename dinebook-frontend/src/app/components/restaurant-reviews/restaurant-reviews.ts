@@ -254,6 +254,11 @@ export class RestaurantReviewsComponent
         comment: this.editReviewData.comment.trim(),
       };
 
+      // Add image file if selected
+      if (this.selectedImage) {
+        reviewData.image = this.selectedImage.file;
+      }
+
       await this.reviewService.createReview(reviewData).toPromise();
 
       this.snackBar.open('Review submitted successfully!', 'Close', {

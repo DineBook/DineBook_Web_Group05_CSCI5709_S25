@@ -162,6 +162,37 @@
               <div class="file-constraints">PNG, JPG up to {{ formatFileSize(maxFileSize) }}</div>
             </div>
           </div>
+
+          <!-- Selected Image Preview -->
+          <div *ngIf="selectedImage" class="selected-image-container">
+            <div class="selected-image-label">Selected Image:</div>
+            <div class="image-preview">
+              <div class="preview-container">
+                <img [src]="selectedImage.preview" 
+                     [alt]="selectedImage.file.name" 
+                     class="preview-image">
+                <button 
+                  type="button" 
+                  class="remove-button"
+                  (click)="removeImage()"
+                  aria-label="Remove selected image">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Upload Progress -->
+          <div class="upload-progress" *ngIf="uploadProgress > 0 && uploadProgress < 100">
+            <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+            <div class="progress-text">Uploading image... {{ uploadProgress }}%</div>
+          </div>
+
+          <!-- Upload Error -->
+          <div class="upload-error" *ngIf="uploadError">
+            <mat-icon class="error-icon">error</mat-icon>
+            <span class="error-message">{{ uploadError }}</span>
+          </div>
         </div>
 
         <div class="form-actions">
@@ -374,17 +405,6 @@
               </div>
 
               <div class="edit-form-actions">
-                <button mat-button (click)="cancelEditReviewInList()">
-                  Cancel
-                </button>
-                <button mat-raised-button color="primary" 
-                        [disabled]="!editReviewData.rating || !editReviewData.comment.trim()"
-                        (click)="updateReviewInList()">
-                  Update Review
-                </button>
-              </div>
-              
-              <div class="edit-actions">
                 <button mat-button (click)="cancelEditReviewInList()" class="cancel-btn">
                   Cancel
                 </button>
