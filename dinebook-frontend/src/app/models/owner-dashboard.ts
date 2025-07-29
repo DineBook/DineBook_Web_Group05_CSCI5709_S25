@@ -14,6 +14,7 @@ export interface Restaurant {
   phoneNumber?: string;
   email?: string;
   capacity?: number;
+  imageUrl?: string; // URL for restaurant image
   coordinates?: {
     latitude: number;
     longitude: number;
@@ -28,7 +29,6 @@ export interface Restaurant {
   };
   isActive: boolean;
   averageRating?: number;
-  imageUrl?: string;
   createdAt: string;
 }
 

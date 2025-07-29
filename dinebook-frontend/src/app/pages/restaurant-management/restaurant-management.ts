@@ -41,7 +41,6 @@ import { Restaurant } from '../../models/owner-dashboard';
   styleUrl: './restaurant-management.scss',
 })
 export class RestaurantManagementComponent implements OnInit {
-
   restaurant: Restaurant | null = null;
   restaurantForm: FormGroup;
   loading = true;

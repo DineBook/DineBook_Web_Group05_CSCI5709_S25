@@ -76,6 +76,9 @@ export class RestaurantReviewsComponent
     public authService: AuthService,
     private snackBar: MatSnackBar
   ) {}
+  ngOnDestroy(): void {
+    throw new Error('Method not implemented.');
+  }
 
   ngOnInit() {
     this.loadReviews();

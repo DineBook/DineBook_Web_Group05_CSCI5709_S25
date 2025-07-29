@@ -26,6 +26,7 @@ export interface CreateReviewRequest {
   restaurantId: string;
   rating: number;
   comment: string;
+  image?: File; // Optional image file for review creation
 }
 
 export interface UpdateReviewRequest {
