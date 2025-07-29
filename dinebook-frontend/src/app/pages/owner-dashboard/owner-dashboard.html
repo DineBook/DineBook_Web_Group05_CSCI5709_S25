@@ -166,11 +166,11 @@
                 <div class="day-info">
                   <span class="day-name">{{ day.label }}</span>
                   <div class="hours-display">
-                    <span *ngIf="getOperatingHours()[day.key]?.open && getOperatingHours()[day.key]?.close" 
+                    <span *ngIf="getOperatingHours()[day.key] && getOperatingHours()[day.key].open && getOperatingHours()[day.key].close" 
                           class="hours-text">
                       {{ formatOperatingTime(getOperatingHours()[day.key].open) }} - {{ formatOperatingTime(getOperatingHours()[day.key].close) }}
                     </span>
-                    <span *ngIf="!getOperatingHours()[day.key]?.open || !getOperatingHours()[day.key]?.close" 
+                    <span *ngIf="!getOperatingHours()[day.key] || !getOperatingHours()[day.key].open || !getOperatingHours()[day.key].close" 
                           class="closed-text">
                       Closed
                     </span>
@@ -178,8 +178,8 @@
                 </div>
                 <div class="status-indicator">
                   <div class="status-dot" 
-                       [class.open]="getOperatingHours()[day.key]?.open && getOperatingHours()[day.key]?.close"
-                       [class.closed]="!getOperatingHours()[day.key]?.open || !getOperatingHours()[day.key]?.close">
+                       [class.open]="getOperatingHours()[day.key] && getOperatingHours()[day.key].open && getOperatingHours()[day.key].close"
+                       [class.closed]="!getOperatingHours()[day.key] || !getOperatingHours()[day.key].open || !getOperatingHours()[day.key].close">
                   </div>
                 </div>
               </div>
