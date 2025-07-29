@@ -263,16 +263,31 @@
             </mat-card-header>
             <mat-card-content>
               <div class="image-upload-section">
-                <div class="current-image" *ngIf="getRestaurantImageUrl()">
+                <!-- Current Restaurant Image (only show if restaurant has existing image and no new image selected) -->
+                <div class="current-image" *ngIf="getRestaurantImageUrl() && !imagePreviewUrl">
                   <img [src]="getRestaurantImageUrl()" alt="Current restaurant image">
                   <div class="image-overlay">
-                    <button type="button" mat-icon-button (click)="removeImage()">
+                    <button type="button" mat-icon-button (click)="removeCurrentImage()" matTooltip="Delete current image">
                       <mat-icon>delete</mat-icon>
                     </button>
                   </div>
                 </div>
                 
+                <!-- New Image Preview (only show if new image is selected) -->
+                <div *ngIf="imagePreviewUrl" class="image-preview">
+                  <div class="preview-container">
+                    <img [src]="imagePreviewUrl" alt="New restaurant image preview">
+                    <div class="image-overlay">
+                      <button type="button" mat-icon-button (click)="removeSelectedImage()" matTooltip="Remove selected image">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Upload Area (only show if no image exists and no new image selected) -->
                 <div class="image-upload-area" 
+                     *ngIf="!getRestaurantImageUrl() && !imagePreviewUrl"
                      [class.drag-over]="isDragOver"
                      (dragover)="onDragOver($event)"
                      (dragleave)="onDragLeave($event)"
@@ -284,8 +299,25 @@
                   <input #fileInput type="file" hidden accept="image/*" (change)="onFileSelected($event)">
                 </div>
                 
-                <div *ngIf="imagePreviewUrl" class="image-preview">
-                  <img [src]="imagePreviewUrl" alt="Preview">
+                <!-- Upload Button (show when current image is removed but no new image selected) -->
+                <div class="upload-button-container" *ngIf="!getRestaurantImageUrl() && !imagePreviewUrl && imageWasRemoved">
+                  <button mat-raised-button color="primary" (click)="fileInput.click()" class="upload-btn">
+                    <mat-icon>add_photo_alternate</mat-icon>
+                    Add Restaurant Image
+                  </button>
+                  <input #fileInput type="file" hidden accept="image/*" (change)="onFileSelected($event)">
+                </div>
+                
+                <!-- Upload Error Display -->
+                <div *ngIf="imageUploadError" class="upload-error">
+                  <mat-icon>error</mat-icon>
+                  <span>{{ imageUploadError }}</span>
+                </div>
+                
+                <!-- Upload Success Display -->
+                <div *ngIf="imageUploadSuccess" class="upload-success">
+                  <mat-icon>check_circle</mat-icon>
+                  <span>Image uploaded successfully!</span>
                 </div>
               </div>
             </mat-card-content>

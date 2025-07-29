@@ -56,6 +56,7 @@ export class RestaurantManagementComponent implements OnInit {
   imageUploadError: string | null = null;
   isDragOver = false;
   imageUploadSuccess = false;
+  imageWasRemoved = false; // Track if the current image was removed
 
   cuisineTypes = [
     'Italian',
@@ -108,6 +109,13 @@ export class RestaurantManagementComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Reset image states on component initialization
+    this.selectedImageFile = null;
+    this.imagePreviewUrl = null;
+    this.imageUploadError = null;
+    this.imageUploadSuccess = false;
+    this.imageWasRemoved = false;
+
     this.loadRestaurant();
   }
 
@@ -171,6 +179,13 @@ export class RestaurantManagementComponent implements OnInit {
   populateForm() {
     if (!this.restaurant) return;
 
+    // Reset image upload state when loading restaurant
+    this.selectedImageFile = null;
+    this.imagePreviewUrl = null;
+    this.imageUploadError = null;
+    this.imageUploadSuccess = false;
+    this.imageWasRemoved = false;
+
     this.restaurantForm.patchValue({
       name: this.restaurant.name,
       cuisine: this.restaurant.cuisine,
@@ -195,7 +210,7 @@ export class RestaurantManagementComponent implements OnInit {
     const openingHours = (this.restaurant as any).openingHours || {};
     this.daysOfWeek.forEach((day) => {
       const hours = openingHours[day];
-      if (hours) {
+      if (hours && hours.open && hours.close) {
         this.restaurantForm.get(`openingHours.${day}`)?.patchValue({
           open: hours.open || '',
           close: hours.close || '',
@@ -228,7 +243,8 @@ export class RestaurantManagementComponent implements OnInit {
 
         // Add all form fields to FormData
         Object.keys(formData).forEach((key) => {
-          if (key === 'openingHours') {
+          if (key === 'openingHours' || key === 'address' || key === 'coordinates') {
+            // Stringify nested objects
             submitData.append(key, JSON.stringify(formData[key]));
           } else {
             submitData.append(key, formData[key]);
@@ -240,12 +256,26 @@ export class RestaurantManagementComponent implements OnInit {
           submitData.append('image', this.selectedImageFile);
         }
 
+        // Add flag to indicate if current image should be removed
+        if (this.imageWasRemoved && !this.selectedImageFile) {
+          submitData.append('removeImage', 'true');
+        }
+
         let response;
         if (this.restaurant) {
           // Update existing restaurant
           response = await this.apiService
             .updateRestaurant(this.restaurant._id, submitData)
             .toPromise();
+
+          // Update the local restaurant object with the response
+          if (response?.restaurant) {
+            this.restaurant = response.restaurant;
+            // Reset image states after successful update
+            this.selectedImageFile = null;
+            this.imagePreviewUrl = null;
+            this.imageWasRemoved = false;
+          }
 
           this.snackBar.open('Restaurant updated successfully!', 'Close', {
             duration: 3000,
@@ -590,7 +620,24 @@ export class RestaurantManagementComponent implements OnInit {
     reader.readAsDataURL(file);
   }
 
+  removeCurrentImage(): void {
+    // Mark that the current image was removed
+    this.imageWasRemoved = true;
+    // Clear any preview since we're removing the current image
+    this.selectedImageFile = null;
+    this.imagePreviewUrl = null;
+    this.imageUploadError = null;
+    this.imageUploadSuccess = false;
+
+    // Reset file input
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  }
+
   removeSelectedImage(): void {
+    // Remove only the newly selected image
     this.selectedImageFile = null;
     this.imagePreviewUrl = null;
     this.imageUploadError = null;
@@ -622,6 +669,10 @@ export class RestaurantManagementComponent implements OnInit {
   }
 
   getRestaurantImageUrl(): string | null {
+    // If image was marked for removal, don't show it
+    if (this.imageWasRemoved) {
+      return null;
+    }
     return (this.restaurant as any)?.imageUrl || null;
   }
 
@@ -636,16 +687,14 @@ export class RestaurantManagementComponent implements OnInit {
     }
   }
 
+  // Legacy method for backward compatibility
   removeImage(): void {
-    this.selectedImageFile = null;
-    this.imagePreviewUrl = null;
-    this.imageUploadError = null;
-    this.imageUploadSuccess = false;
-
-    // Reset file input
-    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = '';
+    if (this.imagePreviewUrl) {
+      // If there's a preview, remove the selected image
+      this.removeSelectedImage();
+    } else if (this.getRestaurantImageUrl()) {
+      // If there's a current image, remove it
+      this.removeCurrentImage();
     }
   }
 }
