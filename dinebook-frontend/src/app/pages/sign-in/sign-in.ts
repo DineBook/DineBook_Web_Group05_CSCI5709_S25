@@ -82,11 +82,11 @@ export class SignInComponent {
 
           const userRole = response.user?.role
           if (userRole === 'customer') {
-            this.router.navigate(["/dashboard"])
+            this.router.navigate(["/restaurants"])
           } else if (userRole === 'owner') {
             this.router.navigate(["/owner/dashboard"])
           } else {
-            this.router.navigate(["/dashboard"])
+            this.router.navigate(["/restaurants"])
           }
         },
         error: (err) => {
