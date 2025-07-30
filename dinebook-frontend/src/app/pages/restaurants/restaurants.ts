@@ -15,6 +15,7 @@ import { ReviewService } from '../../services/review.service';
 import { Restaurant } from '../../models/booking';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ApiService } from '../../services/api.service';
+import { RestaurantMapComponent } from '../../components/restaurant-map/restaurant-map.component';
 
 interface RestaurantDisplay extends Restaurant {
   badge: string;
@@ -38,6 +39,7 @@ interface RestaurantDisplay extends Restaurant {
     MatPaginatorModule,
     ReactiveFormsModule,
     RouterLink,
+    RestaurantMapComponent,
   ],
   templateUrl: './restaurants.html',
   styleUrl: './restaurants.scss',
@@ -389,9 +391,9 @@ export class RestaurantsComponent implements OnInit {
             const averageRating =
               reviewCount > 0
                 ? reviews.reduce(
-                    (sum: number, review: any) => sum + review.rating,
-                    0
-                  ) / reviewCount
+                  (sum: number, review: any) => sum + review.rating,
+                  0
+                ) / reviewCount
                 : 0;
 
             // Update the restaurant with review data while preserving favorite status
@@ -467,6 +469,6 @@ export class RestaurantsComponent implements OnInit {
   onImageError(event: any): void {
     // Set fallback image when restaurant image fails to load
     event.target.src =
-      'https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg';
+      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
   }
 }

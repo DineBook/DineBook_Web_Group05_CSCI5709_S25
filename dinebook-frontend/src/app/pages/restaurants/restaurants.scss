@@ -1139,6 +1139,12 @@
     }
   }
   
+  .map-component-wrapper {
+    // This wrapper ensures proper integration of the map component
+    display: block;
+    width: 100%;
+  }
+  
   app-restaurant-map {
     display: block;
     // Remove any potential margins from the map component

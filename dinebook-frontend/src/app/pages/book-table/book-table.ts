@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatChipsModule } from '@angular/material/chips';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { Subject, takeUntil, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 
@@ -35,6 +36,7 @@ import { Restaurant, AvailabilityResponse, TimeSlot, CreateBookingRequest } from
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatTooltipModule,
+    MatChipsModule,
     RouterModule
   ],
   templateUrl: './book-table.html',
@@ -47,6 +49,7 @@ export class BookTableComponent implements OnInit, OnDestroy {
   selectedTimeSlot: TimeSlot | null = null;
   isLoading = false;
   isSubmitting = false;
+  hasAttemptedSubmit = false;
   minDate = new Date();
   maxDate = new Date();
   currentStep = 1;
@@ -295,8 +298,20 @@ export class BookTableComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
+    this.hasAttemptedSubmit = true;
+
     if (this.bookingForm.invalid || !this.selectedTimeSlot || this.isSubmitting) {
       this.markFormGroupTouched();
+
+      // Show helpful error message
+      if (!this.selectedTimeSlot) {
+        this.showError('Please select a time slot to complete your booking.');
+      } else {
+        this.showError('Please fix the form errors before submitting.');
+      }
+
+      // Scroll to the first error
+      this.scrollToFirstError();
       return;
     }
 
@@ -344,6 +359,20 @@ export class BookTableComponent implements OnInit, OnDestroy {
     Object.keys(this.bookingForm.controls).forEach(key => {
       this.bookingForm.get(key)?.markAsTouched();
     });
+  }
+
+  // Scroll to the first form error for better UX
+  private scrollToFirstError(): void {
+    setTimeout(() => {
+      const firstErrorElement = document.querySelector('.error-message, .mat-mdc-form-field-error');
+      if (firstErrorElement) {
+        firstErrorElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'nearest'
+        });
+      }
+    }, 100);
   }
 
   private formatDate(date: Date): string {
@@ -420,5 +449,47 @@ export class BookTableComponent implements OnInit, OnDestroy {
       Validators.max(20)
     ]);
     this.bookingForm.get('guests')?.updateValueAndValidity();
+  }
+
+  // Get maximum guests allowed (considers restaurant capacity)
+  getMaxGuests(): number {
+    if (this.preselectedRestaurant?.capacity) {
+      return Math.min(this.preselectedRestaurant.capacity, 20);
+    }
+    return 20;
+  }
+
+  // Add suggestion to special requests field
+  addSuggestion(suggestion: string): void {
+    const currentValue = this.bookingForm.get('specialRequests')?.value || '';
+    const newValue = currentValue ? `${currentValue}, ${suggestion}` : suggestion;
+
+    // Check if adding the suggestion would exceed the character limit
+    if (newValue.length <= 500) {
+      this.bookingForm.get('specialRequests')?.setValue(newValue);
+    } else {
+      this.showError('Cannot add suggestion - it would exceed the 500 character limit.');
+    }
+  }
+
+  // Suggest alternative dates when no slots are available
+  suggestAlternativeDate(dayOffset: number): void {
+    const currentDate = this.bookingForm.get('date')?.value;
+    if (!currentDate) return;
+
+    const newDate = new Date(currentDate);
+    newDate.setDate(newDate.getDate() + dayOffset);
+
+    // Check if the new date is within allowed range
+    if (newDate >= this.minDate && newDate <= this.maxDate) {
+      this.bookingForm.get('date')?.setValue(newDate);
+      this.showMessage(
+        `Checking availability for ${newDate.toLocaleDateString()}...`,
+        'info-snackbar'
+      );
+    } else {
+      const direction = dayOffset > 0 ? 'later' : 'earlier';
+      this.showError(`Cannot suggest a ${direction} date - it's outside the booking window.`);
+    }
   }
 } 

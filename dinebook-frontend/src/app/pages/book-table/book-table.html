@@ -60,7 +60,7 @@
                   <div *ngIf="preselectedRestaurant" class="selected-restaurant">
                     <div class="restaurant-card featured">
                       <div class="restaurant-image">
-                        <img src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" 
+                        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
                              [alt]="preselectedRestaurant.name">
                       </div>
                       <div class="restaurant-info">
@@ -104,9 +104,25 @@
                           </div>
                         </mat-option>
                       </mat-select>
-                      <mat-error *ngIf="bookingForm.get('restaurantId')?.hasError('required') && bookingForm.get('restaurantId')?.touched">
-                        Please select a restaurant
-                      </mat-error>
+                      
+                      <!-- Enhanced Error Messages -->
+                      <div class="field-messages" role="alert" aria-live="polite">
+                        <div *ngIf="bookingForm.get('restaurantId')?.hasError('required') && bookingForm.get('restaurantId')?.touched" 
+                             class="error-message">
+                          <mat-icon class="message-icon">error_outline</mat-icon>
+                          <span>Please select a restaurant to continue with your booking.</span>
+                        </div>
+                        <div *ngIf="restaurants.length === 0 && !isLoading" 
+                             class="warning-message">
+                          <mat-icon class="message-icon">warning</mat-icon>
+                          <span>No restaurants available at the moment. Please try again later.</span>
+                        </div>
+                        <div *ngIf="isLoading" 
+                             class="info-message">
+                          <mat-icon class="message-icon">info</mat-icon>
+                          <span>Loading restaurants...</span>
+                        </div>
+                      </div>
                     </mat-form-field>
                   </div>
 
@@ -114,7 +130,7 @@
                   <div *ngIf="selectedRestaurant && !preselectedRestaurant" class="selected-restaurant">
                     <div class="restaurant-card">
                       <div class="restaurant-image">
-                        <img src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" 
+                        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
                              [alt]="selectedRestaurant.name">
                       </div>
                       <div class="restaurant-info">
@@ -175,9 +191,35 @@
                           <mat-icon matDatepickerToggleIcon>calendar_month</mat-icon>
                         </mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
-                        <mat-error *ngIf="bookingForm.get('date')?.hasError('required') && bookingForm.get('date')?.touched">
-                          Please select a date
-                        </mat-error>
+                        
+                        <!-- Enhanced Error Messages -->
+                        <div class="field-messages" role="alert" aria-live="polite">
+                          <div *ngIf="bookingForm.get('date')?.hasError('required') && bookingForm.get('date')?.touched" 
+                               class="error-message">
+                            <mat-icon class="message-icon">error_outline</mat-icon>
+                            <span>Please select a date for your reservation. You can book up to 3 months in advance.</span>
+                          </div>
+                          <div *ngIf="bookingForm.get('date')?.hasError('matDatepickerParse') && bookingForm.get('date')?.touched" 
+                               class="error-message">
+                            <mat-icon class="message-icon">error_outline</mat-icon>
+                            <span>Please enter a valid date format (MM/DD/YYYY) or use the calendar picker.</span>
+                          </div>
+                          <div *ngIf="bookingForm.get('date')?.hasError('matDatepickerMin') && bookingForm.get('date')?.touched" 
+                               class="error-message">
+                            <mat-icon class="message-icon">error_outline</mat-icon>
+                            <span>Cannot book for past dates. Please select today or a future date.</span>
+                          </div>
+                          <div *ngIf="bookingForm.get('date')?.hasError('matDatepickerMax') && bookingForm.get('date')?.touched" 
+                               class="error-message">
+                            <mat-icon class="message-icon">error_outline</mat-icon>
+                            <span>Bookings are only available up to 3 months in advance. Please select an earlier date.</span>
+                          </div>
+                          <div *ngIf="bookingForm.get('date')?.valid && bookingForm.get('date')?.touched && bookingForm.get('date')?.value" 
+                               class="success-message">
+                            <mat-icon class="message-icon">check_circle</mat-icon>
+                            <span>Great! {{ bookingForm.get('date')?.value | date:'fullDate' }} is available.</span>
+                          </div>
+                        </div>
                       </mat-form-field>
                     </div>
 
@@ -187,15 +229,35 @@
                         <mat-label>Number of guests</mat-label>
                         <input matInput type="number" formControlName="guests" 
                                min="1" max="20" placeholder="Enter number of guests">
-                        <mat-error *ngIf="bookingForm.get('guests')?.hasError('required') && bookingForm.get('guests')?.touched">
-                          Please enter number of guests
-                        </mat-error>
-                        <mat-error *ngIf="bookingForm.get('guests')?.hasError('min')">
-                          Minimum 1 guest required
-                        </mat-error>
-                        <mat-error *ngIf="bookingForm.get('guests')?.hasError('max')">
-                          Maximum 20 guests allowed
-                        </mat-error>
+                        
+                        <!-- Enhanced Error Messages -->
+                        <div class="field-messages" role="alert" aria-live="polite">
+                          <div *ngIf="bookingForm.get('guests')?.hasError('required') && bookingForm.get('guests')?.touched" 
+                               class="error-message">
+                            <mat-icon class="message-icon">error_outline</mat-icon>
+                            <span>Please enter the number of guests for your reservation.</span>
+                          </div>
+                          <div *ngIf="bookingForm.get('guests')?.hasError('min') && bookingForm.get('guests')?.touched" 
+                               class="error-message">
+                            <mat-icon class="message-icon">error_outline</mat-icon>
+                            <span>Minimum 1 guest required. Please enter at least 1.</span>
+                          </div>
+                          <div *ngIf="bookingForm.get('guests')?.hasError('max') && bookingForm.get('guests')?.touched" 
+                               class="error-message">
+                            <mat-icon class="message-icon">error_outline</mat-icon>
+                            <span>Maximum {{ getMaxGuests() }} guests allowed{{ preselectedRestaurant?.capacity ? ' for this restaurant' : '' }}. Please contact the restaurant directly for larger groups.</span>
+                          </div>
+                          <div *ngIf="bookingForm.get('guests')?.valid && bookingForm.get('guests')?.touched && bookingForm.get('guests')?.value" 
+                               class="success-message">
+                            <mat-icon class="message-icon">check_circle</mat-icon>
+                            <span>Perfect! Table for {{ bookingForm.get('guests')?.value }} {{ bookingForm.get('guests')?.value === 1 ? 'guest' : 'guests' }}.</span>
+                          </div>
+                          <div *ngIf="bookingForm.get('guests')?.value > 8" 
+                               class="info-message">
+                            <mat-icon class="message-icon">info</mat-icon>
+                            <span>Large party booking - the restaurant may need additional preparation time.</span>
+                          </div>
+                        </div>
                       </mat-form-field>
                     </div>
                   </div>
@@ -206,6 +268,20 @@
                       <div class="divider-line"></div>
                       <span class="divider-text">Select Your Time</span>
                       <div class="divider-line"></div>
+                    </div>
+
+                    <!-- Time Selection Validation Messages -->
+                    <div class="field-messages" role="alert" aria-live="polite" *ngIf="bookingForm.get('date')?.touched && bookingForm.get('guests')?.touched">
+                      <div *ngIf="!selectedTimeSlot && !isLoading && availableSlots.length > 0" 
+                           class="info-message">
+                        <mat-icon class="message-icon">schedule</mat-icon>
+                        <span>Please select a time slot to continue with your booking.</span>
+                      </div>
+                      <div *ngIf="selectedTimeSlot" 
+                           class="success-message">
+                        <mat-icon class="message-icon">check_circle</mat-icon>
+                        <span>Time {{ selectedTimeSlot.time }} selected! {{ selectedTimeSlot.availableCapacity }} spots remaining.</span>
+                      </div>
                     </div>
 
                     <!-- Loading State -->
@@ -220,20 +296,6 @@
 
                     <!-- Available Times -->
                     <div *ngIf="availability && !isLoading" class="availability-section">
-                      <!-- <div class="availability-header">
-                        <div class="restaurant-info">
-                          <h4 class="restaurant-name">{{ availability.restaurantName }}</h4>
-                          <div class="date-info">
-                            <mat-icon>calendar_today</mat-icon>
-                            <span>{{ availability.date }} • {{ availability.dayOfWeek }}</span>
-                          </div>
-                          <div class="hours-info">
-                            <mat-icon>schedule</mat-icon>
-                            <span>Open {{ availability.openingHours.open }} - {{ availability.openingHours.close }}</span>
-                          </div>
-                        </div>
-                      </div> -->
-
                       <div class="time-slots-container" *ngIf="availableSlots.length > 0; else noSlotsTemplate">
                         <div class="time-slots-grid">
                           <button
@@ -260,6 +322,18 @@
                           <h3>No Available Times</h3>
                           <p>Unfortunately, there are no available time slots for the selected date.</p>
                           <p class="suggestion-text">Please try selecting a different date above.</p>
+                          
+                          <!-- Helpful suggestions for no slots -->
+                          <div class="suggestions-actions">
+                            <button type="button" mat-stroked-button (click)="suggestAlternativeDate(-1)">
+                              <mat-icon>arrow_back</mat-icon>
+                              Try Previous Day
+                            </button>
+                            <button type="button" mat-stroked-button (click)="suggestAlternativeDate(1)">
+                              Try Next Day
+                              <mat-icon>arrow_forward</mat-icon>
+                            </button>
+                          </div>
                         </div>
                       </ng-template>
                     </div>
@@ -294,10 +368,51 @@
                                 rows="3"
                                 maxlength="500"></textarea>
                       <mat-hint align="end">{{ bookingForm.get('specialRequests')?.value?.length || 0 }}/500</mat-hint>
-                      <mat-error *ngIf="bookingForm.get('specialRequests')?.hasError('maxlength')">
-                        Special requests cannot exceed 500 characters
-                      </mat-error>
+                      
+                      <!-- Enhanced Error Messages -->
+                      <div class="field-messages" role="alert" aria-live="polite">
+                        <div *ngIf="bookingForm.get('specialRequests')?.hasError('maxlength') && bookingForm.get('specialRequests')?.touched" 
+                             class="error-message">
+                          <mat-icon class="message-icon">error_outline</mat-icon>
+                          <span>Special requests cannot exceed 500 characters. Please shorten your message.</span>
+                        </div>
+                        <div *ngIf="bookingForm.get('specialRequests')?.value?.length >= 450 && bookingForm.get('specialRequests')?.value?.length < 500" 
+                             class="warning-message">
+                          <mat-icon class="message-icon">warning</mat-icon>
+                          <span>Approaching character limit ({{ 500 - (bookingForm.get('specialRequests')?.value?.length || 0) }} characters remaining).</span>
+                        </div>
+                        <div *ngIf="bookingForm.get('specialRequests')?.value && bookingForm.get('specialRequests')?.value.length > 0 && bookingForm.get('specialRequests')?.valid" 
+                             class="success-message">
+                          <mat-icon class="message-icon">check_circle</mat-icon>
+                          <span>Special requests noted! The restaurant will do their best to accommodate.</span>
+                        </div>
+                      </div>
                     </mat-form-field>
+                    
+                    <!-- Helpful suggestions -->
+                    <div class="suggestions-section" *ngIf="!bookingForm.get('specialRequests')?.value">
+                      <div class="suggestions-header">
+                        <mat-icon>lightbulb</mat-icon>
+                        <span>Common requests you might want to mention:</span>
+                      </div>
+                      <div class="suggestion-chips">
+                        <button type="button" mat-chip-option class="suggestion-chip" (click)="addSuggestion('Vegetarian options needed')">
+                          Vegetarian options
+                        </button>
+                        <button type="button" mat-chip-option class="suggestion-chip" (click)="addSuggestion('Birthday celebration')">
+                          Birthday celebration
+                        </button>
+                        <button type="button" mat-chip-option class="suggestion-chip" (click)="addSuggestion('Quiet table preferred')">
+                          Quiet table
+                        </button>
+                        <button type="button" mat-chip-option class="suggestion-chip" (click)="addSuggestion('Window seating if available')">
+                          Window seating
+                        </button>
+                        <button type="button" mat-chip-option class="suggestion-chip" (click)="addSuggestion('High chair needed')">
+                          High chair needed
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -318,7 +433,7 @@
               <div class="summary-section" *ngIf="selectedRestaurant || preselectedRestaurant">
                 <div class="restaurant-summary">
                   <div class="restaurant-image-small">
-                    <img src="https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg" 
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
                          [alt]="(selectedRestaurant || preselectedRestaurant)?.name">
                   </div>
                   <div class="restaurant-info-small">
@@ -368,6 +483,36 @@
 
             <!-- Action Buttons -->
             <div class="summary-actions" *ngIf="selectedTimeSlot">
+              <!-- Form Validation Summary -->
+              <div class="validation-summary" *ngIf="!isFormValid && (bookingForm.touched || hasAttemptedSubmit)">
+                <div class="summary-header">
+                  <mat-icon>error_outline</mat-icon>
+                  <span>Please complete the following:</span>
+                </div>
+                <ul class="validation-list">
+                  <li *ngIf="bookingForm.get('restaurantId')?.invalid">
+                    <mat-icon>restaurant</mat-icon>
+                    Select a restaurant
+                  </li>
+                  <li *ngIf="bookingForm.get('date')?.invalid">
+                    <mat-icon>calendar_today</mat-icon>
+                    Choose a valid date
+                  </li>
+                  <li *ngIf="bookingForm.get('guests')?.invalid">
+                    <mat-icon>people</mat-icon>
+                    Enter a valid number of guests (1-{{ getMaxGuests() }})
+                  </li>
+                  <li *ngIf="!selectedTimeSlot">
+                    <mat-icon>schedule</mat-icon>
+                    Select a time slot
+                  </li>
+                  <li *ngIf="bookingForm.get('specialRequests')?.invalid">
+                    <mat-icon>note</mat-icon>
+                    Special requests are too long (max 500 characters)
+                  </li>
+                </ul>
+              </div>
+              
               <button type="button" mat-stroked-button (click)="goBack()" class="cancel-btn">
                 Cancel
               </button>
