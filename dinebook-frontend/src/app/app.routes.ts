@@ -3,6 +3,8 @@ import { LandingComponent } from './pages/landing/landing';
 import { SignInComponent } from './pages/sign-in/sign-in';
 import { SignUpComponent } from './pages/sign-up/sign-up';
 import { VerifyComponent } from './pages/verify/verify';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password';
 import { OwnerDashboardComponent } from './pages/owner-dashboard/owner-dashboard';
 import { OwnerBookingsComponent } from './pages/owner-bookings/owner-bookings';
 import { RestaurantManagementComponent } from './pages/restaurant-management/restaurant-management';
@@ -26,6 +28,8 @@ export const routes: Routes = [
   { path: 'sign-in', component: SignInComponent, canActivate: [PublicGuard] },
   { path: 'sign-up', component: SignUpComponent, canActivate: [PublicGuard] },
   { path: 'verify', component: VerifyComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [PublicGuard] },
+  { path: 'reset-password', component: ResetPasswordComponent, canActivate: [PublicGuard] },
   { path: 'owner/dashboard', component: OwnerDashboardComponent, canActivate: [OwnerGuard] },
   { path: 'owner/restaurant', component: RestaurantManagementComponent, canActivate: [OwnerGuard] },
   { path: 'owner/menu', component: MenuManagementComponent, canActivate: [OwnerGuard] },
