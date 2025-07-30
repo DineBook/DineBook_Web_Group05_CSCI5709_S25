@@ -6,6 +6,8 @@
     "build": "tsc",
     "serve": "node dist/index.js",
     "setup-db": "ts-node src/scripts/createIndex.ts",
+    "seed": "ts-node src/scripts/seedData.ts",
+    "seed:clear": "ts-node src/scripts/seedData.ts --clear",
     "dev": "nodemon --exec ts-node src/index.ts"
   },
   "dependencies": {

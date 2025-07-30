@@ -27,7 +27,7 @@ import { RouterLink } from '@angular/router';
         <div *ngIf="!loading && !error && favorites.length > 0" class="favorites-grid">
           <div class="restaurant-card" *ngFor="let restaurant of favorites">
             <div class="restaurant-image">
-              <img [src]="restaurant.image || 'https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg'" alt="{{ restaurant.name }}" />
+              <img [src]="restaurant.image || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'" alt="{{ restaurant.name }}" />
             </div>
             <div class="restaurant-info">
               <div class="restaurant-header">
@@ -60,7 +60,7 @@ export class FavoritesPageComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  constructor(private apiService: ApiService, public authService: AuthService) {}
+  constructor(private apiService: ApiService, public authService: AuthService) { }
 
   ngOnInit() {
     if (!this.authService.isLoggedIn || !this.authService.isCustomer()) {

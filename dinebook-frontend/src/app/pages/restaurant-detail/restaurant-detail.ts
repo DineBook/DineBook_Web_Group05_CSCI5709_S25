@@ -43,7 +43,7 @@ export class RestaurantDetailComponent implements OnInit {
     private apiService: ApiService,
     public authService: AuthService,
     private snackBar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.route.paramMap.subscribe((params) => {
@@ -104,8 +104,8 @@ export class RestaurantDetailComponent implements OnInit {
           res && typeof (res as any).isFavorited === 'boolean'
             ? (res as any).isFavorited
             : res && typeof res.isFavorite === 'boolean'
-            ? res.isFavorite
-            : false;
+              ? res.isFavorite
+              : false;
       },
       error: () => {
         this.isFavorite = false;
@@ -127,8 +127,8 @@ export class RestaurantDetailComponent implements OnInit {
           res && typeof (res as any).isFavorited === 'boolean'
             ? (res as any).isFavorited
             : res && typeof res.isFavorite === 'boolean'
-            ? res.isFavorite
-            : false;
+              ? res.isFavorite
+              : false;
         this.favoriteLoading = false;
       },
       error: () => {
@@ -342,6 +342,6 @@ export class RestaurantDetailComponent implements OnInit {
   onImageError(event: any): void {
     // Set fallback image when restaurant image fails to load
     event.target.src =
-      'https://cdn.pixabay.com/photo/2019/09/12/15/21/resort-4471852_1280.jpg';
+      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
   }
 }

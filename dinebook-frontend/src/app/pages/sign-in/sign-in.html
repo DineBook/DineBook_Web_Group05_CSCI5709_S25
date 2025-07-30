@@ -68,7 +68,7 @@
                 matInput 
                 formControlName="password" 
                 [type]="hidePassword ? 'password' : 'text'"
-                placeholder="At least 8 characters, e.g. Passw0rd"
+                placeholder="Enter your password"
                 autocomplete="current-password"
                 [attr.aria-describedby]="getPasswordErrorId()"
                 (blur)="loginForm.get('password')?.markAsTouched()">
@@ -89,21 +89,6 @@
                    class="error-message">
                 <mat-icon class="message-icon">error_outline</mat-icon>
                 <span>Password is required. Please enter your password.</span>
-              </div>
-              <div *ngIf="loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched" 
-                   class="error-message">
-                <mat-icon class="message-icon">error_outline</mat-icon>
-                <span>Password must be at least 8 characters long.</span>
-              </div>
-              <div *ngIf="loginForm.get('password')?.hasError('pattern') && loginForm.get('password')?.touched" 
-                   class="error-message">
-                <mat-icon class="message-icon">error_outline</mat-icon>
-                <span>Password must contain at least one letter and one number. Example: Passw0rd</span>
-              </div>
-              <div *ngIf="loginForm.get('password')?.valid && loginForm.get('password')?.touched" 
-                   class="success-message">
-                <mat-icon class="message-icon">check_circle</mat-icon>
-                <span>Password looks good!</span>
               </div>
             </div>
           </div>

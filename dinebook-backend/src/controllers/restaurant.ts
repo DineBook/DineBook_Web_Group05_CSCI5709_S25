@@ -97,7 +97,7 @@ export const getNearbyRestaurants = async (
             maxDistance: radiusKm * 1000, // Convert km to meters
             spherical: true,
             query: filter,
-            key: "geometry" // Specify which field to use for geospatial search
+            key: "geometry" // Specify which field to use for geospatial search - prevents "multiple 2dsphere index" error
           },
         },
         {
@@ -128,7 +128,7 @@ export const getNearbyRestaurants = async (
             maxDistance: radiusKm * 1000,
             spherical: true,
             query: filter,
-            key: "geometry" // Specify which field to use for geospatial search
+            key: "geometry" // Specify which field to use for geospatial search - prevents "multiple 2dsphere index" error
           },
         },
         {
