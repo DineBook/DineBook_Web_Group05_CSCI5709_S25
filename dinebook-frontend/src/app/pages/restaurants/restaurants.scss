@@ -362,18 +362,20 @@
       }
       
       &.mdc-list-item--selected {
-        background: #e0e7ff !important;
-        color: #667eea !important;
+        background: #5a6fd8 !important;
+        color: white !important;
+        font-weight: 600 !important;
       }
       
       &.mat-mdc-option-active {
-        background: #f0f4ff !important;
-        color: #667eea !important;
+        background: #5a6fd8 !important;
+          color: white !important;
       }
       
       &.mat-mdc-option-multiple-selected {
-        background: #e0e7ff !important;
-        color: #667eea !important;
+        background: #667eea !important;
+        color: white !important;
+        font-weight: 600 !important;
       }
     }
   }
