@@ -16,6 +16,7 @@ import { Restaurant } from '../../models/booking';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ApiService } from '../../services/api.service';
 import { RestaurantMapComponent } from '../../components/restaurant-map/restaurant-map.component';
+import { PRICE_RANGE_OPTIONS, formatPriceRange } from '../../utils/price-range.util';
 
 interface RestaurantDisplay extends Restaurant {
   badge: string;
@@ -70,12 +71,7 @@ export class RestaurantsComponent implements OnInit {
     'Other',
   ];
 
-  priceRangeOptions = [
-    { value: '1', label: '$10-20', icon: '$' },
-    { value: '2', label: '$20-40', icon: '$$' },
-    { value: '3', label: '$40-60', icon: '$$$' },
-    { value: '4', label: '$60+', icon: '$$$$' },
-  ];
+  priceRangeOptions = PRICE_RANGE_OPTIONS;
 
   // Active filters for display
   activeFilters: { location?: string; cuisine?: string; priceRange?: string } =
@@ -254,15 +250,7 @@ export class RestaurantsComponent implements OnInit {
   }
 
   private formatPriceRange(priceRange: number): string {
-    const priceRanges = {
-      1: '10-20 $',
-      2: '20-40 $',
-      3: '40-60 $',
-      4: '60+ $',
-    };
-    return (
-      priceRanges[priceRange as keyof typeof priceRanges] || 'Price varies'
-    );
+    return formatPriceRange(priceRange);
   }
 
   bookTable() {

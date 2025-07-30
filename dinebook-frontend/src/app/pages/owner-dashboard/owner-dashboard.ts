@@ -133,7 +133,15 @@ export class OwnerDashboardComponent implements OnInit {
     }
 
     getPriceRangeDisplay(priceRange: number): string {
-        return '$'.repeat(priceRange);
+        const priceRanges = {
+            1: '$10-20',
+            2: '$20-40',
+            3: '$40-60',
+            4: '$60+',
+        };
+        return (
+            priceRanges[priceRange as keyof typeof priceRanges] || 'Price varies'
+        );
     }
 
     getDaysOfWeek(): { key: string; label: string }[] {

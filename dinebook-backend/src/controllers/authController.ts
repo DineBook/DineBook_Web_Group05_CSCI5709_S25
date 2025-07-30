@@ -8,7 +8,11 @@ import {
 	sendVerificationEmail,
 	verifyPassword,
 } from "../utils/";
+import { sendPasswordResetEmail } from "../utils/email";
 import { userPayload } from "../types/";
+import jwt from "jsonwebtoken";
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
 
 export const register = async (req: Request, res: Response) => {
 	const { email, password, role = "customer", name } = req.body;
@@ -96,5 +100,62 @@ export const verifyEmail = async (req: Request, res: Response) => {
 	} catch (err) {
 		console.error('Error during email verification:', err);
 		res.status(500).json({ message: 'An unexpected error occurred during email verification. Please try again later.' });
+	}
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+	const { email } = req.body;
+
+	try {
+		const user = await User.findOne({ email });
+		if (!user) {
+			// Return success message even if user doesn't exist for security
+			return res.json({ message: 'If an account with that email exists, we have sent a password reset link.' });
+		}
+
+		// Generate JWT token for password reset (expires in 1 hour)
+		const resetToken = jwt.sign(
+			{ userId: user._id.toString(), email: user.email },
+			JWT_SECRET,
+			{ expiresIn: '1h' }
+		);
+
+		await sendPasswordResetEmail(user.email, resetToken);
+
+		res.json({ message: 'If an account with that email exists, we have sent a password reset link.' });
+	} catch (err) {
+		console.error('Error during password reset request:', err);
+		res.status(500).json({ message: 'An unexpected error occurred. Please try again later.' });
+	}
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+	const { token, newPassword } = req.body;
+
+	try {
+		// Verify the JWT token
+		const decoded = jwt.verify(token, JWT_SECRET) as { userId: string; email: string };
+
+		const user = await User.findById(decoded.userId);
+		if (!user || user.email !== decoded.email) {
+			return res.status(400).json({ message: 'Invalid or expired reset token.' });
+		}
+
+		// Hash the new password
+		const hashedPassword = await hashPassword(newPassword);
+
+		// Update the user's password
+		await User.updateOne(
+			{ _id: user._id },
+			{ $set: { password: hashedPassword } }
+		);
+
+		res.json({ message: 'Your password has been reset successfully.' });
+	} catch (err) {
+		if (err instanceof jwt.JsonWebTokenError) {
+			return res.status(400).json({ message: 'Invalid or expired reset token.' });
+		}
+		console.error('Error during password reset:', err);
+		res.status(500).json({ message: 'An unexpected error occurred. Please try again later.' });
 	}
 };

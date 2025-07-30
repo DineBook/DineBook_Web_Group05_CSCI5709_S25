@@ -411,8 +411,15 @@ export class BookTableComponent implements OnInit, OnDestroy {
 
   // Format price range from number to display string
   formatPriceRange(priceRange: number): string {
-    const ranges = ['', '$', '$$', '$$$', '$$$$'];
-    return ranges[priceRange] || '$';
+    const priceRanges = {
+      1: '$10-20',
+      2: '$20-40',
+      3: '$40-60',
+      4: '$60+',
+    };
+    return (
+      priceRanges[priceRange as keyof typeof priceRanges] || 'Price varies'
+    );
   }
 
   private setLoading(loading: boolean): void {

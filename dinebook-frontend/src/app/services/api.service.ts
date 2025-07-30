@@ -39,6 +39,14 @@ export class ApiService {
     return this.http.get(`${this.apiUrl}/api/auth/verify?token=${token}`);
   }
 
+  forgotPassword(data: { email: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/auth/forgot-password`, data);
+  }
+
+  resetPassword(data: { token: string; newPassword: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/auth/reset-password`, data);
+  }
+
   getRestaurantById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/restaurants/${id}`);
   }
