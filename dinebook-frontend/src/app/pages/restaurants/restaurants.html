@@ -8,14 +8,6 @@
             Discover exceptional restaurants and book your table with ease.
           </p>
         </div>
-        <div class="header-visual">
-          <div class="stats-grid">
-            <div class="stat-item">
-              <span class="stat-number">{{ totalRestaurants }}+</span>
-              <span class="stat-label">Restaurants</span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -28,10 +20,10 @@
             <!-- Search Bar -->
             <div class="search-section">
               <mat-form-field appearance="outline" class="search-field">
-                <mat-label>Search by location</mat-label>
+                <mat-label>Search by city</mat-label>
                 <input matInput 
                        formControlName="location" 
-                       placeholder="Search by location..." 
+                       placeholder="Search by city..." 
                        type="text">
                 <mat-icon matSuffix class="search-icon">search</mat-icon>
               </mat-form-field>
@@ -55,7 +47,7 @@
                 <mat-select formControlName="priceRange">
                   <mat-option value="">Any Price</mat-option>
                   <mat-option *ngFor="let option of priceRangeOptions" [value]="option.value">
-                    {{ option.icon }} {{ option.label }}
+                    {{ option.label }}
                   </mat-option>
                 </mat-select>
                 <mat-icon matSuffix>attach_money</mat-icon>

@@ -72,10 +72,10 @@ export class RestaurantManagementComponent implements OnInit {
   ];
 
   priceRanges = [
-    { value: 1, label: '$ - Budget Friendly' },
-    { value: 2, label: '$$ - Moderate' },
-    { value: 3, label: '$$$ - Expensive' },
-    { value: 4, label: '$$$$ - Very Expensive' },
+    { value: 1, label: '$10-20' },
+    { value: 2, label: '$20-40' },
+    { value: 3, label: '$40-60' },
+    { value: 4, label: '$60+' },
   ];
 
   daysOfWeek = [
@@ -448,7 +448,15 @@ export class RestaurantManagementComponent implements OnInit {
   }
 
   getPriceRangeDisplay(priceRange: number): string {
-    return '$'.repeat(priceRange);
+    const priceRanges = {
+      1: '$10-20',
+      2: '$20-40',
+      3: '$40-60',
+      4: '$60+',
+    };
+    return (
+      priceRanges[priceRange as keyof typeof priceRanges] || 'Price varies'
+    );
   }
 
   getDaysOfWeek(): { key: string; label: string }[] {
