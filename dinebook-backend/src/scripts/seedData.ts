@@ -15,42 +15,42 @@ const users = [
     {
         name: "Sarah Mitchell",
         email: "sarah.mitchell@gmail.com",
-        password: "$2y$10$JLS5EH9QL/oUzBPYuiu78.oQxL6TfhrfYM.zSMR5ykSyICtPvKOeS",
+        password: "$2b$10$Z76JigcQ6QCHTrslVY9r5OzhrpaGxJaUkVPTqjo6rKGuEwm81hmOO",
         role: "owner",
         isVerified: true
     },
     {
         name: "Marcus Chen",
         email: "marcus.chen@outlook.com",
-        password: "$2y$10$JLS5EH9QL/oUzBPYuiu78.oQxL6TfhrfYM.zSMR5ykSyICtPvKOeS",
+        password: "$2b$10$Z76JigcQ6QCHTrslVY9r5OzhrpaGxJaUkVPTqjo6rKGuEwm81hmOO",
         role: "owner",
         isVerified: true
     },
     {
         name: "Isabella Rodriguez",
         email: "isabella.rodriguez@yahoo.com",
-        password: "$2y$10$JLS5EH9QL/oUzBPYuiu78.oQxL6TfhrfYM.zSMR5ykSyICtPvKOeS",
+        password: "$2b$10$Z76JigcQ6QCHTrslVY9r5OzhrpaGxJaUkVPTqjo6rKGuEwm81hmOO",
         role: "owner",
         isVerified: true
     },
     {
         name: "James Thompson",
         email: "james.thompson@gmail.com",
-        password: "$2y$10$JLS5EH9QL/oUzBPYuiu78.oQxL6TfhrfYM.zSMR5ykSyICtPvKOeS",
+        password: "$2b$10$Z76JigcQ6QCHTrslVY9r5OzhrpaGxJaUkVPTqjo6rKGuEwm81hmOO",
         role: "owner",
         isVerified: true
     },
     {
         name: "Priya Patel",
         email: "priya.patel@hotmail.com",
-        password: "$2y$10$JLS5EH9QL/oUzBPYuiu78.oQxL6TfhrfYM.zSMR5ykSyICtPvKOeS",
+        password: "$2b$10$Z76JigcQ6QCHTrslVY9r5OzhrpaGxJaUkVPTqjo6rKGuEwm81hmOO",
         role: "owner",
         isVerified: true
     },
     {
         name: "David Wilson",
         email: "david.wilson@gmail.com",
-        password: "$2y$10$JLS5EH9QL/oUzBPYuiu78.oQxL6TfhrfYM.zSMR5ykSyICtPvKOeS",
+        password: "$2b$10$Z76JigcQ6QCHTrslVY9r5OzhrpaGxJaUkVPTqjo6rKGuEwm81hmOO",
         role: "owner",
         isVerified: true
     },
@@ -58,28 +58,28 @@ const users = [
     {
         name: "Emily Johnson",
         email: "emily.johnson@gmail.com",
-        password: "$2y$10$JLS5EH9QL/oUzBPYuiu78.oQxL6TfhrfYM.zSMR5ykSyICtPvKOeS",
+        password: "$2b$10$Z76JigcQ6QCHTrslVY9r5OzhrpaGxJaUkVPTqjo6rKGuEwm81hmOO",
         role: "customer",
         isVerified: true
     },
     {
         name: "Alex Kim",
         email: "alex.kim@outlook.com",
-        password: "$2y$10$JLS5EH9QL/oUzBPYuiu78.oQxL6TfhrfYM.zSMR5ykSyICtPvKOeS",
+        password: "$2b$10$Z76JigcQ6QCHTrslVY9r5OzhrpaGxJaUkVPTqjo6rKGuEwm81hmOO",
         role: "customer",
         isVerified: true
     },
     {
         name: "Rachel Brown",
         email: "rachel.brown@yahoo.com",
-        password: "$2y$10$JLS5EH9QL/oUzBPYuiu78.oQxL6TfhrfYM.zSMR5ykSyICtPvKOeS",
+        password: "$2b$10$Z76JigcQ6QCHTrslVY9r5OzhrpaGxJaUkVPTqjo6rKGuEwm81hmOO",
         role: "customer",
         isVerified: true
     },
     {
         name: "Michael Davis",
         email: "michael.davis@gmail.com",
-        password: "$2y$10$JLS5EH9QL/oUzBPYuiu78.oQxL6TfhrfYM.zSMR5ykSyICtPvKOeS",
+        password: "$2b$10$Z76JigcQ6QCHTrslVY9r5OzhrpaGxJaUkVPTqjo6rKGuEwm81hmOO",
         role: "customer",
         isVerified: true
     }
