@@ -45,7 +45,7 @@ export const sendVerificationEmail = async (to: string, token: string) => {
           </p>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://dinebook-web-group05-csci5709-s25.onrender.com/verify?token=${token}" 
+            <a href="https://dine-book-web-group05-csci-5709-s25.vercel.app/verify?token=${token}" 
                style="padding: 14px 28px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; display: inline-block; box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.25);">
               Verify Email Address
             </a>
@@ -95,7 +95,7 @@ export const sendPasswordResetEmail = async (to: string, token: string) => {
           </p>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="https://dinebook-web-group05-csci5709-s25.onrender.com/reset-password?token=${token}" 
+            <a href="https://dine-book-web-group05-csci-5709-s25.vercel.app/reset-password?token=${token}" 
                style="padding: 14px 28px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; display: inline-block; box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.25);">
               Reset Password
             </a>
@@ -177,7 +177,7 @@ export const sendBookingConfirmationEmail = async (
             <p style="color: #6b7280; font-size: 14px; margin: 0 0 15px 0;">
               Need to make changes to your booking?
             </p>
-            <a href="https://dinebook-web-group05-csci5709-s25.onrender.com/my-bookings" 
+            <a href="https://dine-book-web-group05-csci-5709-s25.vercel.app/my-bookings" 
                style="padding: 12px 24px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 14px; display: inline-block; box-shadow: 0 4px 14px 0 rgba(99, 102, 241, 0.25);">
               Manage My Bookings
             </a>
