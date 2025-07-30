@@ -16,7 +16,7 @@ export class PublicGuard implements CanActivate {
             this.router.navigate(['/owner/dashboard']);
             return false;
         } else if (this.authService.isLoggedIn && this.authService.isCustomer()) {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/restaurants']);
             return false;
         } else {
             this.router.navigate(['/']);
